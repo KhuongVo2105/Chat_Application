@@ -1,0 +1,63 @@
+@startuml
+
+entity "USERS" as u {
+    user_id:varchar(1024)
+    --
+    username:varchar(256)
+    email:varchar(128)
+    password:varchar(1024)
+    created_at:Timestamp
+    updated_at:Timestamp
+}
+
+entity "LIKES" as l {
+    like_id:integer<<auto_increment>> 
+    user_id:varchar(1024)
+    post_id:integer
+    --
+    created_at:Timestamp
+}
+
+entity "POSTS" as p {
+    post_id:integer<<auto_increment>>
+    user_id:varchar(1024)
+    --
+    caption:varchar(1024)
+    created_at:Timestamp
+    updated_at:Timestamp
+}
+
+entity "MEDIAS" as m {
+    media_id:integer<<auto_increment>>
+    post_id:integer
+    --
+    media_url:varchar(512)
+    created_at:Timestamp
+}
+
+entity "COMMENTS" as c {
+    comment_id:integer<<auto_increment>>
+    user_id:varchar(1024)
+    post_id:String
+    --
+    comment_text:String
+    created_at:Timestamp
+}
+
+entity "FOLLOWS" as f {
+    follow_id:String
+    follower_user_id:varchar(1024)
+    following_user_id:varchar(1024)
+    --
+    created_at:Timestamp
+}
+
+u ||..o{ p
+u ||..o{ f
+l ||..o{ u
+p ||..o{ m
+p ||..o{ c
+p ||..o{ l
+
+
+@enduml

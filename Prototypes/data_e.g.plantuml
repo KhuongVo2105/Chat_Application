@@ -1,0 +1,37 @@
+@startsalt
+{
+..
+== USERS table
+{T!
++ user_id | username | email | password | created_at | updated_at
++ u01 | khuongvo2105 | khuongvo2105@gmail.com | *** | DD:MM:YYYY | DD:MM:YYYY
++ u02 | nguyenvo0909 | nguyenvo0909@gmail.com | *** | DD:MM:YYYY | DD:MM:YYYY
++ u03 | khuongvo | 21130407@gmail.com | *** | DD:MM:YYYY | DD:MM:YYYY
++ u04 | lelongphi | lephilong@gmail.com | *** | DD:MM:YYYY | DD:MM:YYYY
++ u05 | ainhung | ainhung@gmail.com | *** | DD:MM:YYYY | DD:MM:YYYY
+}
+..
+== POSTS table
+{T+
++ post_id | user_id | caption | created_at | updated_at
++ 1 | u01 | "This is my first post!" | DD:MM:YYYY | DD:MM:YYYY
++ 2 | u01 | "This is my second post!" | DD:MM:YYYY | DD:MM:YYYY
++ 3 | u02 | "This is my first post! From NguyenVo0909" | DD:MM:YYYY | DD:MM:YYYY
++ 4 | u01 | "This is my third post!" | DD:MM:YYYY | DD:MM:YYYY
++ 5 | u04 | "Hello everyone!" | DD:MM:YYYY | DD:MM:YYYY
+}
+..
+== LIKES table
+{T!
++ like_id | user_id | post_id | created_at
+}
+..
+== with T#
+{T#
++Region | Population | Age
++ World | 7.13 billion | 30
+++ America | 964 million | 30
+}
+..
+}
+@endsalt
