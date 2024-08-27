@@ -70,6 +70,12 @@
         + 6 | u03 | u05 | ...
         + 7 | u03 | u01 | ...
         + 8 | u05 | u02 | ...
-   } 
+   }
+    ..
+    == INNER JOIN (USERS, POSTS)
+    {
+        T!
+         
+    }
 }
 @endsalt
