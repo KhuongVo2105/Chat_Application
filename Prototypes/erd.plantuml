@@ -54,7 +54,8 @@ entity "FOLLOWS" as f {
 
 u ||..o{ p
 u ||..o{ f
-l ||..o{ u
+u ||..o{ l
+u ||..o{ c
 p ||..o{ m
 p ||..o{ c
 p ||..o{ l
