@@ -1,0 +1,48 @@
+package com.chat_application.ChatApplication.Services;
+
+import com.chat_application.ChatApplication.Dto.Request.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Request.CreateUserReq;
+import com.chat_application.ChatApplication.Entities.User;
+import com.chat_application.ChatApplication.Exceptions.AppException;
+import com.chat_application.ChatApplication.Exceptions.ErrorCode;
+import com.chat_application.ChatApplication.Repositories.IUserRepository;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Date;
+
+@Service
+@Data
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class UserService {
+    @Autowired
+    IUserRepository userRepository;
+
+    public ApiResponse<String> createUser(CreateUserReq req) {
+        if (userRepository.existsByEmail(req.getEmail())) throw new AppException(ErrorCode.USER_EXISTED);
+
+        // Mapper
+        User user = new User();
+        user.setEmail(req.getEmail());
+        user.setUsername(req.getUsername());
+        user.setPassword(new BCryptPasswordEncoder().encode(req.getPassword()));
+        user.setCreated_at(Timestamp.from(Instant.now()));
+        user.setUpdated_at(Timestamp.from(Instant.now()));
+
+        userRepository.save(user);
+
+        return ApiResponse.<String>builder()
+                .code(200)
+                .message("User created successfully")
+                .build();
+    }
+}
