@@ -12,3 +12,4 @@ A chat application inspired by Instagram's messaging feature, built with Spring 
 - Spring boot
 - RESTful APIs
 - MySQL
+- Apache MavenMaven
