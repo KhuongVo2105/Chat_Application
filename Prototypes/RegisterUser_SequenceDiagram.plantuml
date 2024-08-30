@@ -1,0 +1,53 @@
+@startuml
+
+actor Guest as gu
+boundary Endpoint as end
+control UserController as control
+entity UserService as service
+entity UserRepository as repository
+database Chat_Application as db
+
+gu -> end : "I want to create a new user"
+activate end
+gu -> end : send email, username, password in request body
+
+end -> control : POST/ createUser()
+
+activate control
+control -> service : createUser()
+
+alt not exist
+    service -> repository : existByEmail()
+    repository --> service : false
+    entity AppException as exception
+    entity ErrorCode as err
+    service -> exception : AppException()
+    exception -> err : ErrorCode.USER_EXISTED
+else exist
+    service -> repository : existByEmail()
+    repository --> service : true
+end
+
+entity User as u
+service -> u : User()
+activate service
+service -> u : setEmail()
+service -> u : setUsername()
+service -> u : setPassword()
+service -> u : setCreated_at()
+service -> u : setUpdated_at()
+deactivate service
+
+service -> repository : save()
+repository -> db : insert
+
+entity ApiResponse as res
+service -> res : build()
+res --> control 
+control --> end : 
+deactivate control
+
+end --> gu : return a JSON-formatted response with text content
+deactivate end
+
+@enduml
