@@ -41,10 +41,10 @@ public class AuthenticationService {
      * @return
      */
     public AuthenticationRes authenticate(LoginRequest request) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated) throw new AppException(ErrorCode.INVALID_PASSWORD);
