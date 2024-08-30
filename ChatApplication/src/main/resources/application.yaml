@@ -8,3 +8,10 @@ spring:
     url: "jdbc:mysql://localhost:3306/Chat_Application"
     username: "root"
     password: "root"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+jwt:
+  signerKey: "CQi5Od7TCiOp6gLgEaj6niGw6ZRxqbS3V06hTRX5V5wwbGkQGPv2fMMTEOGe2COg\n"
