@@ -1,0 +1,55 @@
+@startuml
+
+actor Guest as gu
+boundary Endpoint as end
+control AuthController as control
+entity AuthenticationService as service
+entity UserRepository as repository
+database Chat_Application as db
+
+gu -> end : "I want to login"
+activate end
+gu -> end : send email, password in request body
+
+end -> control : GET/ login()
+
+activate control
+control -> service : authenticate()
+
+alt exist
+    service -> repository : existByEmail()
+    ' activate service
+    repository --> service : true
+    entity AppException as exception
+    entity ErrorCode as err
+    service -> exception : AppException()
+    exception -> err : ErrorCode.USER_NOT_EXISTED
+    err --> service : return
+    ' deactivate service
+else not exist
+    ' activate service
+    service -> repository : existByEmail()
+    repository --> service : false
+    ' deactivate service
+end
+
+entity PasswordEncoder as pw
+alt unmatch
+    service -> pw : matches()
+    pw --> service : false
+    service -> exception : AppException()
+    exception -> err : ErrorCode.INVALID_PASSWORD
+else match
+    service -> pw : matches()
+    service -> service : generateToken()
+    entity AuthenticationRes as res
+    service -> res : build()
+end
+res --> control
+control --> end :
+deactivate control
+
+end --> gu : return a JSON-formatted response with text content
+deactivate end
+
+@enduml
