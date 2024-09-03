@@ -1,26 +1,20 @@
-package com.chat_application.ChatApplication.Entities;
+package com.chat_application.ChatApplication.Dto.Response;
 
-import jakarta.persistence.*;
+import com.chat_application.ChatApplication.Entities.Role;
+import jakarta.persistence.ManyToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
 import java.util.Set;
-import java.util.UUID;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
-    String username, password, email;
+public class UserRes {
+    String id, username, password, email;
     Timestamp created_at, updated_at;
-
-    @ManyToMany
     Set<Role> roles;
 }
