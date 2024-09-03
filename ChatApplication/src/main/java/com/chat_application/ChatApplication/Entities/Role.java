@@ -1,12 +1,12 @@
 package com.chat_application.ChatApplication.Entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.sql.Timestamp;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -14,13 +14,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
-    String username, password, email;
-    Timestamp created_at, updated_at;
+    String name;
+    String descrition;
 
     @ManyToMany
-    Set<Role> roles;
+    Set<Permission> permissions;
 }

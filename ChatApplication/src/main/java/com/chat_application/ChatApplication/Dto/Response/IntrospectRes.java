@@ -1,13 +1,13 @@
 package com.chat_application.ChatApplication.Dto.Response;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CreateUserRes {
-    String token;
+public class IntrospectRes {
+    boolean valid;
 }
