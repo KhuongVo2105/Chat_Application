@@ -4,7 +4,7 @@ import com.chat_application.ChatApplication.Dto.Request.LoginRequest;
 import com.chat_application.ChatApplication.Dto.Response.AuthenticationRes;
 import com.chat_application.ChatApplication.Exceptions.AppException;
 import com.chat_application.ChatApplication.Exceptions.ErrorCode;
-import com.chat_application.ChatApplication.Repositories.IUserRepository;
+import com.chat_application.ChatApplication.Repositories.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -34,7 +34,7 @@ public class AuthenticationService {
     @Value("${jwt.signerKey}")
     String SIGN_KEY;
 
-    IUserRepository userRepository;
+    UserRepository userRepository;
 
     /**
      * @param request
