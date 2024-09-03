@@ -1,6 +1,6 @@
-package com.chat_application.ChatApplication.Controllers;
+package com.chat_application.ChatApplication.Controllers.v1;
 
-import com.chat_application.ChatApplication.Dto.Request.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Dto.Request.LoginRequest;
 import com.chat_application.ChatApplication.Dto.Response.AuthenticationRes;
 import com.chat_application.ChatApplication.Services.AuthenticationService;
@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/v1/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthController {
