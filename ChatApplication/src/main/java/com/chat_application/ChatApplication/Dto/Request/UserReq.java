@@ -16,5 +16,4 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserReq {
     String username, password, email;
-    Timestamp updated_at;
 }

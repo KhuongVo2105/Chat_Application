@@ -1,7 +1,6 @@
 package com.chat_application.ChatApplication.Dto.Response;
 
 import com.chat_application.ChatApplication.Entities.Role;
-import jakarta.persistence.ManyToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserRes {
+public class UserResponse {
     String id, username, password, email;
     Timestamp created_at, updated_at;
     Set<Role> roles;
