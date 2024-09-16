@@ -1,13 +1,16 @@
 @startuml
 
 entity "USERS" as u {
-    user_id:varchar(1024)
+    userId:UUID
     --
     username:varchar(256)
     email:varchar(128)
     password:varchar(1024)
-    created_at:Timestamp
-    updated_at:Timestamp
+    privacy:boolean  /'Public || Private'/
+    status:byte     /'trang thai cua nguoi dung. Han che, thoai mai, chua xac thuc'/
+    avatar:String   /'anh dai dien nguoi dung'/
+    createdAt:Timestamp
+    updatedAt:Timestamp
 }
 
 entity "LIKES" as l {
@@ -22,6 +25,7 @@ entity "POSTS" as p {
     post_id:integer<<auto_increment>>
     user_id:varchar(1024)
     --
+    visible:boolean /'True:hien thi, False: an'/
     caption:varchar(1024)
     created_at:Timestamp
     updated_at:Timestamp
@@ -40,6 +44,8 @@ entity "COMMENTS" as c {
     user_id:varchar(1024)
     post_id:String
     --
+    visible:boolean /'True: hien'/
+    pre_comment:integer
     comment_text:String
     created_at:Timestamp
 }
@@ -52,13 +58,82 @@ entity "FOLLOWS" as f {
     created_at:Timestamp
 }
 
+entity "GROUPS" as g{
+    group_id:String
+    ---
+    create_at:Timestamp
+}
+
+entity "MEMBERS" as mem{
+    group_id:String
+    user_id:UUID
+    ---
+    created_at:Timestamp
+}
+
+entity "LEADERS" as le{
+    user_id:UUID
+    group_id:String
+    ---
+}
+
+entity "MESSAGES" as me{
+    message_id:integer
+    group_id:String
+    user_id:UUID
+    ---
+    visible:boolean
+    context:String
+    create_at:Timestamp
+}
+
+entity "ROLES" as ro{
+    name:String
+    ---
+    description:String
+}
+
+entity "PERMISSIONS" as pe{
+    name:String
+    ---
+    description:String
+}
+
+/'Tin noi bat'/
+entity "WISHLISTS" as wl{
+    postId:String
+    createdAt:Timestamp
+}
+
+/''/
+entity "BLOCKS" as bl{
+    blockId:integer<<auto_increment>>
+    blockerId:UUID
+    blockedId:UUID
+}
+
+entity "REPORTS" as rp{
+    reportId:integer<<auto_increment>>
+    reporter:UUID /'id nguoi tao phieu report'/
+    reported:UUID  /'id cua nguoi bi report'/
+    reportedPost:   /'id cua bai post bi report'/
+    context:byte
+    created_at:Timestamp
+}
+
 u ||..o{ p
 u ||..o{ f
 u ||..o{ l
 u ||..o{ c
+u ||..|| g
+u ||..o{ le
+u ||.. ro
 p ||..o{ m
 p ||..o{ c
 p ||..o{ l
-
+g ||..o{ me
+pe ||..|| ro
+g ||..o{ mem
+mem ||..|| u
 
 @enduml
