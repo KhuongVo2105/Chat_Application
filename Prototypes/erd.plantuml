@@ -1,64 +1,141 @@
 @startuml
 
 entity "USERS" as u {
-    user_id:varchar(1024)
+    id:UUID
     --
     username:varchar(256)
     email:varchar(128)
-    password:varchar(1024)
-    created_at:Timestamp
-    updated_at:Timestamp
+    password:String
+    privacy:boolean  /'Public || Private'/
+    status:byte     /'trang thai cua nguoi dung. Han che, thoai mai, chua xac thuc'/
+    avatar:String   /'anh dai dien nguoi dung'/
+    createdAt:Timestamp
+    updatedAt:Timestamp
 }
 
 entity "LIKES" as l {
-    like_id:integer<<auto_increment>> 
-    user_id:varchar(1024)
-    post_id:integer
+    id:integer<<auto_increment>> 
+    userId:String
+    postId:integer
     --
     created_at:Timestamp
 }
 
 entity "POSTS" as p {
-    post_id:integer<<auto_increment>>
-    user_id:varchar(1024)
+    id:integer<<auto_increment>>
+    userId:String
     --
-    caption:varchar(1024)
-    created_at:Timestamp
-    updated_at:Timestamp
+    visible:boolean /'True:hien thi, False: an'/
+    caption:String
+    createdAt:Timestamp
+    updatedAt:Timestamp
 }
 
 entity "MEDIAS" as m {
-    media_id:integer<<auto_increment>>
-    post_id:integer
+    id:integer<<auto_increment>>
+    postId:integer
     --
-    media_url:varchar(512)
+    mediaUrl:varchar(512)
     created_at:Timestamp
 }
 
 entity "COMMENTS" as c {
-    comment_id:integer<<auto_increment>>
-    user_id:varchar(1024)
-    post_id:String
+    id:integer<<auto_increment>>
+    userId:String
+    postId:String
     --
-    comment_text:String
-    created_at:Timestamp
+    visible:boolean /'True: hien'/
+    preComment:integer
+    commentText:String
+    createdAt:Timestamp
 }
 
 entity "FOLLOWS" as f {
-    follow_id:String
-    follower_user_id:varchar(1024)
-    following_user_id:varchar(1024)
+    id:String
+    followerUserId:String
+    followingUserId:String
     --
-    created_at:Timestamp
+    createdAt:Timestamp
+}
+
+entity "GROUPS" as g{
+    id:String
+    ---
+    creatAt:Timestamp
+}
+
+entity "MEMBERS" as mem{
+    groupId:String
+    userId:UUID
+    ---
+    createdAt:Timestamp
+}
+
+entity "LEADERS" as le{
+    id:integer
+    userId:UUID
+    groupId:String
+    ---
+}
+
+entity "MESSAGES" as me{
+    id:integer
+    groupId:String
+    userId:UUID
+    ---
+    visible:boolean
+    context:String
+    createAt:Timestamp
+}
+
+entity "ROLES" as ro{
+    name:String
+    ---
+    description:String
+}
+
+entity "PERMISSIONS" as pe{
+    name:String
+    ---
+    description:String
+}
+
+/'Tin noi bat'/
+entity "WISHLISTS" as wl{
+    postId:String
+    createdAt:Timestamp
+}
+
+/''/
+entity "BLOCKS" as bl{
+    blockId:integer<<auto_increment>>
+    blockerId:UUID
+    blockedId:UUID
+}
+
+entity "REPORTS" as rp{
+    reportId:integer<<auto_increment>>
+    reporter:UUID /'id nguoi tao phieu report'/
+    reported:UUID  /'id cua nguoi bi report'/
+    reportedPost:   /'id cua bai post bi report'/
+    context:byte
+    createdAt:Timestamp
 }
 
 u ||..o{ p
 u ||..o{ f
 u ||..o{ l
 u ||..o{ c
+u ||..|| g
+u ||..o{ le
+u ||.. ro
 p ||..o{ m
 p ||..o{ c
 p ||..o{ l
-
+g ||..o{ me
+pe ||..|| ro
+g ||..o{ mem
+mem ||..|| u
+g ||..|| le
 
 @enduml
