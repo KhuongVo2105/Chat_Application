@@ -14,25 +14,20 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
-    String username, password, email;
-    boolean privacy;
-    byte status;
-    String avatar;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    int id;
+    boolean visible;
+    String caption;
     Timestamp createdAt, updatedAt;
 
-    @ManyToMany
-    Set<Role> roles;
+    @OneToMany
+    Set<Like> likes;
 
     @OneToMany
-    Set<Post> posts;
+    Set<Media> medias;
 
     @OneToMany
-    Set<Follow> follows;
-
-    @OneToMany
-    Set<Group> groups;
+    Set<Comment> comments;
 }
