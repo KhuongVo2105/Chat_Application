@@ -1,16 +1,10 @@
 import * as React from "react";
 import { useState, useContext } from "react";
-import {
-  StyleSheet,
-  Alert,
-  Button,
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Alert, Text, TextInput, View, TouchableOpacity, } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
+
+import FontLoader from "../utils/FontLoader";
 
 import { AuthContext } from "./Context";
 
@@ -73,7 +67,7 @@ function LoginScreen({ navigation }) {
         style={styles.input}
         placeholder="Enter your password"
         placeholderTextColor={"#333"}
-        secureTextEntry = {secureTextEntry}
+        secureTextEntry={secureTextEntry}
         value={loginRequest.password}
         onChangeText={(text) =>
           setLoginRequest({ ...loginRequest, password: text })
@@ -85,7 +79,7 @@ function LoginScreen({ navigation }) {
         <Icon name="eye" size={20} color={"#0095f6"} />
       </TouchableOpacity>
       <TouchableOpacity onPress={handleShowPass}
-        style={{ position: "absolute", right: 25, top: 315, zIndex: 10, opacity:0 }}
+        style={{ position: "absolute", right: 25, top: 315, zIndex: 10, opacity: 0 }}
       >
         <Icon name="eye-slash" size={20} color={"#0095f6"} />
       </TouchableOpacity>
@@ -123,7 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 45,
     marginBottom: 30,
     textAlign: "center",
-    fontFamily: "Trebuchet MS",
+    fontFamily: "Instagram-Sans",
   },
   input: {
     fontSize: 15,

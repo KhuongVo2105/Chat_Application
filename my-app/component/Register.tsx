@@ -12,7 +12,6 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 // import { LoginManager, AccessToken } from "react-native-fbsdk-next"; // Thêm import này
 
-import App from "../App";
 import axios from "axios";
 
 interface CreateUserRequest {
@@ -199,7 +198,7 @@ const styles = StyleSheet.create({
     fontSize: 45,
     marginBottom: 30,
     textAlign: "center",
-    fontFamily: "Trebuchet MS",
+    fontFamily: "Instagram-Sans",
   },
   input: {
     fontSize: 15,

@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginBottom: 20,
     textAlign: "center",
-    fontFamily: "Trebuchet MS",
+    fontFamily: "Instagram-Sans",
   },
   otpContainer: {
     flexDirection: "row",

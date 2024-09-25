@@ -13,3 +13,14 @@ A chat application inspired by Instagram's messaging feature, built with Spring 
 - RESTful APIs
 - MySQL
 - Apache Maven
+## How can I run React application?
+With **npm**:
+
+> npm install
+
+Install Font Awesome with **npm**:
+> npm install react-native-vector-icons --save
+
+Run app with **npx**:
+> npx expo start --tunnel
+
