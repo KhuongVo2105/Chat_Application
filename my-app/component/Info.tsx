@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Text, View, ActivityIndicator } from "react-native";
 import axios from "axios";
 import { AuthContext } from "./Context";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 // Define User interface
 interface User {
@@ -25,8 +26,11 @@ export default function DetailsScreen() {
       }
 
       try {
+
+        const endpoint = `${REACT_APP_API_BASE_URL}/users/myInfo`;
+
         const response = await axios.post(
-          "http://192.168.1.6:8080/spring/user",
+          endpoint,
           {},
           {
             headers: {

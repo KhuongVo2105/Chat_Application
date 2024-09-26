@@ -4,9 +4,8 @@ import { StyleSheet, Alert, Text, TextInput, View, TouchableOpacity, } from "rea
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 
-import FontLoader from "../utils/FontLoader";
-
 import { AuthContext } from "./Context";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 interface LoginRequest {
   username: string;
@@ -22,24 +21,40 @@ function LoginScreen({ navigation }) {
 
   // Hàm xử lý khi nhấn nút Login
   const handleLogin = async () => {
+
+    const endpoint = `${REACT_APP_API_BASE_URL}/auth/token`;
+
     try {
-      const response = await axios.post(
-        "http://192.168.1.6:8080/spring/login",
-        loginRequest
-      );
-      if (response.data.authenticate) {
+      console.log(`Instagram_Login_endpoint: ${endpoint}`)
+      const response = await axios.post(endpoint, loginRequest);
+
+      // Kiểm tra giá trị authenticated từ phản hồi
+      if (response.data.result.authenticated) {
         console.log("success API");
-        setUserToken(response.data.token);
-        navigation.navigate("Infos"); // Chuyển đến màn hình chi tiết nếu login thành công
+        setUserToken(response.data.result.token); // Lưu token từ response
+        navigation.navigate("Info"); // Chuyển đến màn hình chi tiết nếu login thành công
       } else {
-        // console.error("error API");
         Alert.alert("Login Failed", "Username or password is incorrect");
       }
     } catch (error) {
-      //   console.error(error); // Log lỗi ra console
-      Alert.alert("Login Failed", "Username or password is incorrect");
+      // Log lỗi ra console
+      if (axios.isAxiosError(error)) {
+        // Lỗi từ Axios
+        console.error("Axios error:", error.message); // Thông báo lỗi chung
+        console.error("Error code:", error.code); // Mã lỗi (nếu có)
+        console.error("Response data:", error.response?.data); // Dữ liệu phản hồi từ server
+        console.error("Response status:", error.response?.status); // Mã trạng thái HTTP
+        console.error("Response statusText:", error.response?.statusText); // Mô tả mã trạng thái
+
+        Alert.alert("Login Failed", error.response?.data?.message || "An error occurred while logging in.");
+      } else {
+        // Lỗi khác
+        console.error("Unexpected error:", error);
+        Alert.alert("Login Failed", "An unexpected error occurred.");
+      }
     }
   };
+
 
   // Hàm xử lý khi nhấn nút Register
   const handleRegister = () => {
