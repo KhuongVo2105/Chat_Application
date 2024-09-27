@@ -20,7 +20,7 @@ export default function App() {
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Infos" component={InfoScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Info" component={InfoScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Verify" component={VerifyScreen} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
