@@ -1,8 +1,7 @@
 package com.example.identity_service.controller;
 
-import com.example.identity_service.dto.request.ApiResponse;
-import com.example.identity_service.dto.request.UserCreationRequest;
-import com.example.identity_service.dto.request.UserUpdateRequest;
+import com.example.identity_service.dto.request.*;
+import com.example.identity_service.dto.response.ForgotPasswordResponse;
 import com.example.identity_service.dto.response.UserResponse;
 import com.example.identity_service.entity.User;
 import com.example.identity_service.service.UserService;
@@ -15,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/users")
@@ -26,11 +26,9 @@ public class UserController {
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-
-        apiResponse.setResult(userService.createRequest(request));
-
-        return apiResponse;
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.createRequest(request))
+                .build();
     }
 
     @GetMapping
@@ -69,5 +67,18 @@ public class UserController {
     String deleteUser(@PathVariable String userId) {
         userService.deleteById(userId);
         return "User has been deleted";
+    }
+
+    @PostMapping("/forgotPasswd")
+    ApiResponse<ForgotPasswordResponse> forgotPassword(@RequestBody @Valid ForgotPasswordRequest request) {
+        return ApiResponse.<ForgotPasswordResponse>builder()
+                .result(userService.forgotPassword(request.getEmail()))
+                .build();
+    }
+
+    @PostMapping("/reset-password")
+    ApiResponse<UserResponse> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.resetPassword(request.getToken())).build();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.identity_service.repository;
 
+import com.example.identity_service.entity.Token;
 import com.example.identity_service.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,10 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
-    boolean existsByUsername(String username);
+public interface TokenRepository extends JpaRepository<Token, Integer> {
+    Optional<Token> findByToken(int token);
 
-    Optional<User> findByUsername(String username);
-
-    Optional<User> findByEmail(String email);
+    Optional<Token> findByUser(User user);
 }

@@ -1,6 +1,6 @@
 package com.example.identity_service.dto.request;
 
-import com.example.identity_service.validator.DobConstraint;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,9 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
-    String username, password,email, firstName, lastName;
-    
-    @DobConstraint(min = 18, message = "INVALID_DOB")
-    LocalDate dob;
+public class ForgotPasswordRequest {
+    @Email(message = "EMAIL_INVALID")
+    String email;
 }
