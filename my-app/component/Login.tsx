@@ -8,12 +8,12 @@ import { AuthContext } from "./Context";
 import { REACT_APP_API_BASE_URL } from '@env';
 
 interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 function LoginScreen({ navigation }) {
   const [loginRequest, setLoginRequest] = useState<LoginRequest>({
-    username: "",
+    email: "",
     password: "",
   });
   const { setUserToken } = useContext(AuthContext);
@@ -34,7 +34,7 @@ function LoginScreen({ navigation }) {
         setUserToken(response.data.result.token); // Lưu token từ response vào Context
         navigation.navigate("Info"); // Chuyển đến màn hình chi tiết nếu login thành công
       } else {
-        Alert.alert("Login Failed", "Username or password is incorrect");
+        Alert.alert("Login Failed", "Email or password is incorrect");
       }
     } catch (error) {
       // Log lỗi ra console
@@ -61,6 +61,10 @@ function LoginScreen({ navigation }) {
     navigation.navigate("Register"); // Chuyển đến màn hình chi tiết nếu login thành công
   };
 
+  const handleForgotPassword = ()=>{
+    navigation.navigate("ForgotPassword");
+  }
+
   const handleShowPass = () => {
     setSecureTextEntry(prev => !prev);
   }
@@ -70,11 +74,11 @@ function LoginScreen({ navigation }) {
       <Text style={styles.title}>InstaClone</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter your username"
+        placeholder="Enter your email"
         placeholderTextColor={"#333"}
-        value={loginRequest.username}
+        value={loginRequest.email}
         onChangeText={(text) =>
-          setLoginRequest({ ...loginRequest, username: text })
+          setLoginRequest({ ...loginRequest, email: text })
         }
       />
 
@@ -99,7 +103,7 @@ function LoginScreen({ navigation }) {
         <Icon name="eye-slash" size={20} color={"#0095f6"} />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleRegister}>
+      <TouchableOpacity onPress={handleForgotPassword}>
         <Text style={styles.forgetText}>Forgot Password?</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>

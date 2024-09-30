@@ -8,16 +8,22 @@ import {
   Alert,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 // import { LoginManager, AccessToken } from "react-native-fbsdk-next"; // Thêm import này
 
 import axios from "axios";
+import { REACT_APP_API_BASE_URL } from '@env';
+
 
 interface CreateUserRequest {
   username: string;
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
+  dob: string;
 }
 function RegisterScreen({ navigation }) {
   const [createUserRequeste, setCreateUserRequest] =
@@ -25,6 +31,9 @@ function RegisterScreen({ navigation }) {
       username: "",
       email: "",
       password: "",
+      firstName: "",
+      lastName: "",
+      dob: ""
     });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -97,10 +106,9 @@ function RegisterScreen({ navigation }) {
 
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://192.168.1.6:8080/spring/createUser",
-        createUserRequeste
-      );
+      const endpoint = `${REACT_APP_API_BASE_URL}/users/forgotPasswd`;
+      console.log(`Instagram_Register_endpoint: ${endpoint}`)
+      const response = await axios.post(endpoint, createUserRequeste);
 
       if (response.data) {
         userId = response.data.id;
@@ -123,67 +131,97 @@ function RegisterScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>InstaClone</Text>
-      <Text>...</Text>
-      <TouchableOpacity style={{ alignItems: "center", marginBottom: 20 }}>
-        <Text style={styles.loginFacebook}>
-          <Icon name="facebook-square" size={40} color="#0095f6" /> Login with
-          Facebook
-        </Text>
-      </TouchableOpacity>
-      <Text style={{ opacity: 0.5, marginBottom: 20, textAlign: "center" }}>
-        ______________________ OR ______________________
-      </Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your username"
-        placeholderTextColor={"#333"}
-        value={createUserRequeste.username}
-        onChangeText={(text) =>
-          setCreateUserRequest({ ...createUserRequeste, username: text })
-        }
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your email"
-        placeholderTextColor={"#333"}
-        value={createUserRequeste.email}
-        keyboardType="email-address"
-        onChangeText={(text) =>
-          setCreateUserRequest({ ...createUserRequeste, email: text })
-        }
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your password"
-        placeholderTextColor={"#333"}
-        secureTextEntry
-        value={createUserRequeste.password}
-        onChangeText={(text) =>
-          setCreateUserRequest({ ...createUserRequeste, password: text })
-        }
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm your password"
-        placeholderTextColor={"#333"}
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-      />
-      {loading ? ( // Hiển thị ActivityIndicator khi đang loading
-        <ActivityIndicator size="large" color="#0095f6" />
-      ) : (
-        <TouchableOpacity style={styles.registerBtn} onPress={handleRegister}>
-          <Text style={styles.registerText}>Register</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>InstaClone</Text>
+        <Text>...</Text>
+        <TouchableOpacity style={{ alignItems: "center", marginBottom: 20 }}>
+          <Text style={styles.loginFacebook}>
+            <Icon name="facebook-square" size={40} color="#0095f6" /> Login with
+            Facebook
+          </Text>
         </TouchableOpacity>
-      )}
-      <Button title="Back" onPress={handleBack} />
-    </View>
+        <Text style={{ opacity: 0.5, marginBottom: 20, textAlign: "center" }}>
+          ______________________ OR ______________________
+        </Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your username"
+          placeholderTextColor={"#333"}
+          value={createUserRequeste.username}
+          onChangeText={(text) =>
+            setCreateUserRequest({ ...createUserRequeste, username: text })
+          }
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your first name"
+          placeholderTextColor={"#333"}
+          value={createUserRequeste.firstName}
+          onChangeText={(text) =>
+            setCreateUserRequest({ ...createUserRequeste, firstName: text })
+          }
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your last name"
+          placeholderTextColor={"#333"}
+          value={createUserRequeste.lastName}
+          onChangeText={(text) =>
+            setCreateUserRequest({ ...createUserRequeste, lastName: text })
+          }
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your birthday"
+          placeholderTextColor={"#333"}
+          value={createUserRequeste.dob}
+          onChangeText={(text) =>
+            setCreateUserRequest({ ...createUserRequeste, dob: text })
+          }
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email"
+          placeholderTextColor={"#333"}
+          value={createUserRequeste.email}
+          keyboardType="email-address"
+          onChangeText={(text) =>
+            setCreateUserRequest({ ...createUserRequeste, email: text })
+          }
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your password"
+          placeholderTextColor={"#333"}
+          secureTextEntry
+          value={createUserRequeste.password}
+          onChangeText={(text) =>
+            setCreateUserRequest({ ...createUserRequeste, password: text })
+          }
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm your password"
+          placeholderTextColor={"#333"}
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
+        {loading ? ( // Hiển thị ActivityIndicator khi đang loading
+          <ActivityIndicator size="large" color="#0095f6" />
+        ) : (
+          <TouchableOpacity style={styles.registerBtn} onPress={handleRegister}>
+            <Text style={styles.registerText}>Register</Text>
+          </TouchableOpacity>
+        )}
+        <Button title="Back" onPress={handleBack} />
+      </View>
+
+    </ScrollView>
   );
 }
 

@@ -8,6 +8,8 @@ import { AuthProvider } from "./component/Context";
 import LoginScreen from "./component/Login"
 import VerifyScreen from "./component/Verify"
 import FontLoader from "./utils/FontLoader";
+import ForgotPassword from "./component/ForgotPassword";
+import VerifyToken from "./component/VerifyToken";
 
 // Tạo Stack Navigator
 const Stack = createStackNavigator();
@@ -22,6 +24,8 @@ export default function App() {
             <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Info" component={InfoScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Verify" component={VerifyScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
+            <Stack.Screen name="VerifyToken" component={VerifyToken} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </FontLoader>

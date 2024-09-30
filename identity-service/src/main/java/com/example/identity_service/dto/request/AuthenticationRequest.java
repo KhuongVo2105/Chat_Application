@@ -1,5 +1,6 @@
 package com.example.identity_service.dto.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,8 +11,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationRequest {
-    @Size(min = 3, message = "USERNAME_INVALID")
-    String username;
+    @Email(message = "EMAIL_NOT_EXISTED")
+    String email;
     @Size(min = 8, message = "INVALID_PASSWORD")
     String password;
 }

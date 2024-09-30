@@ -15,5 +15,5 @@ import lombok.experimental.FieldDefaults;
 public class ResetPasswordRequest {
     @Min(value = 100000, message = "TOKEN_INVALID")
     @Max(value = 999999, message = "TOKEN_INVALID")
-    int Token;
+    String Token;
 }

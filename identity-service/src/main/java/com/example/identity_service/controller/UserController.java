@@ -79,6 +79,6 @@ public class UserController {
     @PostMapping("/reset-password")
     ApiResponse<UserResponse> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         return ApiResponse.<UserResponse>builder()
-                .result(userService.resetPassword(request.getToken())).build();
+                .result(userService.resetPassword(Integer.parseInt(request.getToken()))).build();
     }
 }

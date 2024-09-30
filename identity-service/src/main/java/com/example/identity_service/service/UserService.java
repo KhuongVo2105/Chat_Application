@@ -139,7 +139,7 @@ public class UserService {
         }
 
         // Gửi email với token
-        sendPasswordResetEmail(user.getEmail(), resetToken + "");
+        sendPasswordResetEmail(user.getEmail(),"YOUR OTP", "Your otp\n"+resetToken);
 
         // Tạo phản hồi cho phía client
         return ForgotPasswordResponse.builder()
@@ -159,15 +159,13 @@ public class UserService {
     }
 
     // Phương thức gửi email
-    private void sendPasswordResetEmail(String email, String resetToken) {
-
-        String resetUrl = "http://localhost" + ":" + PORT_SERVER + "/" + CONTEXT_PATH + "/users/reset-password";
+    private void sendPasswordResetEmail(String email, String subject, String content) {
 
         // Tạo nội dung email
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
-        message.setSubject("Password Reset Request");
-        message.setText("To reset your password, click the link below:\n" + resetUrl);
+        message.setSubject(subject);
+        message.setText(content);
 
         // Gửi email
         mailSender.send(message);
@@ -181,8 +179,10 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         if (!Objects.isNull(user)) {
-            String passwd = "matkhaumoi";
+            String passwd = generateResetToken()+"";
             user.setPassword(passwordEncoder.encode(passwd));
+
+            sendPasswordResetEmail(user.getEmail(), "YOUR NEW PASSWORD", "Your new password\n"+passwd);
 
             userRepository.save(user);
         }

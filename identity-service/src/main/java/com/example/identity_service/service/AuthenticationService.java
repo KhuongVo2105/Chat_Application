@@ -46,7 +46,7 @@ public class AuthenticationService {
     String SIGNER_KEY;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var user = userRepository.findByUsername(request.getUsername())
+        var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         boolean authenticated = new BCryptPasswordEncoder().matches(request.getPassword(), user.getPassword());
