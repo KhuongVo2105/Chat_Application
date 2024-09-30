@@ -9,6 +9,8 @@ import {
   Alert,
 } from "react-native";
 
+import { REACT_APP_API_BASE_URL } from '@env';
+
 export default function VerifyScreen({ route, navigation }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(300); // 5 phút = 300 giây
@@ -42,7 +44,10 @@ export default function VerifyScreen({ route, navigation }) {
 
   const handleSubmit = async () => {
     const otpCode = otp.join("");
-    const response = await axios.post("http://192.168.1.6:8080/spring/verify",
+    const endpoint = `${REACT_APP_API_BASE_URL}/users/verify`;
+    console.log(`Instagram_VerifyToken_endpoint: ${endpoint}`)
+    console.log("userId : ",userId +"otp : ",otpCode)
+    const response = await axios.post(endpoint, 
       {
         "userId": userId,
         "passTemp": otpCode 
@@ -56,15 +61,15 @@ export default function VerifyScreen({ route, navigation }) {
     }
   };
   const handleResendCode = async () => {
-    const otpCode = otp.join("");
-    const response = await axios.post("http://192.168.1.6:8080/spring/verify/resend",
-      userId
-    )
-    if (response.status == 200) {
-      Alert.alert("Success", "Resend code successful!");
-    } else {
-      Alert.alert("Error", "Have error wait, please");
-    }
+    // const otpCode = otp.join("");
+    // const response = await axios.post("http://192.168.1.6:8080/spring/verify/resend",
+    //   userId
+    // )
+    // if (response.status == 200) {
+    //   Alert.alert("Success", "Resend code successful!");
+    // } else {
+    //   Alert.alert("Error", "Have error wait, please");
+    // }
   };
 
   const formatTime = (time) => {
@@ -138,6 +143,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 8,
     alignItems: "center",
+    marginTop:50
   },
   submitText: {
     color: "#fff",

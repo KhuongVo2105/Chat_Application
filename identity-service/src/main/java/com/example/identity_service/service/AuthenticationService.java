@@ -46,11 +46,12 @@ public class AuthenticationService {
     String SIGNER_KEY;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var user = userRepository.findByEmail(request.getEmail())
+        var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        boolean isActive = user.getStatus() == 1;
+        if (!isActive) throw new AppException(ErrorCode.USER_NOT_ACTIVE);
 
         boolean authenticated = new BCryptPasswordEncoder().matches(request.getPassword(), user.getPassword());
-
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         return AuthenticationResponse.builder()

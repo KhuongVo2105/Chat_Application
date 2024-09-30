@@ -42,7 +42,7 @@ public class SecurityConfig {
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
     private final String[] PUBLIC_ENDPOINTS = {
-            "/users", "/auth/token", "auth/introspect", "auth/logout", "/users/forgotPasswd", "/users/reset-password"
+            "/users", "/auth/token", "auth/introspect", "auth/logout", "/users/forgotPasswd", "/users/verify", "/users/reset-password"
     };
 
     @Autowired

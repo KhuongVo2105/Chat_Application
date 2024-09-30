@@ -21,7 +21,8 @@ public enum ErrorCode {
     EMAIL_INVALID(1011, "Email is not in correct format", HttpStatus.BAD_REQUEST),
     TOKEN_INVALID(1020, "Token must be at least {min} characters", HttpStatus.BAD_REQUEST),
     TOKEN_NOT_EXISTED(1021, "Token not existed", HttpStatus.NOT_FOUND),
-    TOKEN_CREATION_FAILED(1022, "Token generation or update failed. Please try again later.", HttpStatus.BAD_REQUEST);
+    TOKEN_CREATION_FAILED(1022, "Token generation or update failed. Please try again later.", HttpStatus.BAD_REQUEST),
+    USER_NOT_ACTIVE(1023, "User is not active", HttpStatus.BAD_REQUEST);
 
     private final int code;
     private final String message;

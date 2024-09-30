@@ -76,6 +76,11 @@ public class UserController {
                 .build();
     }
 
+    @PostMapping("/verify")
+    boolean verify(@RequestBody VerifyRequest request) {
+        return userService.isVerify(request.getUserId(), Integer.parseInt(request.getPassTemp()));
+    }
+
     @PostMapping("/reset-password")
     ApiResponse<UserResponse> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         return ApiResponse.<UserResponse>builder()

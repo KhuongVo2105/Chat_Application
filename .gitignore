@@ -34,3 +34,5 @@ output/
 *.log.gz
 *.log-*.gz
 logs/
+
+node_modules/

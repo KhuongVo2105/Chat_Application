@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, ActivityIndicator, Alert } from "react-native";
+import { Text,TouchableOpacity , View, ActivityIndicator, Alert, StyleSheet } from "react-native";
 import axios from "axios";
 import { AuthContext } from "./Context";
 import { REACT_APP_API_BASE_URL } from '@env'; // Import biến môi trường
@@ -7,9 +7,7 @@ import { REACT_APP_API_BASE_URL } from '@env'; // Import biến môi trường
 // Define User interface
 interface User {
   username: string;
-  firstName: string | null;
-  lastName: string | null;
-  dob: string | null;
+  email: string;
 }
 
 export default function InfoScreen({ navigation }) {
@@ -17,6 +15,10 @@ export default function InfoScreen({ navigation }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [userData, setUserData] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const handleBack = () => {
+    navigation.navigate("Login");
+  };
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -66,9 +68,7 @@ export default function InfoScreen({ navigation }) {
           const user = response.data.result;
           setUserData({
             username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            dob: user.dob,
+            email: user.email
           });
         } else {
           throw new Error("Failed to fetch user data");
@@ -98,11 +98,61 @@ export default function InfoScreen({ navigation }) {
 
   // Hiển thị thông tin người dùng nếu dữ liệu đã được tải thành công
   return (
-    <View>
-      <Text>Welcome, {userData?.username}!</Text>
-      <Text>First Name: {userData?.firstName || "N/A"}</Text>
-      <Text>Last Name: {userData?.lastName || "N/A"}</Text>
-      <Text>Date of Birth: {userData?.dob || "N/A"}</Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>Welcome, {userData?.username}!</Text>
+      <View style={styles.infoContainer}>
+        <Text style={styles.label}>Email:</Text>
+        <Text style={styles.info}>{userData?.email}</Text>
+      </View>
+      <TouchableOpacity style={styles.backBtn} onPress={handleBack}>
+            <Text style={styles.backText}>Back</Text>
+          </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center", 
+    alignItems: "center", 
+    padding: 20,
+    backgroundColor: "#2799d1",
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#333", 
+  },
+  infoContainer: {
+    flexDirection: "row", 
+    marginBottom: 10,
+    alignItems: "center",
+  },
+  label: {
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#555", 
+    width: 100, 
+  },
+  info: {
+    fontSize: 16,
+    color: "#000",
+  },
+  backBtn: {
+    backgroundColor: "#303030",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    width: "100%",
+    marginHorizontal: "auto",
+    marginTop: 200,
+  },
+  backText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});

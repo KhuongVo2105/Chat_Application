@@ -21,19 +21,13 @@ interface CreateUserRequest {
   username: string;
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
-  dob: string;
 }
 function RegisterScreen({ navigation }) {
   const [createUserRequeste, setCreateUserRequest] =
     useState<CreateUserRequest>({
       username: "",
       email: "",
-      password: "",
-      firstName: "",
-      lastName: "",
-      dob: ""
+      password: ""
     });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -106,20 +100,21 @@ function RegisterScreen({ navigation }) {
 
     setLoading(true);
     try {
-      const endpoint = `${REACT_APP_API_BASE_URL}/users/forgotPasswd`;
+      const endpoint = `${REACT_APP_API_BASE_URL}/users`;
       console.log(`Instagram_Register_endpoint: ${endpoint}`)
       const response = await axios.post(endpoint, createUserRequeste);
+      console.log("response.data",response.data)
 
       if (response.data) {
-        userId = response.data.id;
+        userId = response.data.result.id;
         setLoading(false);
         Alert.alert(
           "Success",
           "Please check your mail to get the verification code!"
         );
+        navigation.navigate("Verify", { userId: userId });
       }
 
-      navigation.navigate("Verify", { userId: userId });
     } catch (error) {
       setLoading(false);
       Alert.alert("Error", "Username already exists or network error.");
@@ -131,8 +126,8 @@ function RegisterScreen({ navigation }) {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      <View>
         <Text style={styles.title}>InstaClone</Text>
         <Text>...</Text>
         <TouchableOpacity style={{ alignItems: "center", marginBottom: 20 }}>
@@ -151,33 +146,6 @@ function RegisterScreen({ navigation }) {
           value={createUserRequeste.username}
           onChangeText={(text) =>
             setCreateUserRequest({ ...createUserRequeste, username: text })
-          }
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your first name"
-          placeholderTextColor={"#333"}
-          value={createUserRequeste.firstName}
-          onChangeText={(text) =>
-            setCreateUserRequest({ ...createUserRequeste, firstName: text })
-          }
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your last name"
-          placeholderTextColor={"#333"}
-          value={createUserRequeste.lastName}
-          onChangeText={(text) =>
-            setCreateUserRequest({ ...createUserRequeste, lastName: text })
-          }
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your birthday"
-          placeholderTextColor={"#333"}
-          value={createUserRequeste.dob}
-          onChangeText={(text) =>
-            setCreateUserRequest({ ...createUserRequeste, dob: text })
           }
         />
 

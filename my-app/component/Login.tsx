@@ -1,19 +1,27 @@
 import * as React from "react";
 import { useState, useContext } from "react";
-import { StyleSheet, Alert, Text, TextInput, View, TouchableOpacity, } from "react-native";
+import {
+  StyleSheet,
+  Alert,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 
 import { AuthContext } from "./Context";
-import { REACT_APP_API_BASE_URL } from '@env';
+import { REACT_APP_API_BASE_URL } from "@env";
 
 interface LoginRequest {
-  email: string;
+  username: string;
   password: string;
 }
 function LoginScreen({ navigation }) {
   const [loginRequest, setLoginRequest] = useState<LoginRequest>({
-    email: "",
+    username: "",
     password: "",
   });
   const { setUserToken } = useContext(AuthContext);
@@ -21,13 +29,19 @@ function LoginScreen({ navigation }) {
 
   // Hàm xử lý khi nhấn nút Login
   const handleLogin = async () => {
-
     const endpoint = `${REACT_APP_API_BASE_URL}/auth/token`;
 
     try {
-      console.log(`Instagram_Login_endpoint: ${endpoint}`)
+      console.log(`Instagram_Login_endpoint: ${endpoint}`);
+      console.log("loginRequest:", loginRequest);
+      if (loginRequest.username == "" || loginRequest.password == "") {
+        console.log("username or password must not empty!");
+        Alert.alert("Error", "Username or password must not empty!");
+        return;
+      }
       const response = await axios.post(endpoint, loginRequest);
-
+      console.log("--------------------------");
+      console.log("response.data.result : ", response.data.result);
       // Kiểm tra giá trị authenticated từ phản hồi
       if (response.data.result.authenticated) {
         console.log("success API");
@@ -46,7 +60,10 @@ function LoginScreen({ navigation }) {
         console.error("Response status:", error.response?.status); // Mã trạng thái HTTP
         console.error("Response statusText:", error.response?.statusText); // Mô tả mã trạng thái
 
-        Alert.alert("Login Failed", error.response?.data?.message || "An error occurred while logging in.");
+        Alert.alert(
+          "Login Failed",
+          error.response?.data?.message || "An error occurred while logging in."
+        );
       } else {
         // Lỗi khác
         console.error("Unexpected error:", error);
@@ -55,70 +72,79 @@ function LoginScreen({ navigation }) {
     }
   };
 
-
   // Hàm xử lý khi nhấn nút Register
   const handleRegister = () => {
     navigation.navigate("Register"); // Chuyển đến màn hình chi tiết nếu login thành công
   };
 
-  const handleForgotPassword = ()=>{
+  const handleForgotPassword = () => {
     navigation.navigate("ForgotPassword");
-  }
+  };
 
   const handleShowPass = () => {
-    setSecureTextEntry(prev => !prev);
-  }
+    setSecureTextEntry((prev) => !prev);
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>InstaClone</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your email"
-        placeholderTextColor={"#333"}
-        value={loginRequest.email}
-        onChangeText={(text) =>
-          setLoginRequest({ ...loginRequest, email: text })
-        }
-      />
+    <ScrollView style={styles.container}>
+      <View>
+        <Text style={styles.title}>InstaClone</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email"
+          placeholderTextColor={"#333"}
+          value={loginRequest.username}
+          onChangeText={(text) =>
+            setLoginRequest({ ...loginRequest, username: text })
+          }
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your password"
-        placeholderTextColor={"#333"}
-        secureTextEntry={secureTextEntry}
-        value={loginRequest.password}
-        onChangeText={(text) =>
-          setLoginRequest({ ...loginRequest, password: text })
-        }
-      />
-      <TouchableOpacity onPress={handleShowPass}
-        style={{ position: "absolute", right: 25, top: 315, zIndex: 10 }}
-      >
-        <Icon name="eye" size={20} color={"#0095f6"} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleShowPass}
-        style={{ position: "absolute", right: 25, top: 315, zIndex: 10, opacity: 0 }}
-      >
-        <Icon name="eye-slash" size={20} color={"#0095f6"} />
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={handleForgotPassword}>
-        <Text style={styles.forgetText}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-        <Text style={styles.loginText}>Login</Text>
-      </TouchableOpacity>
-      <Text style={styles.orText}>
-        ______________________ OR ______________________
-      </Text>
-      <Text style={styles.registerGroup}>
-        Don't have an account?{" "}
-        <TouchableOpacity onPress={handleRegister}>
-          <Text style={styles.registerText}>Register</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your password"
+          placeholderTextColor={"#333"}
+          secureTextEntry={secureTextEntry}
+          value={loginRequest.password}
+          onChangeText={(text) =>
+            setLoginRequest({ ...loginRequest, password: text })
+          }
+        />
+        <TouchableOpacity
+          onPress={handleShowPass}
+          style={{ position: "absolute", right: 10, top: 170, zIndex: 10 }}
+        >
+          <Icon name="eye" size={20} color={"#0095f6"} />
         </TouchableOpacity>
-      </Text>
-    </View>
+        <TouchableOpacity
+          onPress={handleShowPass}
+          style={{
+            position: "absolute",
+            right: 10,
+            top: 170,
+            zIndex: 10,
+            opacity: 0,
+          }}
+        >
+          <Icon name="eye-slash" size={20} color={"#0095f6"} />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text style={styles.forgetText}>Forgot Password?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableOpacity>
+        <Text style={styles.orText}>
+          ______________________ OR ______________________
+        </Text>
+        <Text style={styles.registerGroup}>
+          Don't have an account?{" "}
+          <TouchableOpacity onPress={handleRegister}>
+            <Text style={styles.registerText}>Register</Text>
+          </TouchableOpacity>
+        </Text>
+      </View>
+    </ScrollView>
   );
 }
 

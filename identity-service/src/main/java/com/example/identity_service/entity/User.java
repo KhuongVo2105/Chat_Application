@@ -18,10 +18,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
-    @Column(name = "username", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
-    String username;
-    String password, email, firstName, lastName;
-    LocalDate dob;
+    String username, password, email;
+    byte status; // -1 : locked, 0 : notVerify, 1 : actived
 
     @ManyToMany
     Set<Role> roles;

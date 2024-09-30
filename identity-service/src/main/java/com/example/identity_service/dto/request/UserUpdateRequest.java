@@ -12,8 +12,5 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
-    String username, password,email, firstName, lastName;
-    
-    @DobConstraint(min = 18, message = "INVALID_DOB")
-    LocalDate dob;
+    String username, password,email;
 }

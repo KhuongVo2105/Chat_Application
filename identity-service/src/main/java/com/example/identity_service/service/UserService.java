@@ -60,12 +60,16 @@ public class UserService {
 
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
+        user.setStatus((byte) 0);
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
 //        user.setRoles(roles);
+        String passwd = generateResetToken() + "";
+//        sendPasswordVerifyEmail(user.getEmail(), "VERIFY EMAIL", "Click this link to verify your email: http://localhost:" + PORT_SERVER + CONTEXT_PATH + "/users/verify/" + user.getId());
+        User newUser = userRepository.save(user);
+        sendVerifyCode(newUser.getUsername());
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        return userMapper.toUserResponse(newUser);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -139,7 +143,7 @@ public class UserService {
         }
 
         // Gửi email với token
-        sendPasswordResetEmail(user.getEmail(),"YOUR OTP", "Your otp\n"+resetToken);
+        sendPasswordResetEmail(user.getEmail(), "YOUR OTP", "Your otp\n" + resetToken);
 
         // Tạo phản hồi cho phía client
         return ForgotPasswordResponse.builder()
@@ -147,6 +151,44 @@ public class UserService {
                 .message("Password reset email has been sent successfully.")
                 .token(resetToken + "")
                 .build();
+    }
+
+    public boolean sendVerifyCode(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        int verifyCode = generateResetToken();
+
+        // Tìm kiếm token có sẵn trong cơ sở dữ liệu
+        Token existingToken = tokenRepository.findByUser(user)
+                .orElse(null);
+        //chuwa logic
+        try {
+            if (existingToken != null) {
+                // Nếu token đã tồn tại, cập nhật thông tin token
+                existingToken.setToken(verifyCode); // Cập nhật giá trị token mới
+                existingToken.setCreateAt(new Date()); // Cập nhật thời gian tạo
+                existingToken.setExpiredAt(new Date(Instant.now().plus(10, ChronoUnit.MINUTES).toEpochMilli())); // Cập nhật thời gian hết hạn
+                tokenRepository.save(existingToken); // Lưu token đã cập nhật
+            } else {
+                // Nếu token chưa tồn tại, tạo mới token
+                Token newToken = Token.builder()
+                        .token(verifyCode)
+                        .createAt(new Date())
+                        .expiredAt(new Date(Instant.now().plus(10, ChronoUnit.MINUTES).toEpochMilli()))
+                        .user(user) // Gán người dùng cho token
+                        .build();
+                tokenRepository.save(newToken); // Lưu token mới
+            }
+
+            // Gửi email với token
+            sendPasswordVerifyEmail(user.getEmail(), "YOUR OTP", "Your otp\n" + verifyCode);
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+
     }
 
     // Phương thức sinh mã token
@@ -171,6 +213,14 @@ public class UserService {
         mailSender.send(message);
     }
 
+    private void sendPasswordVerifyEmail(String email, String subject, String content) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject(subject);
+        message.setText(content);
+        mailSender.send(message);
+    }
+
     public UserResponse resetPassword(int token) {
         Token tk = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new AppException(ErrorCode.TOKEN_NOT_EXISTED));
@@ -179,14 +229,26 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         if (!Objects.isNull(user)) {
-            String passwd = generateResetToken()+"";
+            String passwd = generateResetToken() + "";
             user.setPassword(passwordEncoder.encode(passwd));
 
-            sendPasswordResetEmail(user.getEmail(), "YOUR NEW PASSWORD", "Your new password\n"+passwd);
+            sendPasswordResetEmail(user.getEmail(), "YOUR NEW PASSWORD", "Your new password\n" + passwd);
 
             userRepository.save(user);
         }
 
         return userMapper.toUserResponse(user);
+    }
+    public boolean isVerify(String userId,int token) {
+        Token tk = tokenRepository.findByUser(userRepository.findById(userId).get())
+                .orElseThrow(() -> new AppException(ErrorCode.TOKEN_NOT_EXISTED));
+        if(tk.getToken() == token && tk.getExpiredAt().after(new Date())) {
+            User user = userRepository.findById(userId).get();
+            user.setStatus((byte) 1);
+            userRepository.save(user);
+            return true;
+        }else{
+            return false;
+        }
     }
 }
