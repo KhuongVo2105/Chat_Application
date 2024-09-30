@@ -42,7 +42,7 @@ public class SecurityConfig {
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
     private final String[] PUBLIC_ENDPOINTS = {
-            "/users", "/auth/token", "auth/introspect", "auth/logout"
+            "/users", "/auth/token", "auth/introspect", "auth/logout", "/users/forgotPasswd", "/users/reset-password"
     };
 
     @Autowired
@@ -61,40 +61,6 @@ public class SecurityConfig {
                         jwtConfigurer.decoder(jwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
         );
-
-        httpSecurity.exceptionHandling(
-                exceptionHandling ->
-                        exceptionHandling
-                                .authenticationEntryPoint(new AuthenticationEntryPoint() {
-                                    @Override
-                                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-                                        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                                                .message(ErrorCode.AUTHENTICATION_FAILURE.getMessage())
-                                                .code(ErrorCode.AUTHENTICATION_FAILURE.getCode())
-                                                .build();
-
-                                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-                                        response.getWriter().write(new ObjectMapper().writeValueAsString(apiResponse));
-                                    }
-                                })
-                                .accessDeniedHandler(new AccessDeniedHandler() {
-                                    @Override
-                                    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-                                        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                                                .message(ErrorCode.PERMISSION_DENIED.getMessage())
-                                                .code(ErrorCode.PERMISSION_DENIED.getCode())
-                                                .build();
-
-                                        response.setStatus(HttpStatus.FORBIDDEN.value());
-                                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-                                        response.getWriter().write(new ObjectMapper().writeValueAsString(apiResponse));
-                                    }
-                                })
-        );
-
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
         return httpSecurity.build();

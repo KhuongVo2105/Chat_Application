@@ -12,8 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-    String id, username, email, firstName, lastName;
-    LocalDate dob;
-    Set<Role> roles;
+public class ForgotPasswordResponse {
+    String email;
+    String message;
+    String token;
 }

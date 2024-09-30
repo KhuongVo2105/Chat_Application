@@ -2,6 +2,7 @@ package com.example.identity_service.dto.request;
 
 import com.example.identity_service.exception.ErrorCode;
 import com.example.identity_service.validator.DobConstraint;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +19,8 @@ public class UserCreationRequest {
     String username;
     @Size(min = 8, message = "INVALID_PASSWORD")
     String password;
+    @Email(message = "EMAIL_INVALID")
+    String email;
     String firstName, lastName;
 
     @DobConstraint(min = 10, message = "INVALID_DOB")
