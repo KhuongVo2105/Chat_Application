@@ -26,6 +26,10 @@ const ForgotPassword = ({ navigation }) => {
     });
   const [loading, setLoading] = useState(false);
 
+  const handleBack = () => {
+    navigation.navigate("Login");
+  };
+
   const handleVerifyToken = async () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -74,7 +78,8 @@ const ForgotPassword = ({ navigation }) => {
 
       <TextInput
         style={styles.input}
-        placeholder="Nhập địa chỉ email"
+        placeholder={"Nhập địa chỉ email"}
+        placeholderTextColor={"#333"}
         value={forgotPasswordRequest.email}
         onChangeText={(text) =>
           setForgotPasswordRequest({ ...forgotPasswordRequest, email: text })
@@ -85,10 +90,11 @@ const ForgotPassword = ({ navigation }) => {
       {loading ? ( // Hiển thị ActivityIndicator khi đang loading
         <ActivityIndicator size="large" color="#0095f6" />
       ) : (
-        <TouchableOpacity onPress={handleVerifyToken}>
-          <Text>Forgot Password?</Text>
+        <TouchableOpacity style={styles.sendBtn} onPress={handleVerifyToken}>
+          <Text style={styles.sendText}>Send code</Text>
         </TouchableOpacity>
       )}
+      <Button title="Back" onPress={handleBack} />
     </View>
   );
 };
@@ -99,6 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: "center", // Căn chỉnh theo chiều dọc
     alignItems: "center", // Căn chỉnh theo chiều ngang
     padding: 20, // Khoảng cách từ mép khung tới nội dung
+    backgroundColor: "white",
   },
   description: {
     fontSize: 16,
@@ -113,6 +120,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingLeft: 10, // Đệm bên trong cho văn bản trong input
     borderRadius: 5, // Làm bo góc ô input
+  },
+  sendBtn: {
+    backgroundColor: "#0095f6",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    width: "auto",
+    marginHorizontal: "auto",
+    marginBottom: 30,
+  },
+  sendText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
