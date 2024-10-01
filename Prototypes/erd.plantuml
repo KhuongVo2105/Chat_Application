@@ -15,7 +15,7 @@ entity "USERS" as u {
 
 entity "LIKES" as l {
     id:integer<<auto_increment>> 
-    userId:String
+    userId:UUID
     postId:integer
     --
     created_at:Timestamp
@@ -23,7 +23,7 @@ entity "LIKES" as l {
 
 entity "POSTS" as p {
     id:integer<<auto_increment>>
-    userId:String
+    userId:UUID
     --
     visible:boolean /'True:hien thi, False: an'/
     caption:String
@@ -41,17 +41,18 @@ entity "MEDIAS" as m {
 
 entity "COMMENTS" as c {
     id:integer<<auto_increment>>
-    userId:String
+    userId:UUID
     postId:String
     --
     visible:boolean /'True: hien'/
     preComment:integer
     commentText:String
     createdAt:Timestamp
+    updatedAt:Timestamp
 }
 
-entity "FOLLOWS" as f {
-    id:String
+entity "FOLLOWS" as f {    
+    id:integer<<auto_increment>>
     followerUserId:String
     followingUserId:String
     --
@@ -59,12 +60,14 @@ entity "FOLLOWS" as f {
 }
 
 entity "GROUPS" as g{
-    id:String
+    id:integer<<auto_increment>>
+    userId:UUID
     ---
     creatAt:Timestamp
 }
 
 entity "MEMBERS" as mem{
+    id:integer<<auto_increment>>
     groupId:String
     userId:UUID
     ---
@@ -72,20 +75,20 @@ entity "MEMBERS" as mem{
 }
 
 entity "LEADERS" as le{
-    id:integer
+    id:integer<<auto_increment>>
     userId:UUID
     groupId:String
     ---
 }
 
 entity "MESSAGES" as me{
-    id:integer
+    id:integer<<auto_increment>>
     groupId:String
     userId:UUID
     ---
     visible:boolean
     context:String
-    createAt:Timestamp
+    createdAt:Timestamp
 }
 
 entity "ROLES" as ro{
@@ -102,22 +105,26 @@ entity "PERMISSIONS" as pe{
 
 /'Tin noi bat'/
 entity "WISHLISTS" as wl{
+    id:integer<<auto_increment>>
+    userId:UUID
     postId:String
+    ---
     createdAt:Timestamp
 }
 
 /''/
 entity "BLOCKS" as bl{
-    blockId:integer<<auto_increment>>
+    id:integer<<auto_increment>>
     blockerId:UUID
     blockedId:UUID
 }
 
 entity "REPORTS" as rp{
-    reportId:integer<<auto_increment>>
+    id:integer<<auto_increment>>
     reporter:UUID /'id nguoi tao phieu report'/
     reported:UUID  /'id cua nguoi bi report'/
     reportedPost:   /'id cua bai post bi report'/
+    ---
     context:byte
     createdAt:Timestamp
 }
@@ -126,16 +133,23 @@ u ||..o{ p
 u ||..o{ f
 u ||..o{ l
 u ||..o{ c
-u ||..|| g
+u ||..o{ g
 u ||..o{ le
-u ||.. ro
+u ||..|| ro
+u ||..o{ wl
+u ||..o{ bl : "Blocker"
+bl ||..|| u: "Blocked"
 p ||..o{ m
 p ||..o{ c
 p ||..o{ l
 g ||..o{ me
+me ||..|| u
 pe ||..|| ro
 g ||..o{ mem
 mem ||..|| u
 g ||..|| le
+wl ||..|| p
+rp }o..|| u : "Reporter"
+rp ||..|| u : "Reported"
 
 @enduml
