@@ -16,8 +16,15 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role {
     @Id
-    String name, description;
+    String name;
+
+    String description;
 
     @ManyToMany
+    @JoinTable(
+            name = "permission_group",
+            joinColumns = @JoinColumn(name = "role_id" ),
+            inverseJoinColumns = @JoinColumn(name = "permission_id" )
+    )
     Set<Permission> permissions;
 }

@@ -16,5 +16,10 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Permission {
     @Id
-    String name, description;
+    String name;
+
+    String description;
+
+    @ManyToMany(mappedBy = "permissions")
+    Set<Role> roles;
 }

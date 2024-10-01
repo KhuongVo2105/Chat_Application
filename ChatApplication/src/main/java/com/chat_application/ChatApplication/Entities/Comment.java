@@ -18,13 +18,17 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-    @OneToOne
-    User user;
 
     boolean visible;
-
     int preComment;
-
     String context;
     Timestamp updatedAt, createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    User user;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    Post post;
 }

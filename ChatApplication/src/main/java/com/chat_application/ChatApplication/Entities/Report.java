@@ -5,8 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -14,15 +12,23 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Post {
+public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-    boolean visible;
-    String caption;
-    Timestamp createdAt, updatedAt;
+
+    byte context;
+    Timestamp createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;
+    @JoinColumn(name = "reporter_id", nullable = false)
+    User reporter;
+
+    @OneToOne
+    @JoinColumn(name = "reported_id",nullable = false)
+    User reported;
+
+    @OneToOne
+    @JoinColumn(name = "reported_post_id")
+    Post reportedPost;
 }

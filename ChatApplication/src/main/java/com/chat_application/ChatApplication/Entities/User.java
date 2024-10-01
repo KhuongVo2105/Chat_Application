@@ -26,13 +26,4 @@ public class User {
 
     @ManyToMany
     Set<Role> roles;
-
-    @OneToMany
-    Set<Post> posts;
-
-    @OneToMany
-    Set<Follow> follows;
-
-    @OneToMany
-    Set<Group> groups;
 }

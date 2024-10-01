@@ -19,5 +19,9 @@ public class Media {
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
     String mediaUrl;
-    Timestamp createAt;
+    Timestamp createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    Post post;
 }

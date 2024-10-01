@@ -20,6 +20,11 @@ public class Like {
     int id;
     Timestamp createdAt;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     User user;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    Post post;
 }
