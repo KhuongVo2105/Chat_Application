@@ -5,8 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -20,7 +18,12 @@ public class Follow {
     int id;
 
     @OneToOne
-    User followerUser, followingUser;
+    @JoinColumn(nullable = false)
+    User followerUser;
+
+    @OneToOne
+    @JoinColumn(nullable = false)
+    User followingUser;
 
     Timestamp createdAt;
 }

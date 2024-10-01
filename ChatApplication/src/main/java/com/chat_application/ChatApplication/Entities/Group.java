@@ -17,8 +17,13 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
+
     Timestamp createdAt;
 
-    @OneToMany
-    Set<Message> messages;
+    @OneToOne
+    Leader leader;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    User user;
 }

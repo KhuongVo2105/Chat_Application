@@ -18,10 +18,14 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
 
-    @OneToOne
-    User user;
-
     boolean visible;
     String context;
     Timestamp createdAt;
+
+    @OneToOne
+    User user;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
+    Group group;
 }
