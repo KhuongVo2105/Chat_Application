@@ -96,3 +96,8 @@ public class Address {
     private User user;
 }
 ```
+### Endpoint
+Context-path
+> http://**[hostnam]**:**[port]**/chat-application/v1/
+
+[Read more](https://restfulapi.net/resource-naming/)
