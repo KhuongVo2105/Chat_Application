@@ -1,6 +1,6 @@
 @startuml
 
-entity "USERS" as u {
+entity "Users" as u {
     id:UUID
     --
     username:varchar(256)
@@ -13,7 +13,7 @@ entity "USERS" as u {
     updatedAt:Timestamp
 }
 
-entity "LIKES" as l {
+entity "Likes" as l {
     id:integer<<auto_increment>> 
     userId:UUID
     postId:integer
@@ -21,7 +21,7 @@ entity "LIKES" as l {
     created_at:Timestamp
 }
 
-entity "POSTS" as p {
+entity "Posts" as p {
     id:integer<<auto_increment>>
     userId:UUID
     --
@@ -31,7 +31,7 @@ entity "POSTS" as p {
     updatedAt:Timestamp
 }
 
-entity "MEDIAS" as m {
+entity "Medias" as m {
     id:integer<<auto_increment>>
     postId:integer
     --
@@ -39,7 +39,7 @@ entity "MEDIAS" as m {
     created_at:Timestamp
 }
 
-entity "COMMENTS" as c {
+entity "Comments" as c {
     id:integer<<auto_increment>>
     userId:UUID
     postId:String
@@ -51,7 +51,7 @@ entity "COMMENTS" as c {
     updatedAt:Timestamp
 }
 
-entity "FOLLOWS" as f {    
+entity "Follows" as f {    
     id:integer<<auto_increment>>
     followerUserId:String
     followingUserId:String
@@ -59,14 +59,14 @@ entity "FOLLOWS" as f {
     createdAt:Timestamp
 }
 
-entity "GROUPS" as g{
+entity "ChatGroups" as g{
     id:integer<<auto_increment>>
     userId:UUID
     ---
     creatAt:Timestamp
 }
 
-entity "MEMBERS" as mem{
+entity "GroupMembers" as mem{
     id:integer<<auto_increment>>
     groupId:String
     userId:UUID
@@ -74,14 +74,14 @@ entity "MEMBERS" as mem{
     createdAt:Timestamp
 }
 
-entity "LEADERS" as le{
+entity "GroupLeaders" as le{
     id:integer<<auto_increment>>
     userId:UUID
     groupId:String
     ---
 }
 
-entity "MESSAGES" as me{
+entity "Messages" as me{
     id:integer<<auto_increment>>
     groupId:String
     userId:UUID
@@ -91,20 +91,20 @@ entity "MESSAGES" as me{
     createdAt:Timestamp
 }
 
-entity "ROLES" as ro{
+entity "Roles" as ro{
     name:String
     ---
     description:String
 }
 
-entity "PERMISSIONS" as pe{
+entity "Permissions" as pe{
     name:String
     ---
     description:String
 }
 
 /'Tin noi bat'/
-entity "WISHLISTS" as wl{
+entity "Highlights" as wl{
     id:integer<<auto_increment>>
     userId:UUID
     postId:String
@@ -113,13 +113,13 @@ entity "WISHLISTS" as wl{
 }
 
 /''/
-entity "BLOCKS" as bl{
+entity "Blocks" as bl{
     id:integer<<auto_increment>>
     blockerId:UUID
     blockedId:UUID
 }
 
-entity "REPORTS" as rp{
+entity "Reports" as rp{
     id:integer<<auto_increment>>
     reporter:UUID /'id nguoi tao phieu report'/
     reported:UUID  /'id cua nguoi bi report'/

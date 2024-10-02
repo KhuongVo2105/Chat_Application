@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@Table(name = "Permissions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
