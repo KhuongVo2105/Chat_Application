@@ -33,8 +33,8 @@ public class UserService {
         user.setEmail(req.getEmail());
         user.setUsername(req.getUsername());
         user.setPassword(new BCryptPasswordEncoder().encode(req.getPassword()));
-        user.setCreated_at(Timestamp.from(Instant.now()));
-        user.setUpdated_at(Timestamp.from(Instant.now()));
+        user.setCreatedAt(Timestamp.from(Instant.now()));
+        user.setUpdatedAt(Timestamp.from(Instant.now()));
 
         userRepository.save(user);
 
