@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import java.sql.Timestamp;
 
 @Entity
+@Table(name = "Blocks")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -7,12 +7,13 @@ import lombok.experimental.FieldDefaults;
 import java.sql.Timestamp;
 
 @Entity
+@Table(name = "Highlights")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Wishlist {
+public class Highlight {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;

@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
+@Table(name = "ChatGroups")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
