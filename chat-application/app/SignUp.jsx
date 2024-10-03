@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, TextInput } from 'react-native'
 import images from '../contants/image'
 import { useState } from 'react'
 
-const SignIn = () => {
+const SignUp = () => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
 
@@ -29,7 +29,7 @@ const SignIn = () => {
         value={email} />
       <TouchableOpacity
         className="w-96 mb-3">
-        <Text className="text-blue-600 text-right drop-shadow-md font-medium">Forgotten password?</Text>
+        <Text className="text-blue-600 text-right drop-shadow-md">Forgotten password?</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -44,18 +44,11 @@ const SignIn = () => {
 
       <TouchableOpacity className="flex flex-row justify-items-center items-center">
         <Image className="h-6" source={images.icon_fb} resizeMode='contain' />
-        <Text className="text-base text-blue-600 font-medium">Log in with Facebook</Text>
+        <Text className="text-base text-blue-600">Log in with Facebook</Text>
       </TouchableOpacity>
-
-      <View className="flex flex-row items-center justify-center sticky bottom-0 py-6 border-t-2 border-gray-300 w-full absolute bottom-0">
-        <Text className="text-base text-gray-500">Don't have an account?</Text>
-        <TouchableOpacity className="ml-2">
-          <Text className="text-base font-medium text-blue-600">Sign up</Text>
-        </TouchableOpacity>
-      </View>
     </View>
 
   )
 }
 
-export default SignIn
+export default SignUp
