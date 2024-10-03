@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import { SplashScreen } from 'expo-router';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignIn from './SignIn';
+import SignUp from './SignUp';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,6 +33,7 @@ const RootLayout = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name='SignIn' component={SignIn} options={{headerShown:false}}/>
+            <Stack.Screen name='SignUp' component={SignUp} options={{headerShown:false}}/>
         </Stack.Navigator>
     )
 }
