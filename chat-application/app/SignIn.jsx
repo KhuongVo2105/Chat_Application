@@ -14,6 +14,9 @@ const SignIn = ({ navigation }) => {
     email: email,
     password: password
   }
+  const transfer = {
+    prev: 'SignIn'
+  }
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -39,7 +42,7 @@ const SignIn = ({ navigation }) => {
   }
 
   const handleSignUp = () => {
-    navigation.navigate('Register_Email')
+    navigation.navigate('Register_Email',{data: transfer})
   }
 
   const handleFacebookLogin = () => {

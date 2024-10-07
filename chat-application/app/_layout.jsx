@@ -9,6 +9,9 @@ import SignUp from './SignUp';
 import Register_Email from './Register_Email'
 import Register_ConfirmCode from './Register_ConfirmCode'
 import Register_CreatePasswd from './Register_CreatePasswd'
+import Register_Birthday from './Register_Birthday'
+import Register_Username from './Register_Username'
+import Register from './Register'
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,11 +39,14 @@ const RootLayout = () => {
 
     return (
         <Stack.Navigator initialRouteName='SignIn'>
-            <Stack.Screen name='SignIn' component={SignIn} options={{headerShown:false}}/>
-            <Stack.Screen name='SignUp' component={SignUp} options={{headerShown:false}}/>
-            <Stack.Screen name='Register_Email' component={Register_Email} options={{headerShown:false}}/>
-            <Stack.Screen name='Register_ConfirmCode' component={Register_ConfirmCode} options={{headerShown:false}}/>
-            <Stack.Screen name='Register_CreatePasswd' component={Register_CreatePasswd} options={{headerShown:false}}/>
+            <Stack.Screen name='SignIn' component={SignIn} options={{ headerShown: false }} />
+            <Stack.Screen name='SignUp' component={SignUp} options={{ headerShown: false }} />
+            <Stack.Screen name='Register_Email' component={Register_Email} options={{ headerShown: false }} />
+            <Stack.Screen name='Register_ConfirmCode' component={Register_ConfirmCode} options={{ headerShown: false }} />
+            <Stack.Screen name='Register_CreatePasswd' component={Register_CreatePasswd} options={{ headerShown: false }} />
+            <Stack.Screen name='Register_Birthday' component={Register_Birthday} options={{ headerShown: false }} />
+            <Stack.Screen name='Register_Username' component={Register_Username} options={{ headerShown: false }} />
+            <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }

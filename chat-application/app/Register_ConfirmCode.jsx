@@ -7,15 +7,19 @@ import axios from 'axios'
 const SignIn = ({ navigation, route }) => {
   const [email, setEmail] = useState()
   const [confirmCode, setConfirmCode] = useState()
+  const [prev, setPrev] = useState()
   const [loading, setLoading] = useState(false)
-  const confirmCodeRequest = {
-    code: confirmCode
+
+  const transfer ={
+    prev: prev,
+    email: email
   }
 
   useEffect(() => {
     if (route.params?.data) {
       const { data } = route.params;
       setEmail(data.email);  // Ví dụ: Đặt email từ dữ liệu truyền vào
+      setPrev(data.prev)
     }
   }, [route.params])
 
@@ -51,11 +55,12 @@ const SignIn = ({ navigation, route }) => {
     // }
 
     setLoading(false);
-    navigation.navigate('Register_CreatePasswd')
+    transfer.prev='Register_ConfirmCode'
+    navigation.navigate('Register_CreatePasswd', {data: transfer})
   }
 
   const handleBack = () => {
-    navigation.navigate('Register_Email')
+    navigation.navigate(prev)
   }
 
   const handleResendCode = () => {
