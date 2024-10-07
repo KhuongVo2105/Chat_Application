@@ -1,19 +1,22 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, Image, TextInput, Alert, Modal, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, Image, Button, TextInput, Alert, Modal, ScrollView } from 'react-native'
 import images from '../contants/image'
 import { useState, useEffect } from 'react';
 import axios from 'axios'
 
-const CreatePassword = ({ navigation, route }) => {
+const Username = ({ navigation, route }) => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
-  const [loading, setLoading] = useState(false)
+  const [birthday, setBirthday] = useState(new Date())
+  const [username, setUsername] = useState()
   const [prev, setPrev] = useState()
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const transfer = {
     email: email,
     password: password,
+    birthday: birthday,
+    username: username,
     prev: prev
   }
 
@@ -21,13 +24,11 @@ const CreatePassword = ({ navigation, route }) => {
     if (route.params?.data) {
       const { data } = route.params;
       setEmail(data.email);  // Ví dụ: Đặt email từ dữ liệu truyền vào
+      setPassword(data.password)
+      setBirthday(data.birthday)
       setPrev(data.prev)
     }
   }, [route.params])
-
-  const handleTogglePassword = () => {
-    setIsPasswordVisible(prevState => !prevState);
-  };
 
   const handleBack = () => {
     navigation.navigate(prev)
@@ -37,9 +38,15 @@ const CreatePassword = ({ navigation, route }) => {
     navigation.navigate('SignIn')
   }
 
-  const handleBirthday = () => {
-    transfer.prev = 'Register_CreatePasswd'
-    navigation.navigate('Register_Birthday', { data: transfer })
+  const handleRegister = () => {
+    transfer.prev = 'Register_Username'
+    navigation.navigate('Register', { data: transfer })
+  }
+
+  const handleUsenameIsExist = ()=>{
+    if(username){
+      
+    }
   }
 
   return (
@@ -53,33 +60,22 @@ const CreatePassword = ({ navigation, route }) => {
             source={images.icon_back}
             resizeMode='contain' />
         </TouchableOpacity>
-        <Text className="text-3xl font-semibold mb-1">Create a password</Text>
+        <Text className="text-3xl font-semibold mb-1">Create a username</Text>
         <Text className="text-base mb-7">
-          Create a password with at least 6 letters or numbers. It should be something others can't guess.
+          Add a username or use our suggestion. You can change this at any time.
         </Text>
 
-        {/* Confirm code */}
-        <View
-          className="w-96 relative">
-
-          <TextInput
-            className="enabled:hover:border-gray-40 border py-2 px-4 w-full hover:shadow mb-3 rounded-2xl"
-            onChangeText={setPassword}
-            placeholder='Password'
-            value={password}
-            secureTextEntry={!isPasswordVisible} />
-
-          <TouchableOpacity className="absolute right-0  top-1/2 -translate-y-4"
-            onPress={handleTogglePassword}>
-            <Image className="h-5"
-              source={isPasswordVisible ? images.icon_show : images.icon_hide} resizeMode='contain' />
-          </TouchableOpacity>
-        </View>
+        {/* enter username */}
+        <TextInput
+          className="enabled:hover:border-gray-40 border py-2 px-4 w-full hover:shadow mb-3 rounded-2xl"
+          placeholder="Username"
+          onChangeText={setUsername}
+          value={username} />
 
         {/* Go to next page */}
         <TouchableOpacity
           className="w-96 bg-blue-600 py-2 rounded-full mb-3"
-          onPress={handleBirthday}>
+          onPress={handleRegister}>
           <Text className="text-center text-lg font-medium text-white">Next</Text>
         </TouchableOpacity>
       </View>
@@ -95,4 +91,4 @@ const CreatePassword = ({ navigation, route }) => {
   )
 }
 
-export default CreatePassword
+export default Username

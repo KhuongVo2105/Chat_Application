@@ -1,18 +1,27 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native'
 import images from '../contants/image'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios'
 
-const SignIn = ({ navigation }) => {
+const SignIn = ({ navigation, route }) => {
   const [email, setEmail] = useState()
+  const [prev, setPrev] = useState()
   const [loading, setLoading] = useState(false)
   const checkEmaiRequest = {
     email: email
   }
-  const userData = {
-    email: checkEmaiRequest.email
+  const transfer = {
+    email: checkEmaiRequest.email,
+    prev: prev
   }
+  useEffect(() => {
+    if (route.params?.data) {
+      const { data } = route.params;
+      console.log(`transfer package: ${data.prev}`)
+      setPrev(data.prev)
+    }
+  }, [route.params])
 
   const handleCheckFormat = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -66,11 +75,16 @@ const SignIn = ({ navigation }) => {
     // }
 
     setLoading(false);
-    navigation.navigate('Register_ConfirmCode', { data: userData })
+    transfer.prev = 'Register_Email'
+    navigation.navigate('Register_ConfirmCode', { data: transfer })
   }
 
-  const handleSignIn = () => {
-    navigation.navigate('SignIn')
+  const handlePre = () => {
+    if(prev){
+      navigation.navigate(prev)
+    }else{
+      console.log("No previous page found");
+    }
   }
 
   return (
@@ -78,7 +92,7 @@ const SignIn = ({ navigation }) => {
     <View className="w-full h-full flex items-center bg-white">
 
       <View className="w-96 mt-4">
-        <TouchableOpacity className="w-full" onPress={handleSignIn}>
+        <TouchableOpacity className="w-full" onPress={handlePre}>
           <Image
             className="w-6"
             source={images.icon_back}
@@ -104,7 +118,7 @@ const SignIn = ({ navigation }) => {
 
       {/* Sign up redirect */}
       <View className="flex flex-row items-center justify-center sticky bottom-0 py-6 w-full absolute bottom-0">
-        <TouchableOpacity className="ml-2" onPress={handleSignIn}>
+        <TouchableOpacity className="ml-2" onPress={handlePre}>
           <Text className="text-base font-medium text-blue-600">I already have an account</Text>
         </TouchableOpacity>
       </View>
