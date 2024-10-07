@@ -1,32 +1,40 @@
 package com.chat_application.ChatApplication.Services;
 
-import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
-import com.chat_application.ChatApplication.Dto.Request.CreateUserReq;
+import com.chat_application.ChatApplication.Dto.Request.UserCreateReq;
+import com.chat_application.ChatApplication.Dto.Request.UserReq;
+import com.chat_application.ChatApplication.Dto.Response.UserResponse;
 import com.chat_application.ChatApplication.Entities.User;
+import com.chat_application.ChatApplication.Enums.Role;
 import com.chat_application.ChatApplication.Exceptions.AppException;
 import com.chat_application.ChatApplication.Exceptions.ErrorCode;
+import com.chat_application.ChatApplication.Mapper.UserMapper;
 import com.chat_application.ChatApplication.Repositories.UserRepository;
 import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 @Service
-@Data
-@Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
+@Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
-    @Autowired
     UserRepository userRepository;
+    UserMapper userMapper;
+    PasswordEncoder passwordEncoder;
 
-    public ApiResponse<String> createUser(CreateUserReq req) {
-        if (userRepository.existsByEmail(req.getEmail())) throw new AppException(ErrorCode.USER_EXISTED);
+    public UserResponse createUser(UserCreateReq req) {
+        if (userRepository.existsByEmail(req.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
+        if (userRepository.existsByUsername(req.getUsername())) throw new AppException(ErrorCode.USERNAME_EXISTED);
 
         // Mapper
         User user = new User();
@@ -36,11 +44,38 @@ public class UserService {
         user.setCreatedAt(Timestamp.from(Instant.now()));
         user.setUpdatedAt(Timestamp.from(Instant.now()));
 
-        userRepository.save(user);
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+//        user.setRoles(roles);
 
-        return ApiResponse.<String>builder()
-                .code(200)
-                .message("User created successfully")
-                .build();
+        user = userRepository.save(user);
+        return userMapper.toUserResponse(user);
     }
+
+    public List<UserResponse> getAll() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toUserResponse).toList();
+    }
+
+    public UserResponse get(String id) {
+        return userMapper.toUserResponse(findById(id));
+    }
+
+    public UserResponse update(String id, UserReq request) {
+        var user = findById(id);
+        userMapper.updateUser(user, request);
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    private User findById(String id) {
+        return userRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
+
+    public void delete(String id) {
+        userRepository.deleteById(UUID.fromString(id));
+    }
+
 }
