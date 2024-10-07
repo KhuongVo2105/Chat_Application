@@ -1,0 +1,130 @@
+/* Đặt font và màu sắc mặc định */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Định dạng cho container trang nhập username */
+#username-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Định dạng form nhập username */
+#usernameForm, #messageForm {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Ẩn trang chat khi chưa kết nối */
+.hidden {
+    display: none !important;
+}
+
+/* Định dạng trang chat */
+#chat-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+.connecting {
+    font-size: 18px;
+    color: #999;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#messageArea {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+#messageArea li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#messageArea li:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+#messageArea li:nth-child(even) {
+    background-color: #e9e9e9;
+}
+
+/* Định dạng input và nút gửi trong trang chat */
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group .form-control {
+    flex: 1;
+    border-right: 0;
+    border-radius: 4px 0 0 4px;
+}
+
+.input-group .btn-primary {
+    border-radius: 0 4px 4px 0;
+    flex: none;
+}
+
