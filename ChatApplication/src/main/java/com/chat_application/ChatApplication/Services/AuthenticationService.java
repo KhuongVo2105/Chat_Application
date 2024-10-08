@@ -44,6 +44,7 @@ public class AuthenticationService {
     String SIGNER_KEY;
 
     UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
 
     /**
      * @param request
@@ -53,7 +54,7 @@ public class AuthenticationService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        boolean authenticated = new BCryptPasswordEncoder().matches(request.getPassword(), user.getPassword());
+        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
 
@@ -68,7 +69,7 @@ public class AuthenticationService {
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
-                .issuer("identity.com")
+                .issuer("instagram.com")
                 .issueTime(new Date())
                 .expirationTime(
                         new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli())
