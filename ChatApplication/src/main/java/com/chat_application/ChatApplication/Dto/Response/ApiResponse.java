@@ -17,5 +17,4 @@ public class ApiResponse<T> {
     int code = 200; // successfully
     String message = "";
     T result;
-    HashMap<String, String> links;
 }

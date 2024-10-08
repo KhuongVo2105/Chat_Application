@@ -2,6 +2,7 @@ package com.chat_application.ChatApplication.Services;
 
 import com.chat_application.ChatApplication.Dto.Request.UserCreateReq;
 import com.chat_application.ChatApplication.Dto.Request.UserReq;
+import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Dto.Response.UserResponse;
 import com.chat_application.ChatApplication.Entities.User;
 import com.chat_application.ChatApplication.Enums.Role;
@@ -40,7 +41,7 @@ public class UserService {
         User user = new User();
         user.setEmail(req.getEmail());
         user.setUsername(req.getUsername());
-        user.setPassword(new BCryptPasswordEncoder().encode(req.getPassword()));
+        user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setCreatedAt(Timestamp.from(Instant.now()));
         user.setUpdatedAt(Timestamp.from(Instant.now()));
 
