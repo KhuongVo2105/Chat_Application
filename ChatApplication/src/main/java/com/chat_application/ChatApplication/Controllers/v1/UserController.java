@@ -60,4 +60,9 @@ public class UserController {
                 .message("'" + id + "' was deleted")
                 .build();
     }
+
+    @PostMapping("/my-info")
+    ApiResponse<UserResponse> getMyInfo(){
+        return ApiResponse.<UserResponse>builder().result(userService.getMyInfo()).build();
+    }
 }

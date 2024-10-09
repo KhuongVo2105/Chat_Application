@@ -1,7 +1,7 @@
 package com.chat_application.ChatApplication.Configuration;
 
 import com.chat_application.ChatApplication.Entities.User;
-import com.chat_application.ChatApplication.Enums.Role;
+import com.chat_application.ChatApplication.Enums.ERole;
 import com.chat_application.ChatApplication.Repositories.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class ApplicationInitConfig {
         return args -> {
             if (userRepository.findByEmail("admin").isEmpty()) {
                 var roles = new HashSet<String>();
-                roles.add(Role.ADMIN.name());
+                roles.add(ERole.ADMIN.name());
                 User user = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
