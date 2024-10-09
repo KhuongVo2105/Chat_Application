@@ -1,6 +1,6 @@
 package com.chat_application.ChatApplication.Enums;
 
-public enum Role {
+public enum ERole {
     ADMIN,
     USER
 }
