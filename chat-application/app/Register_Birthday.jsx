@@ -18,7 +18,7 @@ const Birthday = ({ navigation, route }) => {
     setShow(false);
     setBirthday(currentDate);
   };
-
+  
   const showDatePicker = () => {
     setShow(true);
   };
