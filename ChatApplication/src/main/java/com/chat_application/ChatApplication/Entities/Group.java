@@ -20,11 +20,4 @@ public class Group {
     int id;
 
     Timestamp createdAt;
-
-    @OneToOne
-    Leader leader;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;
 }

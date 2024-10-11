@@ -14,9 +14,6 @@ const SignIn = ({ navigation }) => {
     email: email,
     password: password
   }
-  const transfer = {
-    prev: 'SignIn'
-  }
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -42,7 +39,7 @@ const SignIn = ({ navigation }) => {
   }
 
   const handleSignUp = () => {
-    navigation.navigate('Register_Email',{data: transfer})
+    navigation.navigate('SignUp')
   }
 
   const handleFacebookLogin = () => {
@@ -116,7 +113,7 @@ const SignIn = ({ navigation }) => {
 
       {/* Sign up redirect */}
       <View className="flex flex-row items-center justify-center sticky bottom-0 py-6 border-t-2 border-gray-300 w-full absolute bottom-0">
-        <Text className="text-base text-gray-500">Don't have an account?</Text>
+        <Text className="text-base text-gray-500">Already ?</Text>
         <TouchableOpacity className="ml-2" onPress={handleSignUp}>
           <Text className="text-base font-medium text-blue-600">Sign up</Text>
         </TouchableOpacity>

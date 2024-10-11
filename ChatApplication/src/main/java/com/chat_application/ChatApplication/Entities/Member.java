@@ -19,6 +19,8 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
 
+    boolean isLeader;
+
     Timestamp createdAt;
 
     @ManyToOne
