@@ -26,15 +26,17 @@ public class SecurityConfig {
 
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
-    private final String[] PUBLIC_ENDPOINTS = {
-            "/v1/users", "/v1/auth/token", "/v1/auth/introspect"
-    };
+    private final String[] PUBLIC_ENDPOINTS_POST = {
+            "/v1/users", "/v1/auth/token", "/v1/auth/introspect", "/v1/verification/send-code"
+    }, PUBLIC_ENDPOINTS_GET = {"/v1/verification/verify"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.authorizeHttpRequests(request ->
-                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
+                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST)
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
                         .permitAll()
                         .anyRequest().authenticated());
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, Image, Button, TextInput, Alert, Modal, ScrollView } from 'react-native'
-import images from '../contants/image'
+import images from '../constants/image'
 import { useState, useEffect } from 'react';
 import axios from 'axios'
 
@@ -43,9 +43,9 @@ const Username = ({ navigation, route }) => {
     navigation.navigate('Register', { data: transfer })
   }
 
-  const handleUsenameIsExist = () => {
-    if (username) {
-
+  const handleUsenameIsExist = ()=>{
+    if(username){
+      
     }
   }
 
@@ -60,25 +60,32 @@ const Username = ({ navigation, route }) => {
             source={images.icon_back}
             resizeMode='contain' />
         </TouchableOpacity>
-        <Text className="text-3xl font-semibold mb-1">To sign up, read and agree to our terms and policies</Text>
+        <Text className="text-3xl font-semibold mb-1">Create a username</Text>
         <Text className="text-base mb-7">
-          By signing up you agree to Instagram's Terms, Privacy Policy and Cookies Policy
+          Add a username or use our suggestion. You can change this at any time.
         </Text>
 
         {/* enter username */}
-        <TouchableOpacity
-          className="bg-blue-600 py-2 rounded-full mb-3"
-          onPress={handleRegister}>
-          <Text className="text-center text-lg font-medium text-white">I agree</Text>
-        </TouchableOpacity>
+        <TextInput
+          className="enabled:hover:border-gray-40 border py-2 px-4 w-full hover:shadow mb-3 rounded-2xl"
+          placeholder="Username"
+          onChangeText={setUsername}
+          value={username} />
 
+        {/* Go to next page */}
         <TouchableOpacity
-          className="bg-white py-2 rounded-full mb-3"
-          onPress={handleSignIn}>
-          <Text className="text-center text-lg font-medium text-blue-600">Already have an account?</Text>
+          className="w-96 bg-blue-600 py-2 rounded-full mb-3"
+          onPress={handleRegister}>
+          <Text className="text-center text-lg font-medium text-white">Next</Text>
         </TouchableOpacity>
       </View>
 
+      {/* Sign up redirect */}
+      <View className="flex flex-row items-center justify-center sticky bottom-0 py-6 w-full absolute bottom-0">
+        <TouchableOpacity className="ml-2" onPress={handleSignIn}>
+          <Text className="text-base font-medium text-blue-600">I already have an account</Text>
+        </TouchableOpacity>
+      </View>
     </View>
 
   )

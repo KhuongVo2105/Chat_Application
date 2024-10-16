@@ -47,9 +47,15 @@ public enum ErrorCode {
     PERMISSION_EXISTED(1062, "Permission already exists in the system.", HttpStatus.BAD_REQUEST),
     PERMISSION_NOT_EXISTED(1063, "Permission not found in the system.", HttpStatus.NOT_FOUND),
 
-    // Other (code >=2000)
-    KEY_INVALID(2001, "Uncategorized error", HttpStatus.BAD_REQUEST),
-    INVALID_DOB(2004, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
+    // OTP Group (code 107x)
+    TOKEN_EXISTED(1072, "Token already exists for this user. Please use the current token or wait for it to expire.", HttpStatus.BAD_REQUEST),
+    TOKEN_NOT_EXISTED(1073, "Token does not exist or has expired. Please request a new token.", HttpStatus.NOT_FOUND),
+    EMAIL_NOT_MATCHED_WITH_TOKEN(1074, "The email provided does not match with the token.", HttpStatus.BAD_REQUEST),
+    TOKEN_EXPIRED(1075, "The token has expired.", HttpStatus.BAD_REQUEST),
+
+    // Other (code >=3000)
+    KEY_INVALID(3001, "Uncategorized error", HttpStatus.BAD_REQUEST),
+    INVALID_DOB(3004, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatus status) {
