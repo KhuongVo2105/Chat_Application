@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native'
-import images from '../contants/image'
+import images from '../constants/image'
 import { useState } from 'react';
 import axios from 'axios'
 
