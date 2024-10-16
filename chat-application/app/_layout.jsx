@@ -12,6 +12,7 @@ import Register_CreatePasswd from './Register_CreatePasswd'
 import Register_Birthday from './Register_Birthday'
 import Register_Username from './Register_Username'
 import Register from './Register'
+import Home from "./Home";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -47,6 +48,7 @@ const RootLayout = () => {
             <Stack.Screen name='Register_Birthday' component={Register_Birthday} options={{ headerShown: false }} />
             <Stack.Screen name='Register_Username' component={Register_Username} options={{ headerShown: false }} />
             <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
+            <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }
