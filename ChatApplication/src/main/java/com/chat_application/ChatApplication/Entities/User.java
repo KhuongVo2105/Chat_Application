@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class User {
     boolean privacy;
     byte status;
     String avatar;
+    LocalDate birthday;
     Timestamp createdAt, updatedAt;
 
     @ManyToMany
