@@ -1,33 +1,27 @@
 package com.chat_application.ChatApplication.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
-@Table(name = "Users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class Token {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
-    String username, password;
-    @Email(message = "EMAIL_INVALID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    int id;
+    int token;
+    @Email
     String email;
-    boolean privacy;
-    byte status;
-    String avatar;
-    Timestamp createdAt, updatedAt;
-
-    @ManyToMany
-    Set<Role> roles;
+    Date createAt, expiredAt;
 }
