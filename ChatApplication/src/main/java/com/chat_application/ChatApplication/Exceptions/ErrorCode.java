@@ -53,9 +53,9 @@ public enum ErrorCode {
     EMAIL_NOT_MATCHED_WITH_TOKEN(1074, "The email provided does not match with the token.", HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1075, "The token has expired.", HttpStatus.BAD_REQUEST),
 
-    // Other (code >=2000)
-    KEY_INVALID(2001, "Uncategorized error", HttpStatus.BAD_REQUEST),
-    INVALID_DOB(2004, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
+    // Other (code >=3000)
+    KEY_INVALID(3001, "Uncategorized error", HttpStatus.BAD_REQUEST),
+    INVALID_DOB(3004, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatus status) {
