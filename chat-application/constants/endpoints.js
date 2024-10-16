@@ -13,6 +13,7 @@ const ENDPOINTS = {
     USER: {
         SIGN_IN: `${API_BASE_URL}/users`,
         SIGN_UP:``,
+        MY_INFORMATION:`${API_BASE_URL}/users/my-info`,
         GET_USER_PROFILE: `${API_BASE_URL}/user/profile`,
         UPDATE_USER_PROFILE: `${API_BASE_URL}/user/update-profile`,
         DELETE_USER_ACCOUNT: `${API_BASE_URL}/user/delete`
