@@ -61,7 +61,6 @@ entity "Follows" as f {
 
 entity "ChatGroups" as g{
     id:integer<<auto_increment>>
-    userId:UUID
     ---
     creatAt:Timestamp
 }
@@ -71,14 +70,8 @@ entity "GroupMembers" as mem{
     groupId:String
     userId:UUID
     ---
+    isLeader:boolean
     createdAt:Timestamp
-}
-
-entity "GroupLeaders" as le{
-    id:integer<<auto_increment>>
-    userId:UUID
-    groupId:String
-    ---
 }
 
 entity "Messages" as me{
@@ -133,9 +126,7 @@ u ||..o{ p
 u ||..o{ f
 u ||..o{ l
 u ||..o{ c
-u ||..o{ g
-u ||..o{ le
-u ||..|| ro
+u ||..o{ ro
 u ||..o{ wl
 u ||..o{ bl : "Blocker"
 bl ||..|| u: "Blocked"
@@ -147,7 +138,6 @@ me ||..|| u
 pe ||..|| ro
 g ||..o{ mem
 mem ||..|| u
-g ||..|| le
 wl ||..|| p
 rp }o..|| u : "Reporter"
 rp ||..|| u : "Reported"

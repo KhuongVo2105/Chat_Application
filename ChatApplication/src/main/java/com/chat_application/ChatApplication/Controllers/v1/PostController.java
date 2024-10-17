@@ -1,4 +1,4 @@
-package com.chat_application.ChatApplication.Controllers;
+package com.chat_application.ChatApplication.Controllers.v1;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Entities.Post;
