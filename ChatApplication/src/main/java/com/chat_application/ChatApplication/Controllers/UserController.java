@@ -1,4 +1,4 @@
-package com.chat_application.ChatApplication.Controllers.v1;
+package com.chat_application.ChatApplication.Controllers;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Dto.Request.CreateUserReq;
