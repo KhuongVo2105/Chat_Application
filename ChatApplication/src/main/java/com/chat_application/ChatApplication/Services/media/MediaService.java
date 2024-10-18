@@ -3,11 +3,13 @@ package com.chat_application.ChatApplication.Services.media;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Entities.Media;
+import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Repositories.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,16 +41,19 @@ public class MediaService implements IMediaService {
 
     @Override
     @Transactional
-    public ApiResponse<String> delete(List<Media> mediaList) {
-        for (Media media : mediaList) {
-            int id = media.getId();
-            if (!repository.existsById(id)) continue;
+    public ApiResponse<String> delete(int id) {
+        if(repository.existsById(id)){
             repository.deleteById(id);
+
+            return ApiResponse.<String>builder()
+                    .code(200)
+                    .message("Delete image successfully")
+                    .build();
         }
 
         return ApiResponse.<String>builder()
-                .code(200)
-                .message("Delete image successfully")
+                .code(404)
+                .message("Image not found")
                 .build();
     }
 }

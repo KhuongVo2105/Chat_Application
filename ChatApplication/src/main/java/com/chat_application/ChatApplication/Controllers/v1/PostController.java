@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/post")
+@RequestMapping("/v1/post")
 public class PostController {
     @Autowired
     private IPostService service;
@@ -28,13 +28,14 @@ public class PostController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ApiResponse<String> add(@PathVariable int id) {
+    public ApiResponse<String> delete(@PathVariable int id) {
         ApiResponse<String> response = service.delete(id);
         return response;
     }
 
     @PutMapping("/update")
     public ApiResponse<Post> update(@RequestBody Post post) {
+        System.out.println(post);
         ApiResponse<Post> response = service.updateCaption(post);
         return response;
     }

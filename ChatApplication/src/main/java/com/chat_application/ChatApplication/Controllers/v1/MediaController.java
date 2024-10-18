@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/media")
+@RequestMapping("/v1/media")
 public class MediaController {
     @Autowired
     private IMediaService iMediaService;
@@ -24,14 +24,14 @@ public class MediaController {
 
     @PostMapping("/add")
     public ApiResponse<List<Media>> add(@RequestBody List<Media> mediaList) {
-        System.out.println("call api");
+        System.out.println(mediaList);
         ApiResponse<List<Media>> response = iMediaService.add(mediaList);
         return response;
     }
 
     @DeleteMapping("/delete/{id}")
-    public ApiResponse<String> delete(@PathVariable List<Media> mediaList) {
-        ApiResponse<String> response = iMediaService.delete(mediaList);
+    public ApiResponse<String> delete(@PathVariable int id) {
+        ApiResponse<String> response = iMediaService.delete(id);
         return response;
     }
 }

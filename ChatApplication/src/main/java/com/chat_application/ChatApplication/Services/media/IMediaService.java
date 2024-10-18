@@ -9,5 +9,5 @@ import java.util.List;
 public interface IMediaService {
     ApiResponse<List<Media>> findAll();
     ApiResponse<List<Media>> add(List<Media> mediaList);
-    ApiResponse<String> delete(List<Media> mediaList);
+    ApiResponse<String> delete(int id);
 }
