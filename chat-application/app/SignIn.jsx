@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
-import images from '../constants/image';
+import images from '../constants/images';
 import { useState } from 'react';
 import axios from 'axios';
 import ENDPOINTS from "../constants/endpoints";

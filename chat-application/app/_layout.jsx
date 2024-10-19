@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { Button, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useFonts } from "expo-font";
 import React, { useEffect } from 'react'
 import { SplashScreen } from 'expo-router';
@@ -13,6 +13,7 @@ import Register_Birthday from './Register_Birthday'
 import Register_Username from './Register_Username'
 import Register from './Register'
 import Home from "./Home";
+import images from '../constants/images';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,7 +40,7 @@ const RootLayout = () => {
     const Stack = createNativeStackNavigator();
 
     return (
-        <Stack.Navigator initialRouteName='SignIn'>
+        <Stack.Navigator initialRouteName='Home'>
             <Stack.Screen name='SignIn' component={SignIn} options={{ headerShown: false }} />
             <Stack.Screen name='SignUp' component={SignUp} options={{ headerShown: false }} />
             <Stack.Screen name='Register_Email' component={Register_Email} options={{ headerShown: false }} />
@@ -48,7 +49,33 @@ const RootLayout = () => {
             <Stack.Screen name='Register_Birthday' component={Register_Birthday} options={{ headerShown: false }} />
             <Stack.Screen name='Register_Username' component={Register_Username} options={{ headerShown: false }} />
             <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
-            <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
+            <Stack.Screen name='Home' component={Home} options={{
+                headerShown: true,
+                title: '',
+                headerLeft: () => (
+                    <TouchableOpacity className="mx-1" onPress={() => console.log('Left icon pressed')}>
+                        <Image
+                            source={images.instagram_text} // Đảm bảo đường dẫn đúng
+                            style={{ width: 121, height: 35 }} // Điều chỉnh kích thước và margin
+                            resizeMode='containt'
+                        />
+                    </TouchableOpacity>
+                ),
+                headerRight: () => (
+                    <View className="flex flex-row items-center">
+                        <TouchableOpacity
+                            className="mx-1">
+                            <Image source={images.icon_notify}
+                                style={{ width: 30, height: 30 }} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            className="mx-1">
+                            <Image source={images.icon_message}
+                                style={{ width: 27, height: 27 }} />
+                        </TouchableOpacity>
+                    </View>
+                ),
+            }} />
         </Stack.Navigator>
     )
 }

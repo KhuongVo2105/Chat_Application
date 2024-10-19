@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
-import images from '../constants/image';
+import images from '../constants/images';
 import { useState, useEffect } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
