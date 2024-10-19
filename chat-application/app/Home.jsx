@@ -7,6 +7,7 @@ import ENDPOINTS from "../constants/endpoints";
 
 const Home = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
+  const [yourComment, setYourComment] = useState()
 
   useEffect(() => {
     if (route.params?.data) {
@@ -16,152 +17,262 @@ const Home = ({ navigation, route }) => {
 
   return (
     <View className="w-full h-full flex justify-center items-center bg-white">
-      <ScrollView className="w-full bg-yellow-400">
+      <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
 
-        {/* Header */}
+        {/* new feeds */}
+        <ScrollView className="" horizontal={true} showsHorizontalScrollIndicator={false}>
+          <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
+            {/* Hình ảnh chính (phía dưới) */}
+            <Image
+              className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+              style={{ width: '85%', height: '85%' }}
+              resizeMode="cover"
+              source={require('./../assets/portaits/portait_1.jpg')}
+            />
 
-        <View className="w-full flex flex-row">
-          {/* new feeds */}
-          <ScrollView className="" horizontal={true} showsHorizontalScrollIndicator={false}>
-            <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
-              {/* Hình ảnh chính (phía dưới) */}
-              <Image
-                className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
-                style={{ width: '85%', height: '85%' }}
-                resizeMode="cover"
-                source={require('./../assets/portaits/portait_1.jpg')}
-              />
+            {/* Khung viền PNG (phía trên) */}
+            <Image
+              className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+              source={images.story_unseen}
+            />
+          </TouchableOpacity>
 
-              {/* Khung viền PNG (phía trên) */}
-              <Image
-                className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
-                source={images.story_unseen}
-              />
+          <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
+            {/* Hình ảnh chính (phía dưới) */}
+            <Image
+              className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+              style={{ width: '85%', height: '85%' }}
+              resizeMode="cover"
+              source={require('./../assets/portaits/portait_2.jpg')}
+            />
+
+            {/* Khung viền PNG (phía trên) */}
+            <Image
+              className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+              source={images.story_unseen}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
+            {/* Hình ảnh chính (phía dưới) */}
+            <Image
+              className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+              style={{ width: '85%', height: '85%' }}
+              resizeMode="cover"
+              source={require('./../assets/portaits/portait_3.jpg')}
+            />
+
+            {/* Khung viền PNG (phía trên) */}
+            <Image
+              className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+              source={images.story_unseen}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
+            {/* Hình ảnh chính (phía dưới) */}
+            <Image
+              className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+              style={{ width: '85%', height: '85%' }}
+              resizeMode="cover"
+              source={require('./../assets/portaits/portait_4.jpg')}
+            />
+
+            {/* Khung viền PNG (phía trên) */}
+            <Image
+              className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+              source={images.story_unseen}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
+            {/* Hình ảnh chính (phía dưới) */}
+            <Image
+              className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+              style={{ width: '85%', height: '85%' }}
+              resizeMode="cover"
+              source={require('./../assets/portaits/portait_1.jpg')}
+            />
+
+            {/* Khung viền PNG (phía trên) */}
+            <Image
+              className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+              source={images.story_seen}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
+            {/* Hình ảnh chính (phía dưới) */}
+            <Image
+              className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+              style={{ width: '85%', height: '85%' }}
+              resizeMode="cover"
+              source={require('./../assets/portaits/portait_2.jpg')}
+            />
+
+            {/* Khung viền PNG (phía trên) */}
+            <Image
+              className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+              source={images.story_seen}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
+            {/* Hình ảnh chính (phía dưới) */}
+            <Image
+              className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+              style={{ width: '85%', height: '85%' }}
+              resizeMode="cover"
+              source={require('./../assets/portaits/portait_3.jpg')}
+            />
+
+            {/* Khung viền PNG (phía trên) */}
+            <Image
+              className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+              source={images.story_seen}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
+            {/* Hình ảnh chính (phía dưới) */}
+            <Image
+              className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+              style={{ width: '85%', height: '85%' }}
+              resizeMode="cover"
+              source={require('./../assets/portaits/portait_4.jpg')}
+            />
+
+            {/* Khung viền PNG (phía trên) */}
+            <Image
+              className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+              source={images.story_seen}
+            />
+          </TouchableOpacity>
+        </ScrollView>
+
+        {/* Post */}
+        <View className="flex flex-column w-full py-3">
+          {/* Header post */}
+          <View className="flex flex-row w-full justify-between items-center px-3 mb-3">
+            {/* Header left */}
+            <TouchableOpacity className="flex flex-row items-center">
+              <View className="w-10 h-10 overflow-hidden flex flex-row justify-center items-center mr-2">
+                {/* Hình ảnh chính (phía dưới) */}
+                <Image
+                  className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+                  style={{ width: '85%', height: '85%' }}
+                  resizeMode="cover"
+                  source={require('./../assets/portaits/portait_1.jpg')}
+                />
+
+                {/* Khung viền PNG (phía trên) */}
+                <Image
+                  className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+                  source={images.story_unseen}
+                />
+              </View>
+              <View className="flex flex-column">
+                <View className="flex flex-row items-center">
+                  <Text className="font-semibold text-lg">
+                    Username
+                  </Text>
+                  <Image
+                    className="ml-1" source={images.icon_verify}
+                    style={{ width: 25, height: 25, }} resizeMode='containt' />
+                </View>
+
+                {/* Sub title */}
+                <Text className="text-sm">
+                  This is subtitle
+                </Text>
+              </View>
             </TouchableOpacity>
 
-            <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
-              {/* Hình ảnh chính (phía dưới) */}
+            {/* Header right */}
+            <Pressable>
               <Image
-                className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
-                style={{ width: '85%', height: '85%' }}
-                resizeMode="cover"
-                source={require('./../assets/portaits/portait_2.jpg')}
-              />
+                source={images.icon_triple_dot}
+                style={{
+                  width: 24, height: 24
+                }} />
+            </Pressable>
+          </View>
 
-              {/* Khung viền PNG (phía trên) */}
-              <Image
-                className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
-                source={images.story_unseen}
-              />
-            </TouchableOpacity>
+          {/* Content post */}
+          <View className="w-full bg-red-200 relative mb-2">
+            <Image
+              className=""
+              resizeMode="cover"
+              source={require('./../assets/portaits/portait_1.jpg')}
+              style={{
+                width: '100%',
+                height: 'auto',
+                aspectRatio: 3 / 4, // Tỷ lệ 3:4 (width:height)
+              }}
+            />
+            <Text className="absolute right-3 top-3 bg-gray-500 px-2 py-1 rounded-full fs-sm text-white">
+              1/1
+            </Text>
+          </View>
 
-            <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
-              {/* Hình ảnh chính (phía dưới) */}
-              <Image
-                className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
-                style={{ width: '85%', height: '85%' }}
-                resizeMode="cover"
-                source={require('./../assets/portaits/portait_3.jpg')}
-              />
-
-              {/* Khung viền PNG (phía trên) */}
-              <Image
-                className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
-                source={images.story_unseen}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
-              {/* Hình ảnh chính (phía dưới) */}
-              <Image
-                className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
-                style={{ width: '85%', height: '85%' }}
-                resizeMode="cover"
-                source={require('./../assets/portaits/portait_4.jpg')}
-              />
-
-              {/* Khung viền PNG (phía trên) */}
-              <Image
-                className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
-                source={images.story_unseen}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
-              {/* Hình ảnh chính (phía dưới) */}
-              <Image
-                className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
-                style={{ width: '85%', height: '85%' }}
-                resizeMode="cover"
-                source={require('./../assets/portaits/portait_1.jpg')}
-              />
-
-              {/* Khung viền PNG (phía trên) */}
-              <Image
-                className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
-                source={images.story_unseen}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
-              {/* Hình ảnh chính (phía dưới) */}
-              <Image
-                className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
-                style={{ width: '85%', height: '85%' }}
-                resizeMode="cover"
-                source={require('./../assets/portaits/portait_2.jpg')}
-              />
-
-              {/* Khung viền PNG (phía trên) */}
-              <Image
-                className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
-                source={images.story_unseen}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
-              {/* Hình ảnh chính (phía dưới) */}
-              <Image
-                className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
-                style={{ width: '85%', height: '85%' }}
-                resizeMode="cover"
-                source={require('./../assets/portaits/portait_3.jpg')}
-              />
-
-              {/* Khung viền PNG (phía trên) */}
-              <Image
-                className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
-                source={images.story_unseen}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity className="w-20 h-20 overflow-hidden flex flex-row justify-center items-center m-3">
-              {/* Hình ảnh chính (phía dưới) */}
-              <Image
-                className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
-                style={{ width: '85%', height: '85%' }}
-                resizeMode="cover"
-                source={require('./../assets/portaits/portait_4.jpg')}
-              />
-
-              {/* Khung viền PNG (phía trên) */}
-              <Image
-                className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
-                source={images.story_unseen}
-              />
-            </TouchableOpacity>
-          </ScrollView>
+          {/* Footer post */}
+          <View className="flex flew-column">
+            <View className="w-full flex flex-column justify-between px-3">
+              {/* React row */}
+              <View className="w-24 flex flex-row justify-between items-center mb-2">
+                <TouchableOpacity className="">
+                  <Image source={images.icon_notify}
+                    style={styles.icons} />
+                </TouchableOpacity>
+                <TouchableOpacity className="">
+                  <Image source={images.icon_message}
+                    style={{
+                      width: 25, height: 25, transform: [{ scaleX: -1 }]
+                    }} />
+                </TouchableOpacity>
+                <TouchableOpacity className="">
+                  <Image source={images.icon_share}
+                    style={{
+                      width: 25, height: 25
+                    }} />
+                </TouchableOpacity>
+              </View>
+              {/* Comment row */}
+              <Text className="w-full mb-2">
+                This is a new comment
+              </Text>
+              <View className="flex flex-row items-center">
+                <View className="w-8 h-8 overflow-hidden flex flex-row justify-center items-center">
+                  {/* Hình ảnh chính (phía dưới) */}
+                  <Image
+                    className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+                    style={{ width: '85%', height: '85%' }}
+                    resizeMode="cover"
+                    source={require('./../assets/portaits/portait_1.jpg')}
+                  />
+                </View>
+                <TextInput
+                  className="ml-1"
+                  placeholder='Add a comment...'
+                  onChangeText={comment => setYourComment(comment)}
+                  value={yourComment} />
+              </View>
+            </View>
+          </View>
         </View>
 
-        {/* Contents */}
-        <View className="w-full h-96 bg-gray-200">
-
-        </View>
+        {/* navigation bottom */}
+        
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  icons: {
+    width: 28,
+    height: 28
+  },
+
 })
 export default Home;
