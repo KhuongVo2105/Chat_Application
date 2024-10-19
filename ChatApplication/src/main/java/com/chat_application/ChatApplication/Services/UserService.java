@@ -82,15 +82,12 @@ public class UserService {
     }
 
     private User findById(String id) {
-        return userRepository.findById(id)
+        return userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-//        return userRepository.findById(UUID.fromString(id))
-//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 
     public void delete(String id) {
-//        userRepository.deleteById(UUID.fromString(id));
-        userRepository.deleteById(id);
+        userRepository.deleteById(UUID.fromString(id));
     }
 
     public UserResponse getMyInfo() {

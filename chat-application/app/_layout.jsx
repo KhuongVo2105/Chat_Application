@@ -13,6 +13,8 @@ import Register_Birthday from './Register_Birthday'
 import Register_Username from './Register_Username'
 import Register from './Register'
 import Home from "./Home";
+import NewPostScreen from './NewPostScreen';
+import { CardStyleInterpolators } from '@react-navigation/stack';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,16 +41,21 @@ const RootLayout = () => {
     const Stack = createNativeStackNavigator();
 
     return (
-        <Stack.Navigator initialRouteName='SignIn'>
-            <Stack.Screen name='SignIn' component={SignIn} options={{ headerShown: false }} />
-            <Stack.Screen name='SignUp' component={SignUp} options={{ headerShown: false }} />
-            <Stack.Screen name='Register_Email' component={Register_Email} options={{ headerShown: false }} />
-            <Stack.Screen name='Register_ConfirmCode' component={Register_ConfirmCode} options={{ headerShown: false }} />
-            <Stack.Screen name='Register_CreatePasswd' component={Register_CreatePasswd} options={{ headerShown: false }} />
-            <Stack.Screen name='Register_Birthday' component={Register_Birthday} options={{ headerShown: false }} />
-            <Stack.Screen name='Register_Username' component={Register_Username} options={{ headerShown: false }} />
-            <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
-            <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
+        <Stack.Navigator initialRouteName='SignIn'
+        screenOptions={{
+            headerShown: false
+        }}
+        >
+            <Stack.Screen name='SignIn' component={SignIn} />
+            <Stack.Screen name='SignUp' component={SignUp} />
+            <Stack.Screen name='Register_Email' component={Register_Email} />
+            <Stack.Screen name='Register_ConfirmCode' component={Register_ConfirmCode} />
+            <Stack.Screen name='Register_CreatePasswd' component={Register_CreatePasswd} />
+            <Stack.Screen name='Register_Birthday' component={Register_Birthday} />
+            <Stack.Screen name='Register_Username' component={Register_Username} />
+            <Stack.Screen name='Register' component={Register} />
+            <Stack.Screen name='Home' component={Home} />
+            <Stack.Screen name='NewPostScreen' component={NewPostScreen}/>
         </Stack.Navigator>
     )
 }
