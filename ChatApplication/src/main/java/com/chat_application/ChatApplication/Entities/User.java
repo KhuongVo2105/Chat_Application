@@ -21,7 +21,8 @@ public class User {
     UUID id;
     String username, password, email;
     boolean privacy;
-    byte status;
+    byte statusAccount;
+    boolean statusActive;
     String avatar;
     Timestamp createdAt, updatedAt;
 
