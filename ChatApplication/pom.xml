@@ -65,6 +65,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -105,7 +106,6 @@
 			<artifactId>spring-messaging</artifactId>
 			<version>6.1.12</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>

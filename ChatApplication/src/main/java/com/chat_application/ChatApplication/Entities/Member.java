@@ -24,7 +24,7 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     Group group;
-
+    byte isLeader;
     @OneToOne
     User user;
 }

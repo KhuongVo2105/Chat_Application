@@ -1,37 +1,83 @@
+//package com.chat_application.ChatApplication.chat;
+//
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.messaging.handler.annotation.MessageMapping;
+//import org.springframework.messaging.handler.annotation.Payload;
+//import org.springframework.messaging.simp.SimpMessagingTemplate;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.PathVariable;
+//
+//import java.util.List;
+//
+//@Controller
+//@RequiredArgsConstructor
+//public class ChatController {
+//
+//    private final SimpMessagingTemplate messagingTemplate;
+//    private final ChatMessageService chatMessageService;
+//
+//    @MessageMapping("/chat")
+//    public void processMessage(@Payload ChatMessage chatMessage) {
+//        ChatMessage savedMsg = chatMessageService.save(chatMessage);
+//        messagingTemplate.convertAndSendToUser(
+//                chatMessage.getRecipientId(), "/queue/messages",
+//                new ChatNotification(
+//                        savedMsg.getId(),
+//                        savedMsg.getSenderId(),
+//                        savedMsg.getRecipientId(),
+//                        savedMsg.getContent()
+//                )
+//        );
+//    }
+//
+//    @GetMapping("/messages/{senderId}/{recipientId}")
+//    public ResponseEntity<List<ChatMessage>> findChatMessages(@PathVariable String senderId,
+//                                                              @PathVariable String recipientId) {
+//        return ResponseEntity
+//                .ok(chatMessageService.findChatMessages(senderId, recipientId));
+//    }
+//}
 package com.chat_application.ChatApplication.chat;
 
-import com.chat_application.ChatApplication.Dto.Request.AvatUserReq;
-import com.chat_application.ChatApplication.Dto.Request.CreateUserReq;
-import com.chat_application.ChatApplication.Dto.Request.InfoUserReq;
-import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
-import com.chat_application.ChatApplication.Dto.Response.AvatUserResp;
-import com.chat_application.ChatApplication.Dto.Response.InfoUserResp;
-import com.chat_application.ChatApplication.Services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.chat_application.ChatApplication.chat.ChatMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@RestController
+import java.util.List;
+
+@Controller
+@RequiredArgsConstructor
 public class ChatController {
 
-    @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-        return chatMessage;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final ChatMessageService chatMessageService;
+
+    @MessageMapping("/chat")
+    public void processMessage(@Payload ChatMessage chatMessage) {
+        ChatMessage savedMsg = chatMessageService.save(chatMessage);
+        messagingTemplate.convertAndSendToUser(
+                chatMessage.getRecipientId(), "/queue/messages",
+                new ChatNotification(
+                        savedMsg.getId(),
+                        savedMsg.getSenderId(),
+                        savedMsg.getRecipientId(),
+                        savedMsg.getContent()
+                )
+        );
     }
 
-    @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
-    ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-        // add username in web socket session
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-        return chatMessage;
+    @GetMapping("/messages/{senderId}/{recipientId}")
+    public ResponseEntity<List<ChatMessage>> findChatMessages(@PathVariable String senderId,
+                                                              @PathVariable String recipientId) {
+        return ResponseEntity
+                .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }
 }

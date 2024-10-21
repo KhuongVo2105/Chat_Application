@@ -19,12 +19,9 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
 
-    Timestamp createdAt;
-
-    @OneToOne
-    Leader leader;
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    User user;
+    User user; // chỗ này là member
+
+    Timestamp createdAt;
 }

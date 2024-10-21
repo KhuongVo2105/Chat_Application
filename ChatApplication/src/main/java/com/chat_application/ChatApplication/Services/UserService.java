@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @Data
@@ -78,5 +79,19 @@ public class UserService {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    public void disconnectUser(User user) {
+            user.setStatusActive(false);
+            userRepository.save(user);
+    }
+
+    public List<User> findConnectedUsers() {
+        return userRepository.findByStatusActive(true);
+    }
+
+    public void onlineUser(User user) {
+        user.setStatusActive(true);
+        userRepository.save(user);
     }
 }

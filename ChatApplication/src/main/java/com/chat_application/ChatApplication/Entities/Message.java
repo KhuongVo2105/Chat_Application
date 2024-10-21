@@ -20,7 +20,7 @@ public class Message {
     int id;
 
     boolean visible;
-    String context;
+    String content;
     Timestamp createdAt;
 
     @OneToOne
