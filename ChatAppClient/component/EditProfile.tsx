@@ -13,34 +13,21 @@ import { useNavigation } from "@react-navigation/native";
 interface EditProfileProps {
   avatarUrl: string;
   username: string;
-  bio: string;
-  onUpdateProfile: (updatedProfile: {
+  bio: string
+}
+
+function EditProfile({navigation}) {
+  const [profileProps, setProfileProps] = useState<{
     username: string;
     bio: string;
     avatarUrl: string;
-  }) => void;
-}
-
-function EditProfile({
-  avatarUrl,
-  username,
-  bio,
-  onUpdateProfile,
-}: EditProfileProps,{navigation}) {
-  const [newUsername, setNewUsername] = useState(username);
-  const [newBio, setNewBio] = useState(bio);
-  const [newAvatarUrl, setNewAvatarUrl] = useState(avatarUrl);
-
-  const handleUpdateProfile = () => {
-    onUpdateProfile({
-      username: newUsername,
-      bio: newBio,
-      avatarUrl: newAvatarUrl,
-    });
-  };
+  }>();
 
   const handleBack = () => {
-    navigation.navigate("Login");
+    navigation.navigate("Profile");
+  };
+
+  const handleUpdateProfile = () => {
   };
 
   return (
@@ -56,13 +43,16 @@ function EditProfile({
       >
         <Button title="<" onPress={handleBack} />
         <Text style={styles.title}>Chỉnh sửa trang cá nhân</Text>
-        <Button title="Xong" onPress={handleUpdateProfile} />
+        <Button title="Xong" onPress={handleBack} />
       </View>
       <View style={styles.editAvatar}>
-        <Image source={{ uri: newAvatarUrl }} style={styles.avatar} />
+        {/* <Image source={{ uri: profileProps.avatarUrl }} style={styles.avatar} /> */}
+        <Image source={{ uri: profileProps?.avatarUrl }} style={styles.avatar} />
         <Button
           title="Chỉnh sửa ảnh hoặc avatar"
-          onPress={handleUpdateProfile}
+          onPress={() => {
+            // Thêm xử lý thay đổi ảnh đại diện ở đây
+          }}
         />
       </View>
       <View style={styles.editInfo}>
@@ -70,16 +60,16 @@ function EditProfile({
           <Text style={styles.fieldName}>Tên</Text>
           <TextInput
             style={styles.input}
-            value={newUsername}
-            onChangeText={setNewUsername}
+            value={profileProps?.username}
+            onChangeText={(text) => setProfileProps({ ...profileProps, username: text })}
           />
         </View>
         <View style={styles.formGroup}>
           <Text style={styles.fieldName}>Tên người dùng</Text>
           <TextInput
             style={styles.input}
-            value={newBio}
-            onChangeText={setNewBio}
+            value={profileProps?.bio}
+            onChangeText={(text) => setProfileProps({ ...profileProps, bio: text })}
             multiline
           />
         </View>

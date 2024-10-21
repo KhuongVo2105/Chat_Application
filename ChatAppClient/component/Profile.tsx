@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -18,7 +18,14 @@ const dummyPosts = [
   { id: "5", uri: "https://via.placeholder.com/150" },
 ];
 
-const Profile = () => {
+function Profile({ navigation }) {
+  const [selectedItem, setSelectedItem] = useState("table");
+  const handleEdit = () => {
+    navigation.navigate("EditProfile");
+  };
+  const handleSelectItem = (item) => {
+    setSelectedItem(item);
+  };
   return (
     <ScrollView
       horizontal={false}
@@ -55,11 +62,24 @@ const Profile = () => {
         <Text style={styles.bio}>This is a sample bio about the user.</Text>
 
         <View style={{ display: "flex", flexDirection: "row" }}>
-          <TouchableOpacity style={styles.btnEditProfile}>
-            <Text style={{}}>Chỉnh sửa</Text>
+          <TouchableOpacity style={styles.btnEditProfile} onPress={handleEdit}>
+            <Text style={{ fontWeight: 600 }}>Chỉnh sửa</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btnEditProfile}>
-            <Text style={{}}>Chia sẻ trang cá nhân</Text>
+            <Text style={{ fontWeight: 600 }}>Chia sẻ trang cá nhân</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              marginRight: 5,
+              padding: 7,
+              paddingHorizontal: 10,
+              alignItems: "center",
+              borderRadius: 7,
+              backgroundColor: "#ccc",
+              marginTop: 10,
+            }}
+          >
+            <Icon name="user-plus" style={{}}></Icon>
           </TouchableOpacity>
         </View>
 
@@ -96,6 +116,11 @@ const Profile = () => {
                   alignItems: "center",
                 }}
               >
+                <TouchableOpacity
+                  style={{ position: "absolute", right: 10, top: 10 }}
+                >
+                  <Icon name="close" />
+                </TouchableOpacity>
                 <View
                   //   source={{ uri: "https://via.placeholder.com/100" }}
                   style={{
@@ -133,12 +158,40 @@ const Profile = () => {
             flexDirection: "row",
             justifyContent: "space-between",
             marginBottom: 7,
+            marginHorizontal:-10,
           }}
         >
-          <Icon name="table" style={styles.item}></Icon>
-          <Icon name="home" style={styles.item}></Icon>
+          <TouchableOpacity
+            style={[
+              selectedItem === "table" && styles.itemSelected,
+              styles.item,
+            ]}
+            onPress={() => handleSelectItem("table")}
+          >
+            <Icon name="table" style={{ fontSize: 20 }} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              selectedItem === "home" && styles.itemSelected,
+              styles.item,
+            ]}
+            onPress={() => handleSelectItem("home")}
+          >
+            <Icon name="home" style={{ fontSize: 20 }} />
+          </TouchableOpacity>
         </View>
-        <FlatList
+        <View style={styles.postsContainer}>
+            <View style={styles.postImage}>
+                <Icon name="clone" />
+            </View>
+            <View style={styles.postImage}>
+                <Icon name="clone" />
+            </View>
+            <View style={styles.postImage} />
+            <View style={styles.postImage} />
+            <View style={styles.postImage} />
+        </View>
+        {/* <FlatList
           data={dummyPosts}
           renderItem={({ item }) => (
             <TouchableOpacity>
@@ -148,11 +201,11 @@ const Profile = () => {
           keyExtractor={(item) => item.id}
           numColumns={3}
           style={styles.postsContainer}
-        />
+        /> */}
       </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -200,12 +253,22 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   postsContainer: {
+    display: "flex",
+    flexDirection: "row", // Thêm flexDirection: 'row'
+    flexWrap: "wrap", // Cho phép các item xuống dòng nếu không đủ chỗ
     marginTop: 10,
+    width: "105%",
+    backgroundColor: "black",
+    marginHorizontal:-10
   },
   postImage: {
-    width: "33.33%", // 3 cột
+    width: "33.3%",
+    height:'33.3%',
+    backgroundColor: "#ccc",
     aspectRatio: 1, // Tạo hình vuông
+    borderWidth:0.5,
   },
+
   btnEditProfile: {
     marginRight: 5,
     padding: 7,
@@ -221,8 +284,10 @@ const styles = StyleSheet.create({
   },
   item: {
     width: "50%",
-    textAlign:'center',
-    fontSize:20,
+    alignItems: "center",
+  },
+  itemSelected: {
+    borderBottomWidth: 1,
   },
 });
 
