@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
   Image,
   StyleSheet,
-  FlatList,
+  Alert,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import axios from "axios";
+import { AuthContext } from "./Context";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { REACT_APP_API_BASE_URL } from "@env"; // Import biến môi trường
 
 const dummyPosts = [
   { id: "1", uri: "https://via.placeholder.com/150" },
@@ -18,14 +21,72 @@ const dummyPosts = [
   { id: "5", uri: "https://via.placeholder.com/150" },
 ];
 
+interface User {
+  username: string;
+  avatar:string;
+}
+
 function Profile({ navigation }) {
+  const { userToken, setUserToken } = useContext(AuthContext);
   const [selectedItem, setSelectedItem] = useState("table");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [userData, setUserData] = useState<User | null>(null);
   const handleEdit = () => {
     navigation.navigate("EditProfile");
   };
   const handleSelectItem = (item) => {
     setSelectedItem(item);
   };
+  useEffect(() => {
+    const getUserInfo = async () => {
+      // Kiểm tra token có tồn tại không
+      if (!userToken) {
+        Alert.alert("Error", "No user token found", [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("Login"), // Chuyển về trang Login nếu không có token
+          },
+        ]);
+        return;
+      }
+
+      try {
+        const endpoint = `${REACT_APP_API_BASE_URL}/v1/users/my-info`;
+        console.log(`getUser: ${endpoint}`);
+        console.log(`token: ${userToken}`);
+        const response = await axios.post(endpoint, {}, {
+          headers: {
+            Authorization: `Bearer ${userToken}`, // Gửi token theo định dạng Bearer
+          },
+        });
+
+        // Kiểm tra mã code trong phản hồi
+        if (response.status === 200) {
+          // Token hợp lệ, xử lý dữ liệu người dùng
+          console.log('result : ',response.data.result)
+          const user = response.data.result;
+          setUserData({
+            username: user.username,
+            avatar: user.avatar,
+          });
+        } else {
+          throw new Error("Failed to fetch user data");
+        }
+      } catch (err) {
+        console.error("Error fetching user data", err);
+        Alert.alert("Error", "Failed to fetch user data. Please try again.", [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("Login"),
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUserInfo();
+  }, [userToken, navigation]);
   return (
     <ScrollView
       horizontal={false}
@@ -35,7 +96,7 @@ function Profile({ navigation }) {
       <View>
         <View style={styles.header}>
           <View style={styles.infoContainer}>
-            <Text style={styles.username}>Username</Text>
+            <Text style={styles.username}>{userData?.username}</Text>
           </View>
           <Icon name="bars" size={20} color={"#333"} />
         </View>
@@ -158,7 +219,7 @@ function Profile({ navigation }) {
             flexDirection: "row",
             justifyContent: "space-between",
             marginBottom: 7,
-            marginHorizontal:-10,
+            marginHorizontal: -10,
           }}
         >
           <TouchableOpacity
@@ -181,15 +242,15 @@ function Profile({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={styles.postsContainer}>
-            <View style={styles.postImage}>
-                <Icon name="clone" />
-            </View>
-            <View style={styles.postImage}>
-                <Icon name="clone" />
-            </View>
-            <View style={styles.postImage} />
-            <View style={styles.postImage} />
-            <View style={styles.postImage} />
+          <View style={styles.postImage}>
+            <Icon name="clone" />
+          </View>
+          <View style={styles.postImage}>
+            <Icon name="clone" />
+          </View>
+          <View style={styles.postImage} />
+          <View style={styles.postImage} />
+          <View style={styles.postImage} />
         </View>
         {/* <FlatList
           data={dummyPosts}
@@ -259,14 +320,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: "105%",
     backgroundColor: "black",
-    marginHorizontal:-10
+    marginHorizontal: -10,
   },
   postImage: {
     width: "33.3%",
-    height:'33.3%',
+    height: "33.3%",
     backgroundColor: "#ccc",
     aspectRatio: 1, // Tạo hình vuông
-    borderWidth:0.5,
+    borderWidth: 0.5,
   },
 
   btnEditProfile: {

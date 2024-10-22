@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<String> handleRuntimeException(RuntimeException exception){
-        return ResponseEntity.badRequest().body(exception.getMessage());
-    }
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<String> handleValidation(MethodArgumentNotValidException e) {
-        return ResponseEntity.badRequest().body(e.getFieldError().getDefaultMessage());
-    }
+//    @ExceptionHandler(value = RuntimeException.class)
+//    ResponseEntity<String> handleRuntimeException(RuntimeException exception){
+//        return ResponseEntity.badRequest().body(exception.getMessage());
+//    }
+//    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+//    ResponseEntity<String> handleValidation(MethodArgumentNotValidException e) {
+//        return ResponseEntity.badRequest().body(e.getFieldError().getDefaultMessage());
+//    }
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException e) {
         ApiResponse apiResponse = new ApiResponse();

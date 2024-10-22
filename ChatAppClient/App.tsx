@@ -22,9 +22,9 @@ export default function App() {
       <FontLoader>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
-            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Info" component={InfoScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Verify" component={VerifyScreen} options={{ headerShown: false }} />

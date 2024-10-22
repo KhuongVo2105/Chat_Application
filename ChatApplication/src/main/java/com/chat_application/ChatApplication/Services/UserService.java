@@ -49,7 +49,7 @@ public class UserService {
 
         // Mapper
         User user = userMapper.toUser(req);
-        user.setStatusActive(true);
+        user.setStatusAccount((byte) 1);
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setCreatedAt(Timestamp.from(Instant.now()));
         user.setUpdatedAt(Timestamp.from(Instant.now()));

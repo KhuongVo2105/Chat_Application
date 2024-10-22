@@ -16,12 +16,12 @@ import { AuthContext } from "./Context";
 import { REACT_APP_API_BASE_URL } from "@env";
 
 interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 function LoginScreen({ navigation }) {
   const [loginRequest, setLoginRequest] = useState<LoginRequest>({
-    username: "",
+    email: "",
     password: "",
   });
   const { setUserToken } = useContext(AuthContext);
@@ -29,12 +29,12 @@ function LoginScreen({ navigation }) {
 
   // Hàm xử lý khi nhấn nút Login
   const handleLogin = async () => {
-    const endpoint = `${REACT_APP_API_BASE_URL}/auth/token`;
+    const endpoint = `${REACT_APP_API_BASE_URL}/v1/auth/token`;
 
     try {
       console.log(`Instagram_Login_endpoint: ${endpoint}`);
       console.log("loginRequest:", loginRequest);
-      if (loginRequest.username == "" || loginRequest.password == "") {
+      if (loginRequest.email == "" || loginRequest.password == "") {
         console.log("username or password must not empty!");
         Alert.alert("Error", "Username or password must not empty!");
         return;
@@ -93,9 +93,9 @@ function LoginScreen({ navigation }) {
           style={styles.input}
           placeholder="Enter your email"
           placeholderTextColor={"#333"}
-          value={loginRequest.username}
+          value={loginRequest.email}
           onChangeText={(text) =>
-            setLoginRequest({ ...loginRequest, username: text })
+            setLoginRequest({ ...loginRequest, email: text })
           }
         />
 
