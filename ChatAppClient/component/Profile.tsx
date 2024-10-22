@@ -23,7 +23,7 @@ const dummyPosts = [
 
 interface User {
   username: string;
-  avatar:string;
+  avatar: string;
 }
 
 function Profile({ navigation }) {
@@ -49,25 +49,28 @@ function Profile({ navigation }) {
         ]);
         return;
       }
-
       try {
         const endpoint = `${REACT_APP_API_BASE_URL}/v1/users/my-info`;
         console.log(`getUser: ${endpoint}`);
         console.log(`token: ${userToken}`);
-        const response = await axios.post(endpoint, {}, {
-          headers: {
-            Authorization: `Bearer ${userToken}`, // Gửi token theo định dạng Bearer
-          },
-        });
+        const response = await axios.post(
+          endpoint,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`, // Gửi token theo định dạng Bearer
+            },
+          }
+        );
 
         // Kiểm tra mã code trong phản hồi
         if (response.status === 200) {
           // Token hợp lệ, xử lý dữ liệu người dùng
-          console.log('result : ',response.data.result)
+          console.log("result : ", response.data.result);
           const user = response.data.result;
           setUserData({
             username: user.username,
-            avatar: user.avatar,
+            avatar: user?.avatar,
           });
         } else {
           throw new Error("Failed to fetch user data");
@@ -87,6 +90,7 @@ function Profile({ navigation }) {
 
     getUserInfo();
   }, [userToken, navigation]);
+
   return (
     <ScrollView
       horizontal={false}
@@ -101,10 +105,17 @@ function Profile({ navigation }) {
           <Icon name="bars" size={20} color={"#333"} />
         </View>
         <View style={styles.header}>
-          <Image
-            source={{ uri: "https://via.placeholder.com/100" }}
-            style={styles.avatar}
-          />
+          {userData?.avatar == null ? (
+            <Image
+              source={require("../images/avatarDefine.jpg")}
+              style={styles.avatar}
+            />
+          ) : (
+            <Image
+              source={require("../images/avatarDefine.jpg")}
+              style={styles.avatar}
+            />
+          )}
           <View style={styles.statsContainer}>
             <View style={styles.stat}>
               <Text style={styles.statNumber}>100</Text>
@@ -183,7 +194,6 @@ function Profile({ navigation }) {
                   <Icon name="close" />
                 </TouchableOpacity>
                 <View
-                  //   source={{ uri: "https://via.placeholder.com/100" }}
                   style={{
                     width: 80,
                     height: 80,
@@ -252,17 +262,6 @@ function Profile({ navigation }) {
           <View style={styles.postImage} />
           <View style={styles.postImage} />
         </View>
-        {/* <FlatList
-          data={dummyPosts}
-          renderItem={({ item }) => (
-            <TouchableOpacity>
-              <Image source={{ uri: item.uri }} style={styles.postImage} />
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.id}
-          numColumns={3}
-          style={styles.postsContainer}
-        /> */}
       </View>
     </ScrollView>
   );

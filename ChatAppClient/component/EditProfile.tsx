@@ -1,34 +1,89 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   Button,
   Image,
+  Alert,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { AuthContext } from "./Context";
+import { REACT_APP_API_BASE_URL } from "@env"; // Import biến môi trường
 
-interface EditProfileProps {
-  avatarUrl: string;
-  username: string;
-  bio: string
-}
-
-function EditProfile({navigation}) {
-  const [profileProps, setProfileProps] = useState<{
+interface User {
     username: string;
+    avatar: string;
     bio: string;
-    avatarUrl: string;
-  }>();
+  }
+
+function EditProfile({ navigation }) {
+  const { userToken, setUserToken } = useContext(AuthContext);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [userData, setUserData] = useState<User | null>(null);
 
   const handleBack = () => {
     navigation.navigate("Profile");
   };
 
-  const handleUpdateProfile = () => {
-  };
+  const handleUpdateProfile = () => {};
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      // Kiểm tra token có tồn tại không
+      if (!userToken) {
+        Alert.alert("Error", "No user token found", [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("Login"), // Chuyển về trang Login nếu không có token
+          },
+        ]);
+        return;
+      }
+      try {
+        const endpoint = `${REACT_APP_API_BASE_URL}/v1/users/my-info`;
+        console.log(`getUser: ${endpoint}`);
+        console.log(`token: ${userToken}`);
+        const response = await axios.post(
+          endpoint,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`, // Gửi token theo định dạng Bearer
+            },
+          }
+        );
+
+        // Kiểm tra mã code trong phản hồi
+        if (response.status === 200) {
+          // Token hợp lệ, xử lý dữ liệu người dùng
+          console.log("result : ", response.data.result);
+          const user = response.data.result;
+          setUserData({
+            username: user.username,
+            avatar: user?.avatar,
+            bio: user?.bio,
+          });
+        } else {
+          throw new Error("Failed to fetch user data");
+        }
+      } catch (err) {
+        console.error("Error fetching user data", err);
+        Alert.alert("Error", "Failed to fetch user data. Please try again.", [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("Login"),
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUserInfo();
+  }, [userToken, navigation]);
 
   return (
     <View style={styles.editProfileContainer}>
@@ -46,8 +101,17 @@ function EditProfile({navigation}) {
         <Button title="Xong" onPress={handleBack} />
       </View>
       <View style={styles.editAvatar}>
-        {/* <Image source={{ uri: profileProps.avatarUrl }} style={styles.avatar} /> */}
-        <Image source={{ uri: profileProps?.avatarUrl }} style={styles.avatar} />
+        {userData?.avatar == null ? (
+            <Image
+              source={require("../images/avatarDefine.jpg")}
+              style={styles.avatar}
+            />
+          ) : (
+            <Image
+              source={require("../images/avatarDefine.jpg")}
+              style={styles.avatar}
+            />
+          )}
         <Button
           title="Chỉnh sửa ảnh hoặc avatar"
           onPress={() => {
@@ -60,16 +124,20 @@ function EditProfile({navigation}) {
           <Text style={styles.fieldName}>Tên</Text>
           <TextInput
             style={styles.input}
-            value={profileProps?.username}
-            onChangeText={(text) => setProfileProps({ ...profileProps, username: text })}
+            value={userData?.username}
+            onChangeText={(text) =>
+              setUserData({ ...userData, username: text })
+            }
           />
         </View>
         <View style={styles.formGroup}>
           <Text style={styles.fieldName}>Tên người dùng</Text>
           <TextInput
             style={styles.input}
-            value={profileProps?.bio}
-            onChangeText={(text) => setProfileProps({ ...profileProps, bio: text })}
+            value={userData?.bio}
+            onChangeText={(text) =>
+              setUserData({ ...userData, bio: text })
+            }
             multiline
           />
         </View>
