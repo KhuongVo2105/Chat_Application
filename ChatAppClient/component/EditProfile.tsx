@@ -14,21 +14,41 @@ import { AuthContext } from "./Context";
 import { REACT_APP_API_BASE_URL } from "@env"; // Import biến môi trường
 
 interface User {
-    username: string;
-    avatar: string;
-    bio: string;
-  }
+  username: string;
+  avatar: string;
+  bio: string;
+}
+interface UpdateUser {
+  username: string;
+  newUsername: string;
+  privacy: number;
+}
 
 function EditProfile({ navigation }) {
   const { userToken, setUserToken } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(true);
   const [userData, setUserData] = useState<User | null>(null);
+  const [updateUserData, setUpdateUserData] = useState<UpdateUser | null>(null);
 
   const handleBack = () => {
     navigation.navigate("Profile");
   };
 
-  const handleUpdateProfile = () => {};
+  const handleUpdate = async () => {
+    const endpoint = `${REACT_APP_API_BASE_URL}/v1/users/updateInfo`;
+    console.log(`updateUser: ${endpoint}`);
+    const response = await axios.post(endpoint, updateUserData);
+    if (response.status === 200) {
+      console.log("result : ", response.data.username);
+      userData.username = response.data.username;
+      navigation.navigate("Profile");
+    } else {
+      Alert.alert("Error", "Update error");
+      throw new Error("Update error");
+    }
+  };
+
+  const handleUploadAvatar = () => {};
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -66,6 +86,11 @@ function EditProfile({ navigation }) {
             avatar: user?.avatar,
             bio: user?.bio,
           });
+          setUpdateUserData({
+            username: user.username,
+            newUsername: user?.username,
+            privacy: 0,
+          });
         } else {
           throw new Error("Failed to fetch user data");
         }
@@ -98,35 +123,34 @@ function EditProfile({ navigation }) {
       >
         <Button title="<" onPress={handleBack} />
         <Text style={styles.title}>Chỉnh sửa trang cá nhân</Text>
-        <Button title="Xong" onPress={handleBack} />
+        <Button title="Xong" onPress={handleUpdate} />
       </View>
       <View style={styles.editAvatar}>
         {userData?.avatar == null ? (
-            <Image
-              source={require("../images/avatarDefine.jpg")}
-              style={styles.avatar}
-            />
-          ) : (
-            <Image
-              source={require("../images/avatarDefine.jpg")}
-              style={styles.avatar}
-            />
-          )}
-        <Button
-          title="Chỉnh sửa ảnh hoặc avatar"
-          onPress={() => {
-            // Thêm xử lý thay đổi ảnh đại diện ở đây
-          }}
-        />
+          <Image
+            source={require("../images/avatarDefine.jpg")}
+            style={styles.avatar}
+          />
+        ) : (
+          <Image
+            source={require("../images/avatarDefine.jpg")}
+            style={styles.avatar}
+          />
+        )}
+        <TouchableOpacity onPress={handleUploadAvatar}>
+          <Text style={{ color: "#0095f6", fontSize: 15, fontWeight: 500 }}>
+            Chỉnh sửa ảnh hoặc avatar
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.editInfo}>
         <View style={styles.formGroup}>
           <Text style={styles.fieldName}>Tên</Text>
           <TextInput
             style={styles.input}
-            value={userData?.username}
+            value={updateUserData?.newUsername}
             onChangeText={(text) =>
-              setUserData({ ...userData, username: text })
+              setUpdateUserData({ ...updateUserData, newUsername: text })
             }
           />
         </View>
@@ -135,9 +159,7 @@ function EditProfile({ navigation }) {
           <TextInput
             style={styles.input}
             value={userData?.bio}
-            onChangeText={(text) =>
-              setUserData({ ...userData, bio: text })
-            }
+            onChangeText={(text) => setUserData({ ...userData, bio: text })}
             multiline
           />
         </View>
