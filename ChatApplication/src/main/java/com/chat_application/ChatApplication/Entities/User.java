@@ -1,10 +1,12 @@
 package com.chat_application.ChatApplication.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,11 +21,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
-    String username, password, email;
+    String username, password;
+    @Email(message = "EMAIL_INVALID")
+    String email;
     boolean privacy;
     byte statusAccount;
     boolean statusActive;
     String avatar;
+    LocalDate birthday;
     Timestamp createdAt, updatedAt;
 
     @ManyToMany

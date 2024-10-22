@@ -46,7 +46,7 @@ function LoginScreen({ navigation }) {
       if (response.data.result.authenticated) {
         console.log("success API");
         setUserToken(response.data.result.token); // Lưu token từ response vào Context
-        navigation.navigate("Info"); // Chuyển đến màn hình chi tiết nếu login thành công
+        navigation.navigate("Profile"); // Chuyển đến màn hình chi tiết nếu login thành công
       } else {
         Alert.alert("Login Failed", "Username or password is incorrect");
       }

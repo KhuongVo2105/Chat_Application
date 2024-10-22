@@ -19,12 +19,13 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
 
+    boolean isLeader;
+
     Timestamp createdAt;
 
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     Group group;
-    byte isLeader;
     @OneToOne
     User user;
 }
