@@ -192,3 +192,5 @@ vendor/
 
 # CircleCI
 .circleci/generated_config.yml
+
+/path
