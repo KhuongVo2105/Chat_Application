@@ -1,24 +1,109 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
-import images from '../constants/image';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import ENDPOINTS from "../constants/endpoints";
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
+import { FontAwesome, Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const Home = ({ navigation, route }) => {
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (route.params?.data) {
-      const { data } = route.params;
-    }
-  }, [route.params]);
+const InstagramClone = () => {
+  const navigation = useNavigation();
 
   return (
-    <View className="w-full h-full flex justify-center items-center bg-white">
-      <Text>Home page</Text>
-    </View>
+    <SafeAreaView style={styles.container} sharedTransitionTag="sharedTag">
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.logo}>Instagram</Text>
+        <View style={styles.icons}>
+          <TouchableOpacity>
+            <FontAwesome name="heart-o" size={24} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconSpacing}>
+            <Feather name="send" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Welcome message */}
+      <View style={styles.welcomeContainer}>
+        <Text style={styles.welcomeText}>Welcome to Instagram</Text>
+        <Text style={styles.subText}>
+          Follow people to start seeing the photos and videos they share.
+        </Text>
+      </View>
+
+      {/* Bottom navigation bar */}
+      <View style={styles.navbar}>
+        <TouchableOpacity>
+          <FontAwesome name="home" size={24} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome name="search" size={24} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("NewPostScreen")}>
+          <Feather name="plus-square" size={24} color="black"/>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome name="film" size={24} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome name="user-circle-o" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
-export default Home;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-between",
+    backgroundColor: "#f2f2f2",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    height: 60,
+  },
+  logo: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  icons: {
+    flexDirection: "row",
+  },
+  iconSpacing: {
+    marginLeft: 15,
+  },
+  welcomeContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  welcomeText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  subText: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#808080",
+  },
+  navbar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 10,
+    backgroundColor: "#fff",
+  },
+});
+
+export default InstagramClone;
