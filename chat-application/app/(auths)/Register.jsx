@@ -1,44 +1,28 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
-import images from '../constants/images';
-import { useState, useEffect } from 'react';
+import images from '../../constants/images';
 import axios from 'axios';
-import ENDPOINTS from "../constants/endpoints";
+import ENDPOINTS from "../../constants/endpoints";
+import { AuthContext } from '../../constants/AuthContext';
 
 const Register = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [birthday, setBirthday] = useState(new Date());
   const [username, setUsername] = useState('');
-  const [prev, setPrev] = useState();
   const [loading, setLoading] = useState(false);
 
-  const transfer = {
-    email: email,
-    password: password,
-    birthday: birthday,
-    username: username,
-    prev: prev
-  };
+  const { emailContext, setEmailContext } = useContext(AuthContext)
+  const { passwordContext, setPasswordContext } = useContext(AuthContext)
+  const { usernameContext, setUsernameContext } = useContext(AuthContext)
+  const { birthdayContext, setBirthdayContext } = useContext(AuthContext)
 
   useEffect(() => {
-    if (route.params?.data) {
-      const { data } = route.params;
-      setEmail(data.email);
-      setPassword(data.password);
-      setBirthday(data.birthday);
-      setUsername(data.username)
-      setPrev(data.prev);
-    }
-  }, [route.params]);
-
-  const handleBack = () => {
-    navigation.navigate(prev);
-  };
-
-  const handleSignIn = () => {
-    navigation.navigate('SignIn');
-  };
+    setEmail(emailContext)
+    setPassword(passwordContext)
+    setBirthday(birthdayContext)
+    setUsername(usernameContext)
+  }, []);
 
   const handleRegister = async () => {
     if (!email || !password || !username) {
@@ -81,9 +65,7 @@ const Register = ({ navigation, route }) => {
   return (
     <View className="w-full h-full flex items-center bg-white">
       <View className="w-96 mt-4">
-        <TouchableOpacity className="w-full" onPress={handleBack}>
-          <Image className="w-6" source={images.icon_back} resizeMode='contain' />
-        </TouchableOpacity>
+
         <Text className="text-3xl font-semibold mb-1">To sign up, read and agree to our terms and policies</Text>
         <Text className="text-base mb-7">
           By signing up you agree to Instagram's Terms, Privacy Policy and Cookies Policy
@@ -95,13 +77,6 @@ const Register = ({ navigation, route }) => {
           disabled={loading}
         >
           <Text className="text-center text-lg font-medium text-white">{loading ? 'Registering...' : 'I agree'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className="bg-white py-2 rounded-full mb-3"
-          onPress={handleSignIn}
-        >
-          <Text className="text-center text-lg font-medium text-blue-600">Already have an account?</Text>
         </TouchableOpacity>
       </View>
     </View>

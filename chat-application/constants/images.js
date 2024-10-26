@@ -26,5 +26,5 @@ export default {
     icon_calendar,
     story_unseen,
     story_seen, instagram_text, icon_message, icon_notify, icon_verify,
-    icon_triple_dot, icon_share
+    icon_triple_dot, icon_share,
 }
