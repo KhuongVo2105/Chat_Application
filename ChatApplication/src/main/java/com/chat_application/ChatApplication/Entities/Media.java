@@ -12,6 +12,7 @@ import java.util.UUID;
 @Table(name = "Medias")
 @Data
 @NoArgsConstructor
+@ToString
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)

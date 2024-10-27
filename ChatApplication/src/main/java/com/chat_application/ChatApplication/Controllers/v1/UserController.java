@@ -23,7 +23,6 @@ public class UserController {
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateReq req) {
-
         return ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(req))
                 .build();

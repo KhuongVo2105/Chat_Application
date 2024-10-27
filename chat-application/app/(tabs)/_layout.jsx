@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './Home';
-import { View, Image, Pressable, Text } from 'react-native';
+import { View, Image, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import images from '../../constants/images';
 import { AuthProvider } from '../../constants/AuthContext';
-import { SvgXml } from 'react-native-svg';
 import { IconCreateNewPost, IconHeart, IconHome, IconMessage, IconSearch, IconUserProfile } from '../../constants/IconComponents';
 import pathDatas from '../../constants/pathDatas';
+import Home from './Home';
+import NewPostScreen from './NewPostScreen';
 
 const iconBackSize = 30;
 
@@ -27,7 +27,7 @@ const Header = () => {
           <IconHeart width={iconBackSize} height={iconBackSize} />
         </Pressable>
         <Pressable className="mx-1">
-          <IconMessage width={iconBackSize-5} height={iconBackSize-5} fill={"black"}/>
+          <IconMessage width={iconBackSize - 5} height={iconBackSize - 5} fill={"black"} />
         </Pressable>
       </View>
     </View>
@@ -38,20 +38,20 @@ const FooterBar = () => {
   return (
     <View className="flex flex-row items-center justify-between sticky bottom-0 p-3 pb-2 w-full absolute bottom-0 border-t"
       style={{ backgroundColor: "#fafbfb" }}>
-      <Pressable className="ml-2" onPress={() => router.push('./../SignIn')}>
-        <IconHome width={iconBackSize} height={iconBackSize} pathData={pathDatas.icon_home_selected}/>
+      <Pressable className="ml-2" onPress={() => router.push('./Home')}>
+        <IconHome width={iconBackSize} height={iconBackSize} pathData={pathDatas.icon_home_selected} />
       </Pressable>
       <Pressable className="ml-2" onPress={() => router.push('')}>
         <IconSearch width={iconBackSize} height={iconBackSize} />
       </Pressable>
-      <Pressable className="ml-2" onPress={() => router.push('')}>
+      <Pressable className="ml-2" onPress={() => router.push('./NewPostScreen')}>
         <IconCreateNewPost width={iconBackSize} height={iconBackSize} />
       </Pressable>
       <Pressable className="ml-2" onPress={() => router.push('')}>
         <IconHeart width={iconBackSize} height={iconBackSize} />
       </Pressable>
       <Pressable className="ml-2" onPress={() => router.push('')}>
-        <IconUserProfile width={iconBackSize} height={iconBackSize} source={require('./../../assets/portaits/portait_1.jpg')}/>
+        <IconUserProfile width={iconBackSize} height={iconBackSize} source={require('./../../assets/portaits/portait_1.jpg')} />
       </Pressable>
     </View>
   );
@@ -64,6 +64,10 @@ const TabsLayout = () => {
     <AuthProvider>
       <Stack.Navigator initialRouteName='Home'>
         <Stack.Screen name="Home" component={Home} options={{
+          headerShown: true,
+          header: () => <Header />
+        }} />
+        <Stack.Screen name="NewPostScreen" component={NewPostScreen} options={{
           headerShown: true,
           header: () => <Header />
         }} />

@@ -4,6 +4,7 @@
   "main": "expo-router/entry",
   "private": true,
   "dependencies": {
+    "@react-native-camera-roll/camera-roll": "^7.8.3",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
@@ -19,6 +20,7 @@
     "nativewind": "^2.0.11",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-native-image-picker": "^7.1.2",
     "react-native-reanimated": "^3.15.4",
     "react-native-svg": "15.2.0",
     "web-vitals": "^2.1.4"
