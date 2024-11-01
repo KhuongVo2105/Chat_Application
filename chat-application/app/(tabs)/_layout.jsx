@@ -7,6 +7,8 @@ import { IconCreateNewPost, IconHeart, IconHome, IconMessage, IconSearch, IconUs
 import pathDatas from '../../constants/pathDatas';
 import Home from './Home';
 import NewPostScreen from './NewPostScreen';
+import { useState } from 'react';
+import ConversationLayout from '../(conversation)/_layout';
 
 const iconBackSize = 30;
 
@@ -26,7 +28,11 @@ const Header = () => {
           className="mx-1">
           <IconHeart width={iconBackSize} height={iconBackSize} />
         </Pressable>
-        <Pressable className="mx-1">
+
+        <Pressable className="mx-1" onPress={() => {
+          console.log('Action','Go to conversation')
+          router.push('/app/(conversation)/Conversations');
+        }}>
           <IconMessage width={iconBackSize - 5} height={iconBackSize - 5} fill={"black"} />
         </Pressable>
       </View>
@@ -35,22 +41,36 @@ const Header = () => {
 };
 
 const FooterBar = () => {
+
+  const [selected, setSelected] = useState('Home')
+
+  const handleTabPress = (tabName, route) => {
+    setSelected(tabName);
+    router.push(route)
+  }
+
   return (
     <View className="flex flex-row items-center justify-between sticky bottom-0 p-3 pb-2 w-full absolute bottom-0 border-t"
       style={{ backgroundColor: "#fafbfb" }}>
-      <Pressable className="ml-2" onPress={() => router.push('./Home')}>
-        <IconHome width={iconBackSize} height={iconBackSize} pathData={pathDatas.icon_home_selected} />
+      <Pressable className="ml-2" onPress={() => handleTabPress('Home', './Home')}>
+        <IconHome width={iconBackSize} height={iconBackSize}
+          {...(selected === 'Home' && { pathData: pathDatas.icon_home_selected })}
+        />
       </Pressable>
-      <Pressable className="ml-2" onPress={() => router.push('')}>
-        <IconSearch width={iconBackSize} height={iconBackSize} />
+      <Pressable className="ml-2" onPress={() => handleTabPress('Search', './Search')}>
+        <IconSearch width={iconBackSize} height={iconBackSize}
+          {...(selected === 'Search' && { pathData: pathDatas.icon_search_selected })}
+        />
       </Pressable>
-      <Pressable className="ml-2" onPress={() => router.push('./NewPostScreen')}>
+      <Pressable className="ml-2" onPress={() => handleTabPress('NewPostScreen', './NewPostScreen')}>
         <IconCreateNewPost width={iconBackSize} height={iconBackSize} />
       </Pressable>
-      <Pressable className="ml-2" onPress={() => router.push('')}>
-        <IconHeart width={iconBackSize} height={iconBackSize} />
+      <Pressable className="ml-2" onPress={() => handleTabPress('Heart', './Heart')}>
+        <IconHeart width={iconBackSize} height={iconBackSize}
+          {...(selected === 'Heart' && { pathData: pathDatas.icon_heart_selected })}
+        />
       </Pressable>
-      <Pressable className="ml-2" onPress={() => router.push('')}>
+      <Pressable className="ml-2" onPress={() => handleTabPress('', '')}>
         <IconUserProfile width={iconBackSize} height={iconBackSize} source={require('./../../assets/portaits/portait_1.jpg')} />
       </Pressable>
     </View>
@@ -71,7 +91,7 @@ const TabsLayout = () => {
           headerShown: true,
           header: () => <Header />
         }} />
-        {/* Bạn có thể thêm các tab khác vào đây nếu cần */}
+        <Stack.Screen name='(conversation)' component={ConversationLayout} options={{ headerShown: false }} />
 
       </Stack.Navigator>
       <FooterBar />
