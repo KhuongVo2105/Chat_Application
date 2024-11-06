@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, Image, Pressable } from 'react-native';
 import images from '../../constants/images';
@@ -12,7 +13,9 @@ import Notification from './Notification';
 const iconBackSize = 30;
 
 // Thanh điều hướng chung cho các màn hình tab
-const Header = ({ navigation }) => {
+const Header = ({  }) => {
+  const navigation = useNavigation()
+
   return (
     <View className="w-full flex flex-row bg-white justify-between mt-6 p-2">
       <Pressable>
@@ -30,7 +33,7 @@ const Header = ({ navigation }) => {
 
         <Pressable className="mx-1" onPress={() => {
           console.log('Action', 'Go to conversation')
-          navigation.navigate('(conversations)')
+          navigation.navigate('(conversations)');
         }}>
           <IconMessage width={iconBackSize - 5} height={iconBackSize - 5} fill={"black"} />
         </Pressable>

@@ -1,5 +1,3 @@
-import { NavigationContainer } from "@react-navigation/native";
-
 import { useFonts } from "expo-font";
 import React, { useEffect } from 'react'
 import { SplashScreen } from 'expo-router';
