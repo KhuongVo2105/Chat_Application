@@ -1,19 +1,18 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as React from 'react'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, Image, Pressable } from 'react-native';
-import { router } from 'expo-router';
 import images from '../../constants/images';
-import { AuthProvider } from '../../constants/AuthContext';
-import { IconCreateNewPost, IconHeart, IconHome, IconMessage, IconSearch, IconUserProfile } from '../../constants/IconComponents';
-import pathDatas from '../../constants/pathDatas';
+import { IconHeart, IconMessage, IconUserProfile } from '../../constants/IconComponents';
 import Home from './Home';
 import NewPostScreen from './NewPostScreen';
-import { useState } from 'react';
-import ConversationLayout from '../(conversation)/_layout';
+import Search from './Search';
+import Notification from './Notification';
 
 const iconBackSize = 30;
 
 // Thanh điều hướng chung cho các màn hình tab
-const Header = () => {
+const Header = ({ navigation }) => {
   return (
     <View className="w-full flex flex-row bg-white justify-between mt-6 p-2">
       <Pressable>
@@ -26,12 +25,12 @@ const Header = () => {
       <View className="flex flex-row items-center">
         <Pressable
           className="mx-1">
-          <IconHeart width={iconBackSize} height={iconBackSize} />
+          <Ionicons name="heart-outline" color="black" size={iconBackSize} />
         </Pressable>
 
         <Pressable className="mx-1" onPress={() => {
-          console.log('Action','Go to conversation')
-          router.push('/app/(conversation)/Conversations');
+          console.log('Action', 'Go to conversation')
+          navigation.navigate('(conversations)')
         }}>
           <IconMessage width={iconBackSize - 5} height={iconBackSize - 5} fill={"black"} />
         </Pressable>
@@ -40,62 +39,43 @@ const Header = () => {
   );
 };
 
-const FooterBar = () => {
-
-  const [selected, setSelected] = useState('Home')
-
-  const handleTabPress = (tabName, route) => {
-    setSelected(tabName);
-    router.push(route)
-  }
-
-  return (
-    <View className="flex flex-row items-center justify-between sticky bottom-0 p-3 pb-2 w-full absolute bottom-0 border-t"
-      style={{ backgroundColor: "#fafbfb" }}>
-      <Pressable className="ml-2" onPress={() => handleTabPress('Home', './Home')}>
-        <IconHome width={iconBackSize} height={iconBackSize}
-          {...(selected === 'Home' && { pathData: pathDatas.icon_home_selected })}
-        />
-      </Pressable>
-      <Pressable className="ml-2" onPress={() => handleTabPress('Search', './Search')}>
-        <IconSearch width={iconBackSize} height={iconBackSize}
-          {...(selected === 'Search' && { pathData: pathDatas.icon_search_selected })}
-        />
-      </Pressable>
-      <Pressable className="ml-2" onPress={() => handleTabPress('NewPostScreen', './NewPostScreen')}>
-        <IconCreateNewPost width={iconBackSize} height={iconBackSize} />
-      </Pressable>
-      <Pressable className="ml-2" onPress={() => handleTabPress('Heart', './Heart')}>
-        <IconHeart width={iconBackSize} height={iconBackSize}
-          {...(selected === 'Heart' && { pathData: pathDatas.icon_heart_selected })}
-        />
-      </Pressable>
-      <Pressable className="ml-2" onPress={() => handleTabPress('', '')}>
-        <IconUserProfile width={iconBackSize} height={iconBackSize} source={require('./../../assets/portaits/portait_1.jpg')} />
-      </Pressable>
-    </View>
-  );
-};
-
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator()
 
 const TabsLayout = () => {
   return (
-    <AuthProvider>
-      <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name="Home" component={Home} options={{
-          headerShown: true,
-          header: () => <Header />
-        }} />
-        <Stack.Screen name="NewPostScreen" component={NewPostScreen} options={{
-          headerShown: true,
-          header: () => <Header />
-        }} />
-        <Stack.Screen name='(conversation)' component={ConversationLayout} options={{ headerShown: false }} />
-
-      </Stack.Navigator>
-      <FooterBar />
-    </AuthProvider>
+    <Tab.Navigator initialRouteName='Home'
+      screenOptions={{
+        headerShown: true,
+        header: ({ navigation }) => <Header navigation={navigation} />,
+        tabBarShowLabel: false
+      }}>
+      <Tab.Screen name="Home" component={Home} options={{
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="home-outline" color={color} size={size} />
+        )
+      }} />
+      <Tab.Screen name="Search" component={Search} options={{
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="search" color={color} size={size} />
+        )
+      }} />
+      <Tab.Screen name="Post" component={NewPostScreen} options={{
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="add-circle-outline" color={color} size={size} />
+        )
+      }} />
+      <Tab.Screen name="Notification" component={Notification} options={{
+        tabBarBadge: 3,
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="heart-outline" color={color} size={size} />
+        )
+      }} />
+      <Tab.Screen name="Profile" component={Home} options={{
+        tabBarIcon: () => (
+          <IconUserProfile width={iconBackSize} height={iconBackSize} source={require('./../../assets/portaits/portait_1.jpg')} />
+        )
+      }} />
+    </Tab.Navigator>
   );
 };
 

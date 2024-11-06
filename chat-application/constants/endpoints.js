@@ -1,5 +1,5 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-const REACT_APP_API_BASE_URL = "http://10.50.43.153:8080/chat-application/v1"
+const REACT_APP_API_BASE_URL = "http://192.168.2.8:8080/chat-application/v1"
 
 const API_BASE_URL  = REACT_APP_API_BASE_URL;
 
