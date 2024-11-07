@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Conversations from "./Conversations";
 import { View, Pressable, Text } from 'react-native';
+import Conversation from "./Conversation";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,6 +28,7 @@ const ConversationLayout = () => {
     return (
         <Stack.Navigator initialRouteName='Conversations'>
             <Stack.Screen name='Conversations' component={Conversations} />
+            <Stack.Screen name='Conversation' component={Conversation} />
         </Stack.Navigator>
     )
 }

@@ -13,8 +13,8 @@ import Notification from './Notification';
 const iconBackSize = 30;
 
 // Thanh điều hướng chung cho các màn hình tab
-const Header = ({  }) => {
-  const navigation = useNavigation()
+const Header = ({  navigation}) => {
+  // const navigation = useNavigation()
 
   return (
     <View className="w-full flex flex-row bg-white justify-between mt-6 p-2">

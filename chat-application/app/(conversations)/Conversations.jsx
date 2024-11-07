@@ -1,6 +1,7 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { IconUserProfile } from '../../constants/IconComponents';
+import { useNavigation } from '@react-navigation/native';
 
 const CONVERSATIONS = [
   {
@@ -51,14 +52,25 @@ const CONVERSATIONS = [
   },
 ];
 
-const Conversation = ({ item }) => (
-  <TouchableOpacity className="flex flex-row mb-3 w-96 mx-auto items-center">
-    <IconUserProfile containerStyles="" width={60} height={60} seen={true}
-      source={require('./../../assets/portaits/portait_1.jpg')}
-    />
-    <Text className="ml-3">{item.members[0].username}</Text>
-  </TouchableOpacity>
-);
+const Conversation = ({ item }) => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity
+      className="flex flex-row mb-3 w-96 mx-auto items-center"
+      onPress={() => navigation.navigate('Conversation', { groupId: item.id })}
+    >
+      <IconUserProfile
+        containerStyles=""
+        width={60}
+        height={60}
+        seen={true}
+        source={require('./../../assets/portaits/portait_1.jpg')}
+      />
+      <Text className="ml-3">{item.members[0].username}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const Conversations = () => {
 
