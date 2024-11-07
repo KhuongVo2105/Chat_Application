@@ -1,21 +1,14 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
-import images from '../constants/image';
-import { useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import axios from 'axios';
-import ENDPOINTS from "../constants/endpoints";
+import ENDPOINTS from "../../constants/endpoints";
+import { AuthContext } from '../../constants/AuthContext';
 
-const SignIn = ({ navigation, route }) => {
+const RegisterEmail = ({ navigation }) => {
   const [email, setEmail] = useState('');
-  const [prev, setPrev] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (route.params?.data) {
-      const { data } = route.params;
-      setPrev(data.prev);
-    }
-  }, [route.params]);
+  const { emailContext, setEmailContext } = useContext(AuthContext); // Sử dụng context
 
   const handleCheckFormat = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -53,58 +46,50 @@ const SignIn = ({ navigation, route }) => {
 
     try {
       const endpoint = ENDPOINTS.OTP.SEND_OTP;
-      console.log(`Send request to ${endpoint} with ${email}`)
+      console.log(`Send request to ${endpoint} with ${email}`);
       const response = await axios.post(endpoint, { email });
-
-      // Check if response data exists
-      if (response.data && response.data.result) {
-        Alert.alert('Success', 'OTP sent successfully to your email.');
-      } else {
-        Alert.alert('Error', 'No response data received.');
-      }
 
       setLoading(false);
 
-      // Pass data to the next screen
-      navigation.navigate('Register_ConfirmCode', {
-        data: { email, prev: 'Register_Email' },
-      });
+      // Assuming success if response code is 200
+      if (response.data && response.data.code === 200 && response.data.result) {
+        
+        // update emailContext when reponse is successfully
+        setEmailContext(email)
+
+        Alert.alert('Success', 'OTP sent successfully to your email.');
+        navigation.navigate('Register_ConfirmCode');
+      } else {
+        Alert.alert('Error', 'Unexpected response.');
+      }
+
     } catch (error) {
       setLoading(false);
 
-      // Log full error to the console for debugging
-      console.error('Error sending OTP:', error);
-
-      // Log specific response details if available
+      // If server responds with a 4xx or 5xx error, check the response body
       if (error.response) {
-        console.error('Response data:', error.response.data);
-        console.error('Response status:', error.response.status);
-        console.error('Response headers:', error.response.headers);
-      } else if (error.request) {
-        console.error('Request data:', error.request);
+        const errorCode = error.response.data?.code;
+
+        // Switch case for handling specific error codes from the response data
+        switch (errorCode) {
+          case 1022: // EMAIL_EXISTED
+            Alert.alert('Error', 'Email already exists. Please use a different email.');
+            break;
+          default:
+            Alert.alert('Error', 'An unexpected error occurred.');
+        }
+
+        console.error('Error details:', error.response.data);
       } else {
+        Alert.alert('Error', 'Failed to send OTP. Please try again later.');
         console.error('Error message:', error.message);
       }
-
-      // Show a generic error message to the user
-      Alert.alert('Error', 'Failed to send OTP. Please try again later.');
-    }
-  };
-
-  const handlePre = () => {
-    if (prev) {
-      navigation.navigate(prev);
-    } else {
-      console.log('No previous page found');
     }
   };
 
   return (
     <View className="w-full h-full flex items-center bg-white">
-      <View className="w-96 mt-4">
-        <TouchableOpacity className="w-full" onPress={handlePre}>
-          <Image className="w-6" source={images.icon_back} resizeMode="contain" />
-        </TouchableOpacity>
+      <View className="w-96 mt-3">
         <Text className="text-3xl font-semibold mb-1">What's your email?</Text>
         <Text className="text-base mb-7">Enter the email where you can be contacted. No one will see this on your profile.</Text>
 
@@ -113,7 +98,7 @@ const SignIn = ({ navigation, route }) => {
           className="enabled:hover:border-gray-40 border py-2 px-4 w-96 hover:shadow mb-4 rounded-2xl drop-shadow-2xl"
           onChangeText={setEmail}
           placeholder="Email"
-          value={email}
+          value={emailContext? emailContext: email}
         />
 
         {/* Send OTP message button */}
@@ -127,15 +112,8 @@ const SignIn = ({ navigation, route }) => {
           </Text>
         </TouchableOpacity>
       </View>
-
-      {/* Sign up redirect */}
-      <View className="flex flex-row items-center justify-center sticky bottom-0 py-6 w-full absolute bottom-0">
-        <TouchableOpacity className="ml-2" onPress={handlePre}>
-          <Text className="text-base font-medium text-blue-600">I already have an account</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
 
-export default SignIn;
+export default RegisterEmail;
