@@ -14,12 +14,12 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesome, Feather } from "@expo/vector-icons";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Video as ExpoVideo } from "expo-av";
-import ENDPOINTS from "../constants/endpoints";
 import axios from "axios";
 import { useRoute } from "@react-navigation/native";
+import ENDPOINTS from "../../constants/endpoints";
 
 export default function NewPostScreen() {
   const [media, setMedia] = useState([]);
@@ -29,7 +29,10 @@ export default function NewPostScreen() {
 
   const route = useRoute();
   const { user } = route.params;
+  
   const handleCreatePost = async () => {
+    console.log("run")
+    
     const newPost = {
       caption: text,
       user: {
@@ -103,6 +106,7 @@ export default function NewPostScreen() {
         })
 
         navigation.navigate("Home", {"user": user});
+        // router .push('./Home', {"user": user})
       } else {
         Alert.alert("Đăng bài thất bại");
       }
