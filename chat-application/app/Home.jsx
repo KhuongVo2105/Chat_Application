@@ -3,15 +3,17 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
+  TouchableOpacity
 } from "react-native";
 import { FontAwesome, Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const InstagramClone = () => {
   const navigation = useNavigation();
-
+  const route = useRoute(); 
+  const { user } = route.params;
+  
   return (
     <SafeAreaView style={styles.container} sharedTransitionTag="sharedTag">
       {/* Header */}
@@ -43,7 +45,7 @@ const InstagramClone = () => {
         <TouchableOpacity>
           <FontAwesome name="search" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("NewPostScreen")}>
+        <TouchableOpacity onPress={() => navigation.navigate("NewPostScreen", {"user": user})}>
           <Feather name="plus-square" size={24} color="black"/>
         </TouchableOpacity>
         <TouchableOpacity>
@@ -67,10 +69,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 15,
-    paddingTop: 15,
     backgroundColor: "#fff",
     alignItems: "center",
-    height: 60,
+    height: 50,
   },
   logo: {
     fontSize: 24,

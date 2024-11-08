@@ -23,6 +23,7 @@ public class PostController {
 
     @PostMapping("/add")
     public ApiResponse<Post> add(@RequestBody Post post) {
+        System.out.println(post);
         ApiResponse<Post> response = service.add(post);
         return response;
     }

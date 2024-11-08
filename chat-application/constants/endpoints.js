@@ -22,7 +22,25 @@ const ENDPOINTS = {
     OTP:{
         SEND_OTP:`${API_BASE_URL}/verification/send-code`,
         VERIFY_OTP:`${API_BASE_URL}/verification/verify`
-    }
+    },
+
+    POST: {
+        GET: `${API_BASE_URL}/post/findAll`,
+        ADD: `${API_BASE_URL}/post/add`,
+        UPDATE: `${API_BASE_URL}/post/update`,
+        DELETE:`${API_BASE_URL}/post/delete`,
+    },
+
+    MEDIA: {
+        GET: `${API_BASE_URL}/media/findAll`,
+        ADD: `${API_BASE_URL}/media/add`,
+        DELETE:`${API_BASE_URL}/media/delete`,
+    },
+
+    CLOUDINARY: {
+        ADD_ONE: `${API_BASE_URL}/cloudinary/one`,
+        ADD_MULTIPLE: `${API_BASE_URL}/cloudinary/multiple`,
+    },
 }
 
 export default ENDPOINTS;
