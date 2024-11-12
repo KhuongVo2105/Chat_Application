@@ -1,5 +1,6 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-const REACT_APP_API_BASE_URL = "http://192.168.2.8:8080/chat-application/v1"
+const SERVER_ADDRESS = `192.168.1.28`
+const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`
 
 const API_BASE_URL  = REACT_APP_API_BASE_URL;
 
@@ -22,6 +23,10 @@ const ENDPOINTS = {
     OTP:{
         SEND_OTP:`${API_BASE_URL}/verification/send-code`,
         VERIFY_OTP:`${API_BASE_URL}/verification/verify`
+    },
+
+    WEBSOCKET: {
+        SOCKET_URL :`ws://${SERVER_ADDRESS}:8080/chat-application/socket`
     }
 }
 
