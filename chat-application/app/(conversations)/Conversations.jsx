@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const CONVERSATIONS = [
   {
-    id: 1,
+    id: 'HelloImKhuong2105',
     members: [{
       username: "LeLongbe",
       email: "21130436@st.hcmuaf.edu.vn",
