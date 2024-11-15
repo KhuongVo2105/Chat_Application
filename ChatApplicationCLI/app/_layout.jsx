@@ -31,16 +31,14 @@ const RootLayout = () => {
     const Stack = createNativeStackNavigator();
 
     return (
-        <AuthProvider>
-            <NavigationContainer>
-                <Stack.Navigator initialRouteName="SignIn">
-                    <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
-                    <Stack.Screen name="(tabs)" component={TabsLayout} options={{ headerShown: false }} />
-                    <Stack.Screen name="(auths)" component={AuthsLayout} options={{ headerShown: false }} />
-                    <Stack.Screen name="(conversations)" component={ConversationLayout} options={{ headerShown: false }} />
-                </Stack.Navigator>
-            </NavigationContainer>
-        </AuthProvider>
+
+        <Stack.Navigator initialRouteName="SignIn">
+            <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" component={TabsLayout} options={{ headerShown: false }} />
+            <Stack.Screen name="(auths)" component={AuthsLayout} options={{ headerShown: false }} />
+            <Stack.Screen name="(conversations)" component={ConversationLayout} options={{ headerShown: false }} />
+        </Stack.Navigator>
+
     );
 };
 
