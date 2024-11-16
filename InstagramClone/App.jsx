@@ -16,8 +16,11 @@ const App = () => {
 
   return (
     <SafeAreaView>
-      <View className="">
-        <Text className="text-lg font-extrabold">
+      <View className="bg-orange-400">
+        <Text className="text-2xl instagram">
+          Hello
+        </Text>
+        <Text className="text-2xl ">
           Hello
         </Text>
       </View>
