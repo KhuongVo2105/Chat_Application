@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
 import images from '../constants/images';
 import axios from 'axios';
 import ENDPOINTS from "../constants/endpoints";
-import { router, useNavigation } from 'expo-router';
+import { router } from 'expo-router';
+import { AuthContext } from '../constants/AuthContext';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  
+  const authContext = useContext(AuthContext)
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -27,7 +30,7 @@ const SignIn = () => {
 
       if (response.data.code === 200 && response.data.result.authenticated) {
         const token = response.data.result.token;
-
+     
         // Kiểm tra tính hợp lệ của token
         const introspectEndpoint = ENDPOINTS.AUTH.INTROSPECT;
         const introspectRequest = { token: token };
@@ -44,9 +47,11 @@ const SignIn = () => {
             const userData = userInfoResponse.data.result;
             console.log("User Data:", userData);
 
+            authContext.setTokenContext(token)
+            console.log("authContext: " + authContext.tokenContext);
+            
             // Chuyển hướng đến trang Home.jsx sau khi đăng nhập thành công
             router.replace("/(tabs)/Home");
-            // navigation.navigate("Home", {user: userData})
           }
         } else {
           Alert.alert("Error", "Invalid token.");

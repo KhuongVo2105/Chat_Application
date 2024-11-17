@@ -5,23 +5,40 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ENDPOINTS from "./../../constants/endpoints";
 import { IconUserProfile } from '../../constants/IconComponents';
-import { useRoute } from '@react-navigation/native';
 
 const Home = ({ navigation, route }) => {
+  const token = 'eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzE4NDAzMzYsImlhdCI6MTczMTgzNjczNiwic2NvcGUiOiIifQ.aSl0xH66V6WR5C1SKgyiH4Nyvcpr0OEsV36SK99ZnxcuBTHTnEM67R2fCM_c2eUJFDF_rObs79nBkMWqw4n0Kg'
   const [loading, setLoading] = useState(false);
   const [yourComment, setYourComment] = useState()
+  const [post, setPost] = useState([])
+  const [follow, setFollow] = useState([])
+
+  const user = {
+    "id": "c0a65020-1681-441f-90b9-4a846f9f328b"
+  }
+  
+  const getFollowingEndpoint = ENDPOINTS.FOLLOW.GET_FOLLOWING;
+  console.log("get following: " + getFollowingEndpoint);
   
   useEffect(() => {
-    console.log('route.params?.data: ' + route.params?.data)
+    axios.post(getFollowingEndpoint, user, {
+      headers: { Authorization: `Bearer ${token}` },
+    })  .then((response) => {
+      const followingList = response.data.result
+      setFollow(followingList)
+    })
+    .catch((err) => {
+      console.log(err);
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
     if (route.params?.data) {
       const { data } = route.params;
-      console.log("data: " +data)
     }
   }, [route.params]);
-  
-  const { user } = route.params;
-  console.log(user)
-  
+
   return (
     <View className="w-full h-full flex justify-center items-center bg-white">
       <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
@@ -180,7 +197,6 @@ const Home = ({ navigation, route }) => {
         </View>
 
         {/* navigation bottom */}
-
       </ScrollView>
     </View>
   );

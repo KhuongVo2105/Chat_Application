@@ -1,40 +1,47 @@
 {
-    "expo": {
-      "name": "instagram",
-      "slug": "instagram",
-      "version": "1.0.0",
-      "orientation": "portrait",
-      "icon": "./assets/icons--instagram.png",
-      "userInterfaceStyle": "light",
-      "splash": {
-        "image": "./assets/instagram_splash.png",
-        "resizeMode": "cover",
+  "expo": {
+    "name": "instagram",
+    "slug": "instagram",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons--instagram.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/instagram_splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "scheme": "sora",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons--instagram.png",
         "backgroundColor": "#ffffff"
       },
-      "scheme": "sora",
-      "assetBundlePatterns": ["**/*"],
-      "ios": {
-        "supportsTablet": true
-      },
-      "android": {
-        "adaptiveIcon": {
-          "foregroundImage": "./assets/icons--instagram.png",
-          "backgroundColor": "#ffffff"
-        },
-        "package": "com.jsm.sora"
-      },
-      "web": {
-        "favicon": "./assets/favicon.png"
-      },
-      "plugins": [
-        "expo-router", 
-        "expo-font",
-        [
-          "expo-image-picker",
-          {
-            "photosPermission": "The app accesses your photos to let you share them with your friends."
-          }
-        ]
+      "package": "com.jsm.sora"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router", 
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
+        }
       ]
-    }
+    ]
   }
+}

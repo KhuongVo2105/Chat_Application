@@ -8,62 +8,68 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  Alert, 
+  Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { FontAwesome, Feather } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Video as ExpoVideo } from "expo-av";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from "axios";
-import { useRoute } from "@react-navigation/native";
 import ENDPOINTS from "../../constants/endpoints";
 
-export default function NewPostScreen() {
+export default function NewPostScreen({ uri }) {
+  const tokenContext = 'eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzE4NDAzMzYsImlhdCI6MTczMTgzNjczNiwic2NvcGUiOiIifQ.aSl0xH66V6WR5C1SKgyiH4Nyvcpr0OEsV36SK99ZnxcuBTHTnEM67R2fCM_c2eUJFDF_rObs79nBkMWqw4n0Kg'
   const [media, setMedia] = useState([]);
   const [text, setText] = useState("");
 
-  const navigation = useNavigation();
+  const pickMedia = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      allowsMultipleSelection: true,
+      quality: 1,
+    });
 
-  const route = useRoute();
-  const { user } = route.params;
-  
+    console.log(result);
+
+    if (!result.canceled) {
+      setMedia([...media, ...result.assets.map((asset) => asset)]);
+    }
+  };
+
+  const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
+  const navigation = useNavigation();
   const handleCreatePost = async () => {
-    console.log("run")
-    
+    const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
+    const userInfoResponse = await axios.post(
+      userInfoEndpoint,
+      {},
+      {
+        headers: { Authorization: `Bearer ${tokenContext}` },
+      }
+    );
+    const user = userInfoResponse.data.result;
+
     const newPost = {
       caption: text,
       user: {
-        id: user.id,
+        id: 'c0a65020-1681-441f-90b9-4a846f9f328b',
       },
-    };
-
-    const requestGetToken = {
-      email: user.email,
-      password: "123456789a@B",
     };
 
     const endpoint = ENDPOINTS.POST.ADD;
     try {
-      const responseGetToken = await axios.post(
-        ENDPOINTS.AUTH.GET_TOKEN,
-        requestGetToken
-      );
-
-      const token = responseGetToken.data.result.token;
       const introspectResponse = await axios.post(ENDPOINTS.AUTH.INTROSPECT, {
-        token: token,
+        token: tokenContext,
       });
 
-      if (
-        introspectResponse.data.code === 200 &&
-        introspectResponse.data.result.valid
-      ) {
+      if (introspectResponse.data.code === 200 &&introspectResponse.data.result.valid) {
         const responseCreateNewPost = await axios.post(endpoint, newPost, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${tokenContext}` },
         });
+        
         Alert.alert("Đăng bài thành công");
         const postId = responseCreateNewPost.data.result.id;
         var newMedia = [];
@@ -89,24 +95,27 @@ export default function NewPostScreen() {
           ENDPOINTS.MEDIA.ADD,
           newMedia,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${tokenContext}` },
           }
         );
 
         // thêm ảnh vào cloudinary
-        const responseAddCloudinary = axios.post(ENDPOINTS.CLOUDINARY.ADD_MULTIPLE, formData, {
-          params:{
-            userId: user.id,
-            postId: postId,
-          },
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        const responseAddCloudinary = axios.post(
+          ENDPOINTS.CLOUDINARY.ADD_MULTIPLE,
+          formData,
+          {
+            params: {
+              userId: user.id,
+              postId: postId,
+            },
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${tokenContext}`,
+            },
+          }
+        );
 
-        navigation.navigate("Home", {"user": user});
-        // router .push('./Home', {"user": user})
+        navigation.navigate("Home");
       } else {
         Alert.alert("Đăng bài thất bại");
       }
@@ -115,44 +124,28 @@ export default function NewPostScreen() {
     }
   };
 
-  // Hàm chọn ảnh hoặc video từ thư viện
-  const pickMedia = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All, // Cho phép chọn cả ảnh và video
-      allowsMultipleSelection: true,
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setMedia([...media, ...result.assets.map((asset) => asset)]);
-    }
-  };  
-
   return (
     <SafeAreaView style={styles.container}>
       <View>
         <View style={styles.header}>
-          <TouchableOpacity>
-            <FontAwesome
-              name="arrow-left"
-              size={24}
-              color="black"
-              onPress={() => navigation.goBack()}
-            />
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
           <Text style={styles.title}>Tạo Bài Viết</Text>
 
-          <Button 
-            title="Đăng" 
-            onPress = {() => handleCreatePost()}
-            disabled={(text || media.length != 0) ? false : true} />
+          <Button
+            title="Đăng"
+            onPress={() => handleCreatePost()}
+            disabled={text || media.length != 0 ? false : true}
+          />
         </View>
 
         {media.length <= 0 ? (
           <View style={styles.imageLayout}>
-            <FontAwesome name="photo" size={150} color="black" />
+            <MaterialIcons name="perm-media" size={150} color="black" />
           </View>
         ) : null}
+      
 
         <ScrollView horizontal style={styles.imageScroll}>
           {media.map((values, index) =>

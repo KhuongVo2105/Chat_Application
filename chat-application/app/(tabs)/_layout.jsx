@@ -1,20 +1,12 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Image, Pressable } from "react-native";
-import { router } from "expo-router";
-import images from "../../constants/images";
-import { AuthProvider } from "../../constants/AuthContext";
-import {
-  IconCreateNewPost,
-  IconHeart,
-  IconHome,
-  IconMessage,
-  IconSearch,
-  IconUserProfile,
-} from "../../constants/IconComponents";
-import pathDatas from "../../constants/pathDatas";
-import Home from "./Home";
-import NewPostScreen from "./NewPostScreen";
-import { NavigationContainer, useRoute } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Image, Pressable } from 'react-native';
+import { router } from 'expo-router';
+import images from '../../constants/images';
+import { AuthProvider } from '../../constants/AuthContext';
+import { IconCreateNewPost, IconHeart, IconHome, IconMessage, IconSearch, IconUserProfile } from '../../constants/IconComponents';
+import pathDatas from '../../constants/pathDatas';
+import Home from './Home';
+import NewPostScreen from './NewPostScreen';
 
 const iconBackSize = 30;
 
@@ -26,20 +18,16 @@ const Header = () => {
         <Image
           source={images.instagram_text} // Đảm bảo đường dẫn đúng
           style={{ width: 121, height: 35 }} // Điều chỉnh kích thước và margin
-          resizeMode="containt"
-        />
+          resizeMode='containt' />
       </Pressable>
 
       <View className="flex flex-row items-center">
-        <Pressable className="mx-1">
+        <Pressable
+          className="mx-1">
           <IconHeart width={iconBackSize} height={iconBackSize} />
         </Pressable>
         <Pressable className="mx-1">
-          <IconMessage
-            width={iconBackSize - 5}
-            height={iconBackSize - 5}
-            fill={"black"}
-          />
+          <IconMessage width={iconBackSize - 5} height={iconBackSize - 5} fill={"black"} />
         </Pressable>
       </View>
     </View>
@@ -47,39 +35,23 @@ const Header = () => {
 };
 
 const FooterBar = () => {
-  const route = useRoute();
-  const { user } = route.params;
-  console.log(user);
   return (
-    <View
-      className="flex flex-row items-center justify-between sticky bottom-0 p-3 pb-2 w-full absolute bottom-0 border-t"
-      style={{ backgroundColor: "#fafbfb" }}
-    >
-      <Pressable className="ml-2" onPress={() => router.push("./Home")}>
-        <IconHome
-          width={iconBackSize}
-          height={iconBackSize}
-          pathData={pathDatas.icon_home_selected}
-        />
+    <View className="flex flex-row items-center justify-between sticky bottom-0 p-3 pb-2 w-full absolute bottom-0 border-t"
+      style={{ backgroundColor: "#fafbfb" }}>
+      <Pressable className="ml-2" onPress={() => router.push('./Home')}>
+        <IconHome width={iconBackSize} height={iconBackSize} pathData={pathDatas.icon_home_selected} />
       </Pressable>
-      <Pressable className="ml-2" onPress={() => router.push("")}>
+      <Pressable className="ml-2" onPress={() => router.push('')}>
         <IconSearch width={iconBackSize} height={iconBackSize} />
       </Pressable>
-      <Pressable
-        className="ml-2"
-        onPress={() => router.push("./NewPostScreen", { user: user })}
-      >
+      <Pressable className="ml-2" onPress={() => router.push('./NewPostScreen')}>
         <IconCreateNewPost width={iconBackSize} height={iconBackSize} />
       </Pressable>
-      <Pressable className="ml-2" onPress={() => router.push("")}>
+      <Pressable className="ml-2" onPress={() => router.push('')}>
         <IconHeart width={iconBackSize} height={iconBackSize} />
       </Pressable>
-      <Pressable className="ml-2" onPress={() => router.push("")}>
-        <IconUserProfile
-          width={iconBackSize}
-          height={iconBackSize}
-          source={require("./../../assets/portaits/portait_1.jpg")}
-        />
+      <Pressable className="ml-2" onPress={() => router.push('')}>
+        <IconUserProfile width={iconBackSize} height={iconBackSize} source={require('./../../assets/portaits/portait_1.jpg')} />
       </Pressable>
     </View>
   );
@@ -90,25 +62,18 @@ const Stack = createNativeStackNavigator();
 const TabsLayout = () => {
   return (
     <AuthProvider>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerShown: true,
-            header: () => <Header />,
-          }}
-        />
-        <Stack.Screen
-          name="NewPostScreen"
-          component={NewPostScreen}
-          options={{
-            headerShown: true,
-            header: () => <Header />,
-          }}
-        />
+      <Stack.Navigator initialRouteName='Home'>
+        <Stack.Screen name="Home" component={Home} options={{
+          headerShown: true,
+          header: () => <Header />
+        }} />
+        <Stack.Screen name="NewPostScreen" component={NewPostScreen} options={{
+          headerShown: true,
+          header: () => <Header />
+        }} />
         {/* Bạn có thể thêm các tab khác vào đây nếu cần */}
       </Stack.Navigator>
+      <FooterBar />
     </AuthProvider>
   );
 };

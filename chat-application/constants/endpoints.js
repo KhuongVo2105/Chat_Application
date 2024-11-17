@@ -41,6 +41,9 @@ const ENDPOINTS = {
         ADD_ONE: `${API_BASE_URL}/cloudinary/one`,
         ADD_MULTIPLE: `${API_BASE_URL}/cloudinary/multiple`,
     },
+    FOLLOW: {
+        GET_FOLLOWING: `${API_BASE_URL}/follow/findAllByUserId`,
+    }
 }
 
 export default ENDPOINTS;

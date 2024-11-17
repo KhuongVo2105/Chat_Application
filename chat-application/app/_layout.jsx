@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignIn from './SignIn';
 import TabsLayout from './(tabs)/_layout';
 import AuthsLayout from "./(auths)/_layout";
+import { AuthProvider } from "../constants/AuthContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,11 +32,14 @@ const RootLayout = () => {
     const Stack = createNativeStackNavigator();
 
     return (
-        <Stack.Navigator initialRouteName='SignIn'>
-            <Stack.Screen name='SignIn' component={SignIn} options={{ headerShown: false }} />
-            <Stack.Screen name='(tabs)' options={{ headerShown: false }} component={TabsLayout} />
-            <Stack.Screen name='(auths)' options={{ headerShown: false }} component={AuthsLayout} />
-        </Stack.Navigator>
+        <AuthProvider>
+            <Stack.Navigator initialRouteName='SignIn'>
+                <Stack.Screen name='SignIn' component={SignIn} options={{ headerShown: false }} />
+                <Stack.Screen name='(tabs)' options={{ headerShown: false }} component={TabsLayout} />
+                <Stack.Screen name='(auths)' options={{ headerShown: false }} component={AuthsLayout} />
+            </Stack.Navigator>
+        </AuthProvider>
+
     )
 }
 
