@@ -60,11 +60,11 @@ const SignIn = ({ navigation, route }) => {
 
         switch (status) {
           case 400:
-            if (code == 1013) Alert.alert('Error', message)
+            if (code == 1013) Alert.alert(message)
             else console.log(`It's not #1013\tCode ${code}, Message: ${message}`)
             break;
           case 401:
-            if (code == 1040) Alert.alert('Error', message)
+            if (code == 1040) Alert.alert(message)
               else console.log(`It's not #1040\tCode ${code}, Message: ${message}`)
             break;
           default:
@@ -76,11 +76,6 @@ const SignIn = ({ navigation, route }) => {
           data: data,
           headers: headers,
         });
-
-        Alert.alert(
-          "Server Error",
-          `Server returned an error:\nStatus Code: ${error.response.status}\nMessage: ${error.response.data.message || "Unknown error"}`
-        );
       } else if (error.request) {
         // Trường hợp không nhận được phản hồi từ server (timeout, server không khả dụng, v.v.)
         console.error("SignIn Error: No response received from server", {
@@ -108,7 +103,7 @@ const SignIn = ({ navigation, route }) => {
   };
 
   const handleSignUp = () => {
-    navigation.navigate('/Register_Email');
+    navigation.navigate('(auths)');
   };
 
   const handleFacebookLogin = () => {
