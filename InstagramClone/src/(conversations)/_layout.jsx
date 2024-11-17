@@ -5,8 +5,6 @@ import Conversations from "./Conversations";
 import { View, Pressable, Text } from 'react-native';
 import Conversation from "./Conversation";
 
-SplashScreen.preventAutoHideAsync();
-
 const HeaderConversations = () => {
     return (
         <View>

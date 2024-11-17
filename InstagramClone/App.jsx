@@ -8,17 +8,15 @@
 import React from 'react';
 import {
   SafeAreaView,
-  Text,
-  View,
 } from 'react-native';
 import RootLayout from './src/_layout';
 
 const App = () => {
 
   return (
-    <SafeAreaView>
+    // <SafeAreaView>
       <RootLayout />
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 }
 

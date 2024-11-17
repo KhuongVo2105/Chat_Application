@@ -5,6 +5,9 @@ import axios from 'axios';
 import ENDPOINTS from "./constants/endpoints";
 
 const SignIn = () => {
+
+  console.log(`[SCREEN NAVIGATION] ${new Date().toISOString()} - Screen: SignIn`)
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
