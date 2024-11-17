@@ -36,7 +36,7 @@ public enum ErrorCode {
     PASSWORD_NOT_EXISTED(1033, "Password not found. Please check your credentials.", HttpStatus.NOT_FOUND),
 
     // Authentication and Authorization (code 104x)
-    UNAUTHENTICATED(1040, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    UNAUTHENTICATED(1040, "Invalid email or password. Please try again.", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1041, "You do not have permission", HttpStatus.FORBIDDEN),
 
     // Role Group (code 105x)

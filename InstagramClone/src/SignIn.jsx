@@ -4,7 +4,7 @@ import images from './constants/images';
 import axios from 'axios';
 import ENDPOINTS from "./constants/endpoints";
 
-const SignIn = () => {
+const SignIn = ({ navigation, route }) => {
 
   console.log(`[SCREEN NAVIGATION] ${new Date().toISOString()} - Screen: SignIn`)
 
@@ -15,57 +15,100 @@ const SignIn = () => {
 
   const handleSignIn = async () => {
     setLoading(true);
+
     try {
       const endpoint = ENDPOINTS.AUTH.GET_TOKEN;
       console.log(`Instagram-SignIn-endpoint: ${endpoint}`);
-      
+
       const signInRequest = {
         email: email,
         password: password,
       };
 
-      // Gửi yêu cầu đăng nhập
+      console.log(`Request: ${signInRequest}`)
+
       const response = await axios.post(endpoint, signInRequest);
 
-      if (response.data.code === 200 && response.data.result.authenticated) {
-        const token = response.data.result.token;
+      const { code, message, result } = response.data;
+      const statusCode = response.status; // HTTP Status Code từ server
 
-        // Kiểm tra tính hợp lệ của token
-        const introspectEndpoint = ENDPOINTS.AUTH.INTROSPECT;
-        const introspectRequest = { token: token };
-        const introspectResponse = await axios.post(introspectEndpoint, introspectRequest);
-
-        if (introspectResponse.data.code === 200 && introspectResponse.data.result.valid) {
-          // Nếu token hợp lệ, lấy thông tin người dùng
-          const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
-          const userInfoResponse = await axios.post(userInfoEndpoint, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-
-          if (userInfoResponse.data.code === 200) {
-            const userData = userInfoResponse.data.result;
-            console.log("User Data:", userData);
-
-            // Chuyển hướng đến trang Home.jsx sau khi đăng nhập thành công
-            router.replace("/(tabs)/Home");
+      switch (statusCode) {
+        case 200: {
+          // Trường hợp đăng nhập thành công
+          const { authenticated, token } = result;
+          if (authenticated) {
+            console.log("Token:", token);
+            Alert.alert("Success", "Login successful!");
+            navigation.replace("/(tabs)/Home");
+          } else {
+            Alert.alert("Error", "Authentication failed. Please try again.");
           }
-        } else {
-          Alert.alert("Error", "Invalid token.");
+          break;
         }
-      } else {
-        Alert.alert("Error", "Authentication failed. Please check your email and password.");
+        default: {
+          // Trường hợp lỗi không xác định
+          Alert.alert("Error", message || "An unexpected error occurred.");
+          break;
+        }
       }
-
     } catch (error) {
-      console.error("SignIn error:", error);
-      Alert.alert("Error", "Network error or unexpected response.");
+      if (error.response) {
+        // Trường hợp server trả về phản hồi với mã lỗi HTTP (4xx, 5xx)
+
+        const { status, data, headers } = error.response;
+        const { code, message } = data
+
+        switch (status) {
+          case 400:
+            if (code == 1013) Alert.alert('Error', message)
+            else console.log(`It's not #1013\tCode ${code}, Message: ${message}`)
+            break;
+          case 401:
+            if (code == 1040) Alert.alert('Error', message)
+              else console.log(`It's not #1040\tCode ${code}, Message: ${message}`)
+            break;
+          default:
+            break;
+        }
+
+        console.error("SignIn Error: Server responded with an error", {
+          status: status,
+          data: data,
+          headers: headers,
+        });
+
+        Alert.alert(
+          "Server Error",
+          `Server returned an error:\nStatus Code: ${error.response.status}\nMessage: ${error.response.data.message || "Unknown error"}`
+        );
+      } else if (error.request) {
+        // Trường hợp không nhận được phản hồi từ server (timeout, server không khả dụng, v.v.)
+        console.error("SignIn Error: No response received from server", {
+          request: error.request,
+        });
+
+        Alert.alert(
+          "Network Error",
+          "No response received from the server. Please check your connection and try again."
+        );
+      } else {
+        // Các lỗi khác xảy ra trước khi gửi request (cấu hình sai, lỗi mã, v.v.)
+        console.error("SignIn Error: An error occurred while setting up the request", {
+          message: error.message,
+        });
+
+        Alert.alert(
+          "Unexpected Error",
+          `An unexpected error occurred:\n${error.message}`
+        );
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleSignUp = () => {
-    router.push('/Register_Email');
+    navigation.navigate('/Register_Email');
   };
 
   const handleFacebookLogin = () => {
