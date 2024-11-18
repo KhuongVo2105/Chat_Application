@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator, StyleSheet, Pressable, ImageBackground, ScrollView } from 'react-native';
-import images from '../constants/images';
+import images from '../../config/images';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import ENDPOINTS from "../constants/endpoints";
-import { IconUserProfile } from '../constants/IconComponents';
+import ENDPOINTS from "../../config/endpoints";
+import { IconUserProfile } from '../../components/IconComponents';
 
 const Home = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);

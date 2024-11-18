@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
-import images from './constants/images';
 import axios from 'axios';
-import ENDPOINTS from "./constants/endpoints";
+import images from './../config/images';
+import ENDPOINTS from "./../config/endpoints";
 
 const SignIn = ({ navigation, route }) => {
 

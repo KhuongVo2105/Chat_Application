@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import axios from 'axios';
-import ENDPOINTS from "../constants/endpoints";
-import { AuthContext } from '../constants/AuthContext';
+import ENDPOINTS from "../../config/endpoints";
+import { AuthContext } from '../../context/AuthContext';
 
 const RegisterConfirmCode = ({ navigation, route }) => {
   const [confirmCode, setConfirmCode] = useState('');

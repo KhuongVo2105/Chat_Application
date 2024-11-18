@@ -3,9 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from "@react-navigation/native";
 import SignIn from './SignIn';
 import TabsLayout from './(tabs)/_layout';
-import AuthsLayout from "./(auths)/_layout";
-import { AuthProvider } from "./constants/AuthContext";
-import ConversationLayout from "./(conversations)/_layout";
+import AuthsLayout from './(auths)/_layout';
+import ConversationLayout from './(conversations)/_layout';
+import { AuthProvider } from '../context/AuthContext';
 
 const RootLayout = () => {
 

@@ -1,8 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import axios from 'axios';
-import ENDPOINTS from "../constants/endpoints";
-import { AuthContext } from '../constants/AuthContext';
+import ENDPOINTS from "../../config/endpoints";
+import { AuthContext } from '../../context/AuthContext';
+import ValidationComponent from 'react-native-form-validator';
+import { CustomValidation } from '../../components/validators';
 
 const RegisterEmail = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -10,26 +12,26 @@ const RegisterEmail = ({ navigation }) => {
 
   const { emailContext, setEmailContext } = useContext(AuthContext); // Sử dụng context
 
-  const handleCheckFormat = () => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  // const handleCheckFormat = () => {
+  //   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (email.trim() === '') {
-      Alert.alert('Error', 'Email field cannot be left blank. Please enter your email.');
-      return false;
-    }
-    if (!emailRegex.test(email)) {
-      Alert.alert('Error', 'The email you entered is not valid. Please provide a valid email address.');
-      return false;
-    }
+  //   if (email.trim() === '') {
+  //     Alert.alert('Error', 'Email field cannot be left blank. Please enter your email.');
+  //     return false;
+  //   }
+  //   if (!emailRegex.test(email)) {
+  //     Alert.alert('Error', 'The email you entered is not valid. Please provide a valid email address.');
+  //     return false;
+  //   }
 
-    return true;
-  };
+  //   return true;
+  // };
 
   const handleRegisterEmail = async () => {
     setLoading(true);
 
     // Check email format
-    const isValid = handleCheckFormat();
+    const isValid = (new CustomValidation()).isEmail(email)
     if (!isValid) {
       setLoading(false);
       return;
@@ -90,7 +92,7 @@ const RegisterEmail = ({ navigation }) => {
   return (
     <View className="w-full h-full flex items-center bg-white">
       <View className="w-96 mt-3">
-        <Text className="text-3xl font-semibold mb-1">What's your email?</Text>
+        <Text className="text-2xl font-bold mb-1 instagram">What's your email?</Text>
         <Text className="text-base mb-7">Enter the email where you can be contacted. No one will see this on your profile.</Text>
 
         {/* Email field */}

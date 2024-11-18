@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [usernameContext, setUsernameContext] = useState('')
   const [birthdayContext, setBirthdayContext] = useState()
   const [tokenContext, setTokenContext] = useState('')
+  const [OTP, setOTP] = useState('')
 
   // Provider cung cấp emailContext và setEmailContext
   return (
@@ -19,7 +20,8 @@ export const AuthProvider = ({ children }) => {
         passwordContext, setPasswordContext,
         usernameContext, setUsernameContext,
         birthdayContext, setBirthdayContext,
-        tokenContext, setTokenContext
+        tokenContext, setTokenContext,
+        OTP, setOTP
       }}
     >
       {children}

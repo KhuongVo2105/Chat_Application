@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { View, Text, TouchableOpacity, Image, Button, TextInput, Alert, Modal, ScrollView } from 'react-native'
-import images from '../constants/images'
+import images from '../../config/images'
 import axios from 'axios'
-import { AuthContext } from '../constants/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const RegisterUsername = ({ navigation, route }) => {
   const [username, setUsername] = useState()

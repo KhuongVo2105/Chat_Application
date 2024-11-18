@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, Image, Pressable } from 'react-native';
-import images from '../constants/images';
-import { IconHeart, IconMessage, IconUserProfile } from '../constants/IconComponents';
+import images from '../../config/images';
+import { IconHeart, IconMessage, IconUserProfile } from '../../components/IconComponents';
 import Home from './Home';
 import NewPostScreen from './NewPostScreen';
 import Search from './Search';

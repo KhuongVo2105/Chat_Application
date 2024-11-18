@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
-import images from '../constants/images';
+import images from '../../config/images';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { AuthContext } from '../constants/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const Birthday = ({ navigation, route }) => {
   const [birthday, setBirthday] = useState(new Date());

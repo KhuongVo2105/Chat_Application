@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { IconUserProfile } from '../constants/IconComponents';
+import { IconUserProfile } from '../../components/IconComponents';
 import { useNavigation } from '@react-navigation/native';
 
 const CONVERSATIONS = [

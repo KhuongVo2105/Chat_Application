@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
-import images from '../constants/images';
+import images from '../../config/images';
 import axios from 'axios';
-import ENDPOINTS from '../constants/endpoints';
-import { AuthContext } from '../constants/AuthContext';
+import ENDPOINTS from '../../config/endpoints';
+import { AuthContext } from '../../context/AuthContext';
 
 
 const CreatePassword = ({ navigation, route }) => {
