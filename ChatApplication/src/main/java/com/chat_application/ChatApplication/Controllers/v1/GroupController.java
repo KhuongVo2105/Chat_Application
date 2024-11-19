@@ -1,6 +1,7 @@
 package com.chat_application.ChatApplication.Controllers.v1;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.GroupResponse;
 import com.chat_application.ChatApplication.Entities.Group;
 import com.chat_application.ChatApplication.Services.GroupService;
 import lombok.AccessLevel;
@@ -34,8 +35,8 @@ public class GroupController {
     }
 
     @GetMapping("/{id}")
-    ApiResponse<Group> getGroup(@PathVariable int id) {
-        return ApiResponse.<Group>builder()
+    ApiResponse<GroupResponse> getGroup(@PathVariable int id) {
+        return ApiResponse.<GroupResponse>builder()
                 .result(groupService.getById(id))
                 .build();
     }

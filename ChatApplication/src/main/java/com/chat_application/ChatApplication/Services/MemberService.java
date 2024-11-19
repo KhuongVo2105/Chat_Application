@@ -40,7 +40,7 @@ public class MemberService {
                         .createdAt(Timestamp.from(Instant.now()))
                         .group(group)
                         .user(user)
-                        .isLeader(req.isLeader())
+                        .isLeader(req.getIsLeader())
                         .build()
         );
     }

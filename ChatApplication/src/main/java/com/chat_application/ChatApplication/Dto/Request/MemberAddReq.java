@@ -11,5 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class MemberAddReq {
     int groupId;
     String userId;
-    boolean isLeader;
+    Boolean isLeader;
 }

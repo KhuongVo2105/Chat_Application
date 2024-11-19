@@ -55,6 +55,7 @@ public enum ErrorCode {
 
     // Group groups (code 108x)
     GROUP_NOT_EXISTED(1083, "Group does not exist", HttpStatus.NOT_FOUND),
+    GROUP_HAS_NO_MEMBERS(1084, "Group has no members", HttpStatus.NOT_FOUND),
 
     // Member groups (code 109x)
     MEMBER_NOT_EXISTED(1093, "The user is not a member of this group", HttpStatus.NOT_FOUND),
