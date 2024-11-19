@@ -7,18 +7,20 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
+  FlatList,
 } from "react-native";
 import images from "./../../constants/images";
 import { useState, useEffect } from "react";
-import { Video as ExpoVideo } from "expo-av";
+import { useVideoPlayer, VideoView } from "expo-video";
 import axios from "axios";
 import ENDPOINTS from "./../../constants/endpoints";
 import { IconUserProfile } from "../../constants/IconComponents";
 import { AuthContext } from "../../constants/AuthContext";
+import { Video } from "expo-av";
 
 const Home = () => {
   const token =
-    "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzIwMDk4NDcsImlhdCI6MTczMjAwNjI0Nywic2NvcGUiOiIifQ.AXs0jsIdWnr4cbYF3vlj2O5J6YncF1KOyf9Nv2OYxRXzu0-p_SVDBpnkWhZREtsANBlqxB620ujYUX7Ju5frHg";
+    "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzIwMjg2NzAsImlhdCI6MTczMjAyNTA3MCwic2NvcGUiOiIifQ.P3DLFb7qgrRGEDPtUbZk0_Tc96S75_kcWaeK-Y58zCajVXFqo95gvFrHQK4Pfvd4e0CjcQ6D6XyBfwxWenvR8w";
   const [loading, setLoading] = useState(false);
   const [yourComment, setYourComment] = useState();
   const [medias, setMedias] = useState([]);
@@ -87,6 +89,31 @@ const Home = () => {
     };
     fetchData();
   }, []);
+
+  const renderItem = ({ item: url, index: idxChild }) => {
+    if (url.endsWith(".jpg") || url.endsWith(".png")) {
+      return (
+        <Image
+          key={idxChild}
+          source={{ uri: url }}
+          style={styles.selectedImage}
+          resizeMode="cover"
+        />
+      );
+    } else {
+      return (
+        <Video
+          style={styles.selectedVideo}
+          source={{
+            uri: url,
+          }}
+          useNativeControls
+          resizeMode="cover"
+          isLooping
+        />
+      );
+    }
+  };
 
   return (
     <View className="w-full h-full flex justify-center items-center bg-white">
@@ -209,46 +236,21 @@ const Home = () => {
                 </TouchableOpacity>
               </View>
 
-              <View className="w-full bg-red-200 relative mb-2">
-                {medias.map((media, idxParent) =>
-                  media.map((url, idxChild) => {
-                    if (idxParent == index) {
-                      if (url.endsWith(".jpg") || url.endsWith(".png")) {
-                        return (
-                          <Image
-                            key={idxParent + " " + idxChild}
-                            source={{ uri: url }}
-                            style={styles.selectedImage}
-                            resizeMode="cover"
-                          />
-                        );
-                      } else {
-                        return (
-                          // <ExpoVideo
-                          //   source={{
-                          //     uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                          //   }}
-                          //   style={styles.selectedVideo}
-                          //   useNativeControls
-                          //   resizeMode="cover"
-                          //   isLooping
-                          // />
-
-                          <ExpoVideo
-                            key={idxParent + " " + idxChild}
-                            source={{
-                              uri: { url },
-                            }}
-                            style={styles.selectedVideo}
-                            useNativeControls
-                            resizeMode="cover"
-                            isLooping
-                          />
-                        );
-                      }
-                    }
-                  })
-                )}
+              <View
+                style={{
+                  flexl: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <FlatList
+                  data={medias[index]} // Chỉ render danh sách media tương ứng với index
+                  renderItem={renderItem}
+                  keyExtractor={(item, idxChild) => `${index} ${idxChild}`}
+                  horizontal
+                  pagingEnabled
+                  bounces={false}
+                />
               </View>
 
               {/* Content post */}
@@ -323,20 +325,22 @@ const styles = StyleSheet.create({
     height: 28,
   },
   selectedVideo: {
-    width: "100%",
-    height: "auto",
-    aspectRatio: 3 / 4,
-    marginRight: 8,
-    borderRadius: 8,
-    backgroundColor: "#e0e0e0",
+    width: 411,
+    height: 500,
+    borderRadius: 5,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
   },
   selectedImage: {
-    width: "100%",
-    height: "auto",
-    aspectRatio: 3 / 4,
-    marginRight: 8,
-    borderRadius: 8,
-    backgroundColor: "#e0e0e0",
+    width: 411,
+    height: 600,
+    borderRadius: 5,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
   },
 });
 
