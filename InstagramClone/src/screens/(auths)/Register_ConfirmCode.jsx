@@ -1,16 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert, Pressable } from 'react-native';
 import axios from 'axios';
 import ENDPOINTS from "../../config/endpoints";
-import { AuthContext } from '../../context/AuthContext';
 
 const RegisterConfirmCode = ({ navigation, route }) => {
   const [confirmCode, setConfirmCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [isResendEnabled, setIsResendEnabled] = useState(false);
   const [countdown, setCountdown] = useState(60);
-
-  const { emailContext, setEmailContext } = useContext(AuthContext); // Sử dụng context
 
   useEffect(() => {
     startCountdown();  // Bắt đầu đếm ngược khi component được mount
@@ -21,7 +18,7 @@ const RegisterConfirmCode = ({ navigation, route }) => {
 
     try {
       const endpoint = ENDPOINTS.OTP.VERIFY_OTP;
-      console.log(`Verifying OTP at ${endpoint} with email: ${emailContext} and OTP: ${confirmCode}`);
+      console.log(`Verifying OTP at ${endpoint} with email: ${email} and OTP: ${confirmCode}`);
 
       const response = await axios.get(endpoint, {
         params: { otp: confirmCode, email: emailContext }
@@ -87,7 +84,7 @@ const RegisterConfirmCode = ({ navigation, route }) => {
   return (
     <View className="w-full h-full flex items-center bg-white">
       <View className="w-96 mt-3">
-        <Text className="text-3xl font-semibold mb-1">Enter the confirmation code</Text>
+        <Text className="text-2xl font-bold mb-1 instagram">Enter the confirmation code</Text>
         <Text className="text-base mb-7">To confirm your account, enter the 6-digit code we sent to {emailContext}.</Text>
 
         <TextInput
@@ -105,15 +102,15 @@ const RegisterConfirmCode = ({ navigation, route }) => {
           <Text className="text-center text-lg font-medium text-white">{loading ? 'Verifying...' : 'Next'}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        <Pressable
           className="w-96 py-2 rounded-full border"
           onPress={handleResendCode}
           disabled={!isResendEnabled}
         >
-          <Text className="text-center text-lg font-medium text-gray-700">
+          <Text className="text-center text-base font-medium text-gray-700">
             {isResendEnabled ? "I didn't get the code" : `I didn't get the code (${countdown})`}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
