@@ -53,6 +53,12 @@ public enum ErrorCode {
     EMAIL_NOT_MATCHED_WITH_TOKEN(1074, "The email provided does not match with the token.", HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1075, "The token has expired.", HttpStatus.BAD_REQUEST),
 
+    // Group groups (code 108x)
+    GROUP_NOT_EXISTED(1083, "Group does not exist", HttpStatus.NOT_FOUND),
+
+    // Member groups (code 109x)
+    MEMBER_NOT_EXISTED(1093, "The user is not a member of this group", HttpStatus.NOT_FOUND),
+
     // Other (code >=3000)
     KEY_INVALID(3001, "Invalid key provided.", HttpStatus.BAD_REQUEST),
     INVALID_DOB(3004, "Your age must be at least {min}.", HttpStatus.BAD_REQUEST),
