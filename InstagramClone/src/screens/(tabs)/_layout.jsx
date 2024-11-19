@@ -8,8 +8,6 @@ import Search from './Search';
 import Notification from './Notification';
 import Header from './Header';
 
-const iconBackSize = 30;
-
 const Tab = createBottomTabNavigator()
 
 const TabsLayout = () => {
@@ -18,7 +16,10 @@ const TabsLayout = () => {
       screenOptions={{
         headerShown: true,
         header: ({ navigation, route }) => <Header navigation={navigation} route={route} />,
-        tabBarShowLabel: false
+        tabBarShowLabel: false,
+        tabBarIconStyle:{
+          size: 100,
+        },
       }}>
       <Tab.Screen name="Home" component={Home} options={{
         tabBarIcon: ({ color, size }) => (
@@ -43,7 +44,7 @@ const TabsLayout = () => {
       }} />
       <Tab.Screen name="Profile" component={Home} options={{
         tabBarIcon: () => (
-          <IconUserProfile width={iconBackSize} height={iconBackSize} source={require('./../../assets/portaits/portait_1.jpg')} />
+          <IconUserProfile width={32} height={32} source={require('./../../assets/portaits/portait_1.jpg')} />
         )
       }} />
     </Tab.Navigator>

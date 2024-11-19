@@ -88,7 +88,7 @@ const Home = ({ navigation, route }) => {
                   </Text>
                   <Image
                     className="ml-1" source={images.icon_verify}
-                    style={{ width: 25, height: 25, }} resizeMode='containt' />
+                    style={{ width: 25, height: 25, }} resizeMode='contain' />
                 </View>
 
                 {/* Sub title */}

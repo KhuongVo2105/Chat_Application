@@ -56,6 +56,7 @@ public enum ErrorCode {
     // Other (code >=3000)
     KEY_INVALID(3001, "Invalid key provided.", HttpStatus.BAD_REQUEST),
     INVALID_DOB(3004, "Your age must be at least {min}.", HttpStatus.BAD_REQUEST),
+
     ;
 
     ErrorCode(int code, String message, HttpStatus status) {

@@ -13,8 +13,28 @@ const SignIn = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  const handleCheckFormat = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (email.trim() === '') {
+      Alert.alert('Error', 'Email field cannot be left blank. Please enter your email.');
+      return false;
+    }
+    if (!emailRegex.test(email)) {
+      Alert.alert('Error', 'The email you entered is not valid. Please provide a valid email address.');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSignIn = async () => {
     setLoading(true);
+
+    if (!handleCheckFormat()) {
+      setLoading(false)
+      return
+    }
 
     try {
       const endpoint = ENDPOINTS.AUTH.GET_TOKEN;
@@ -60,12 +80,12 @@ const SignIn = ({ navigation, route }) => {
 
         switch (status) {
           case 400:
-            if (code == 1013) Alert.alert(message)
-            else console.log(`It's not #1013\tCode ${code}, Message: ${message}`)
+            if (code == 1040) Alert.alert('Error', message)
+            else console.log(`It's not #1040\tCode ${code}, Message: ${message}`)
             break;
           case 401:
             if (code == 1040) Alert.alert(message)
-              else console.log(`It's not #1040\tCode ${code}, Message: ${message}`)
+            else console.log(`It's not #1040\tCode ${code}, Message: ${message}`)
             break;
           default:
             break;

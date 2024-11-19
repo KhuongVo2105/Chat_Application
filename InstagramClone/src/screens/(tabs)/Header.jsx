@@ -6,7 +6,7 @@ import images from '../../config/images';
 
 const Header = ({ navigation, route }) => {
     return (
-        <View className="w-full flex flex-row bg-white justify-between mt-6 p-2">
+        <View className="w-full flex flex-row bg-white justify-between p-2">
             <Pressable>
                 <Image
                     source={images.instagram_text} // Đảm bảo đường dẫn đúng
@@ -19,7 +19,7 @@ const Header = ({ navigation, route }) => {
                     <AntDesign name='hearto' style={styles.notify} className='' />
                 </Pressable>
 
-                <Pressable className="mx-1" onPress={() => {
+                <Pressable className="mx-1 transform scale-x-[-1]" onPress={() => {
                     console.log('Action', 'Go to conversation')
                     navigation.navigate('(conversations)');
                 }}>
@@ -34,10 +34,13 @@ export default Header
 
 const styles = StyleSheet.create({
     notify: {
-        fontSize: 30,
+        fontSize: 26,
         fontWeight: 'bold',
+        color:'black'
     },
     conversations: {
-        fontSize: 32
+        fontSize: 28,
+        fontWeight: 'normal',
+        color:'black'
     }
 })
