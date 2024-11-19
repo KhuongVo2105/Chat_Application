@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator, Pressable } from 'react-native';
 import axios from 'axios';
 import images from './../config/images';
 import ENDPOINTS from "./../config/endpoints";
@@ -174,9 +174,9 @@ const SignIn = ({ navigation, route }) => {
       {/* Sign up redirect */}
       <View className="flex flex-row items-center justify-center sticky bottom-0 py-6 border-t-2 border-gray-300 w-full absolute bottom-0">
         <Text className="text-base text-gray-500">Don't have an account?</Text>
-        <TouchableOpacity className="ml-2" onPress={handleSignUp}>
+        <Pressable className="ml-2" onPress={handleSignUp}>
           <Text className="text-base font-medium text-blue-600">Sign up</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

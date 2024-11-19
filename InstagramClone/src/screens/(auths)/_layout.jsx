@@ -8,10 +8,10 @@ import Register from "./Register";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import NavigationBar from './NavigationBar';
 
-const FooterBar = () => {
+const FooterBar = ({navigation}) => {
   return (
     <View className="flex flex-row items-center justify-center sticky bottom-0 py-6 w-full absolute bottom-0">
-      <Pressable className="ml-2" onPress={() => router.push('./../SignIn')}>
+      <Pressable className="ml-2" onPress={() => navigation.navigate('./../SignIn')}>
         <Text className="text-base font-medium text-blue-600">I already have an account</Text>
       </Pressable>
     </View>
