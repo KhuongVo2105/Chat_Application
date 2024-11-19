@@ -19,8 +19,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from "axios";
 import ENDPOINTS from "../../constants/endpoints";
 
-export default function NewPostScreen({ uri }) {
-  const tokenContext = 'eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzE4NDAzMzYsImlhdCI6MTczMTgzNjczNiwic2NvcGUiOiIifQ.aSl0xH66V6WR5C1SKgyiH4Nyvcpr0OEsV36SK99ZnxcuBTHTnEM67R2fCM_c2eUJFDF_rObs79nBkMWqw4n0Kg'
+export default function NewPostScreen() {
+  const token =
+    "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzIwMDk4NDcsImlhdCI6MTczMjAwNjI0Nywic2NvcGUiOiIifQ.AXs0jsIdWnr4cbYF3vlj2O5J6YncF1KOyf9Nv2OYxRXzu0-p_SVDBpnkWhZREtsANBlqxB620ujYUX7Ju5frHg";
   const [media, setMedia] = useState([]);
   const [text, setText] = useState("");
 
@@ -145,7 +146,7 @@ export default function NewPostScreen({ uri }) {
             <MaterialIcons name="perm-media" size={150} color="black" />
           </View>
         ) : null}
-      
+    
 
         <ScrollView horizontal style={styles.imageScroll}>
           {media.map((values, index) =>

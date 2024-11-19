@@ -29,10 +29,12 @@ const ENDPOINTS = {
         ADD: `${API_BASE_URL}/post/add`,
         UPDATE: `${API_BASE_URL}/post/update`,
         DELETE:`${API_BASE_URL}/post/delete`,
+        FIND_ALL_MULTIPLE_USER: `${API_BASE_URL}/post/findAllByMultipleUser`,
     },
 
     MEDIA: {
         GET: `${API_BASE_URL}/media/findAll`,
+        FIND_ALL_MULTIPLE_POST: `${API_BASE_URL}/media/findAllByPost`,
         ADD: `${API_BASE_URL}/media/add`,
         DELETE:`${API_BASE_URL}/media/delete`,
     },
@@ -40,6 +42,7 @@ const ENDPOINTS = {
     CLOUDINARY: {
         ADD_ONE: `${API_BASE_URL}/cloudinary/one`,
         ADD_MULTIPLE: `${API_BASE_URL}/cloudinary/multiple`,
+        FIND_ALL_MULTIPLE: `${API_BASE_URL}/cloudinary/getAllMultiple`
     },
     FOLLOW: {
         GET_FOLLOWING: `${API_BASE_URL}/follow/findAllByUserId`,

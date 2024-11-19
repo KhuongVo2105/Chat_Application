@@ -1,6 +1,7 @@
 package com.chat_application.ChatApplication.Services.cloudinary;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Entities.Media;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -151,6 +153,39 @@ public class CloudinaryService implements ICloudinaryService {
                     .message("Folder not found")
                     .build();
         }
+    }
+
+
+    private List<String> getAllMediaFromFolder(String folder) throws Exception {
+        List<String> mediaUrl = new ArrayList<>();
+        Map result = cloudinary.search()
+                .expression("folder:" + folder)
+                .execute();
+
+        List<Map> resources = (List<Map>) result.get("resources");
+        for (Map resource : resources) {
+            String url = resource.get("url").toString();
+            mediaUrl.add(url);
+        }
+
+        return mediaUrl;
+    }
+
+    @Override
+    public ApiResponse<List<List<String>>> getAllMultipleMediaFromFolder(List<String> folders) throws Exception {
+
+        List<List<String>> mediaUrls = new ArrayList<>();
+
+
+        for(String folder : folders){
+            List<String> mediaUrl = getAllMediaFromFolder(folder);
+            mediaUrls.add(mediaUrl);
+        }
+
+        return ApiResponse.<List<List<String>>>builder()
+                .message("Get all media successfully")
+                .result(mediaUrls)
+                .build();
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {

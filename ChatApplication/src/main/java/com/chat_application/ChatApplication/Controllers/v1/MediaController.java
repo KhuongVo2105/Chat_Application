@@ -2,6 +2,7 @@ package com.chat_application.ChatApplication.Controllers.v1;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Entities.Media;
+import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Services.cloudinary.CloudinaryService;
 import com.chat_application.ChatApplication.Services.media.IMediaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,13 @@ public class MediaController {
     @GetMapping("/findAll")
     public ApiResponse<List<Media>> findAll() {
         ApiResponse<List<Media>> response = iMediaService.findAll();
+        return response;
+    }
+
+    @PostMapping("/findAllByPost")
+    public ApiResponse<List<List<Media>>> findAllByPost(@RequestBody List<Post> post) {
+        System.out.println(post);
+        ApiResponse<List<List<Media>>> response = iMediaService.findAllByPost(post);
         return response;
     }
 

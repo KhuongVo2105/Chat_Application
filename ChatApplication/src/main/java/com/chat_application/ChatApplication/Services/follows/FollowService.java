@@ -18,17 +18,24 @@ public class FollowService implements IFollowService{
     @Override
     public ApiResponse<List<Follow>> getFollowByUserId(User followerUser) {
         List<Follow> follows = dao.findAllByFollowerUser(followerUser);
-        if(follows.isEmpty()){
+        if(!follows.isEmpty()){
             return ApiResponse.<List<Follow>>builder()
-                    .code(200)
                     .message("Get list follow successfully")
                     .result(follows)
                     .build();
         }
         return ApiResponse.<List<Follow>>builder()
-                .code(200)
                 .message("Get list follow failed")
-                .result(follows)
+                .result(null)
+                .build();
+    }
+
+    @Override
+    public ApiResponse<Follow> add(Follow follow) {
+        dao.save(follow);
+        return ApiResponse.<Follow>builder()
+                .message("Add follow successfully")
+                .result(follow)
                 .build();
     }
 }

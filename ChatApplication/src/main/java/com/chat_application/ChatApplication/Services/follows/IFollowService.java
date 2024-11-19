@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface IFollowService {
     ApiResponse<List<Follow>> getFollowByUserId(User followerUser);
+    ApiResponse<Follow> add(Follow follow);
 }

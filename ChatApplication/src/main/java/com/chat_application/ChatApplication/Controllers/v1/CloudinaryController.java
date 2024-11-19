@@ -1,6 +1,7 @@
 package com.chat_application.ChatApplication.Controllers.v1;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Entities.Media;
 import com.chat_application.ChatApplication.Services.cloudinary.ICloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -9,12 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping(
         value = "/v1/cloudinary",
-        headers = ("content-type=multipart/*"),
+        headers = ("content-type=multipart/*, application/json"),
         consumes = MediaType.MULTIPART_FORM_DATA_VALUE
 )
 public class CloudinaryController {
@@ -42,5 +44,8 @@ public class CloudinaryController {
         return service.deleteFolderMedia(src);
     }
 
-
+    @PostMapping("/getAllMultiple")
+    public ApiResponse<List<List<String>>> getAllMultiple(@RequestBody List<String> folders) throws Exception {
+        return service.getAllMultipleMediaFromFolder(folders);
+    }
 }

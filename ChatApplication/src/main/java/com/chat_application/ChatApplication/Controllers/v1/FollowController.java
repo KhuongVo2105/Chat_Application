@@ -22,4 +22,9 @@ public class FollowController {
         ApiResponse<List<Follow>> response = service.getFollowByUserId(user);
         return response;
     }
+    @PostMapping("/add")
+    public ApiResponse<Follow> save(@RequestBody Follow follow) {
+        ApiResponse<Follow> response = service.add(follow);
+        return response;
+    }
 }
