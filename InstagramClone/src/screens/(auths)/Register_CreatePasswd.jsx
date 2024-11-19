@@ -1,17 +1,20 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
 import images from '../../config/images';
-import axios from 'axios';
-import ENDPOINTS from '../../config/endpoints';
-import { AuthContext } from '../../context/AuthContext';
 
 
 const CreatePassword = ({ navigation, route }) => {
   const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  useEffect(() => {
+    
+    setEmail(route.params.email)
+
+  }, [route.params])
   
-  const { passwordContext, setPasswordContext } = useContext(AuthContext)
 
   const handleTogglePassword = () => {
     setIsPasswordVisible(prevState => !prevState);
@@ -19,8 +22,7 @@ const CreatePassword = ({ navigation, route }) => {
 
   const handleBirthday = async () => {
     if (password && password.length >= 6) {
-      setPasswordContext(password)
-      navigation.navigate('Register_Birthday');
+      navigation.navigate('Register_Birthday', {'email':email, 'password':password});
     } else {
       Alert.alert("Error", "Password must be at least 6 characters long.");
     }

@@ -1,9 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator, StyleSheet, Pressable, ImageBackground, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, Pressable, ScrollView } from 'react-native';
 import images from '../../config/images';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import ENDPOINTS from "../../config/endpoints";
 import { IconUserProfile } from '../../components/IconComponents';
 
 const Home = ({ navigation, route }) => {
@@ -80,9 +78,9 @@ const Home = ({ navigation, route }) => {
           <View className="flex flex-row w-full justify-between items-center px-3 mb-3">
             {/* Header left */}
             <TouchableOpacity className="flex flex-row items-center">
-              
+
               <IconUserProfile containerStyles="mr-2" width={41} height={41} source={require('./../../assets/portaits/portait_3.jpg')} seen={false} />
-            
+
               <View className="flex flex-column">
                 <View className="flex flex-row items-center">
                   <Text className="font-semibold text-lg">

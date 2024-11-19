@@ -1,19 +1,21 @@
-import React, { useContext, useState } from 'react'
-import { View, Text, TouchableOpacity, Image, Button, TextInput, Alert, Modal, ScrollView } from 'react-native'
-import images from '../../config/images'
-import axios from 'axios'
-import { AuthContext } from '../../context/AuthContext';
+import React, { useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 
 const RegisterUsername = ({ navigation, route }) => {
   const [username, setUsername] = useState()
   const [loading, setLoading] = useState(false)
 
-  const { usernameContext, setUsernameContext } = useContext(AuthContext)
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+  const [birthday, setBirthday] = useState()
 
-  const handleRegister = () => {
-    setUsernameContext(username)
-    navigation.navigate('Register')
-  }
+  useEffect(() => {
+
+    setEmail(route.params.email)
+    setPassword(route.params.password)
+    setBirthday(route.params.birthday)
+
+  }, [route.params])
 
   return (
 
@@ -36,7 +38,7 @@ const RegisterUsername = ({ navigation, route }) => {
         {/* Go to next page */}
         <TouchableOpacity
           className="w-96 bg-blue-600 py-2 rounded-full mb-3"
-          onPress={handleRegister}>
+          onPress={() => navigation.navigate('Register', { 'email': email, 'password': password, 'birthday': birthday, 'username':username})}>
           <Text className="text-center text-lg font-medium text-white">Next</Text>
         </TouchableOpacity>
       </View>

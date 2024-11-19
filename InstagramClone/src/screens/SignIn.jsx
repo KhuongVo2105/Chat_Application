@@ -38,8 +38,8 @@ const SignIn = ({ navigation, route }) => {
           const { authenticated, token } = result;
           if (authenticated) {
             console.log("Token:", token);
-            Alert.alert("Success", "Login successful!");
-            navigation.replace("/(tabs)/Home");
+            // Alert.alert("Success", "Login successful!");
+            navigation.replace("(tabs)");
           } else {
             Alert.alert("Error", "Authentication failed. Please try again.");
           }
@@ -137,9 +137,9 @@ const SignIn = ({ navigation, route }) => {
           value={password}
           secureTextEntry={!isPasswordVisible}
         />
-        <TouchableOpacity className="absolute right-0 top-1/2 -translate-y-4" onPress={handleTogglePassword}>
+        <Pressable className="absolute right-0 top-1/2 -translate-y-4" onPress={handleTogglePassword}>
           <Image className="h-5" source={isPasswordVisible ? images.icon_show : images.icon_hide} resizeMode='contain' />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* Forgot password redirect */}

@@ -1,28 +1,21 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
-import images from '../../config/images';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import ENDPOINTS from "../../config/endpoints";
-import { AuthContext } from '../../context/AuthContext';
 
 const Register = ({ navigation, route }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const [birthday, setBirthday] = useState(new Date());
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState();
   const [loading, setLoading] = useState(false);
 
-  const { emailContext, setEmailContext } = useContext(AuthContext)
-  const { passwordContext, setPasswordContext } = useContext(AuthContext)
-  const { usernameContext, setUsernameContext } = useContext(AuthContext)
-  const { birthdayContext, setBirthdayContext } = useContext(AuthContext)
-
   useEffect(() => {
-    setEmail(emailContext)
-    setPassword(passwordContext)
-    setBirthday(birthdayContext)
-    setUsername(usernameContext)
-  }, []);
+    setEmail(route.params.email)
+    setPassword(route.params.password)
+    setBirthday(route.params.birthday)
+    setUsername(route.params.username)
+  }, [route.params]);
 
   const handleRegister = async () => {
     if (!email || !password || !username) {

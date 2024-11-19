@@ -1,16 +1,23 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
 import images from '../../config/images';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { AuthContext } from '../../context/AuthContext';
 
 const Birthday = ({ navigation, route }) => {
   const [birthday, setBirthday] = useState(new Date());
   const [show, setShow] = useState(false);
 
-  const { birthdayContext, setBirthdayContext } = useContext(AuthContext)
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
 
-  const onChange = (event, selectedDate) => {
+  useEffect(() => {
+
+    setEmail(route.params.email)
+    setPassword(route.params.password)
+
+  }, [route.params])
+
+  const onChange = (selectedDate) => {
     const currentDate = selectedDate || birthday;
     setShow(false);
     setBirthday(currentDate);
@@ -21,8 +28,7 @@ const Birthday = ({ navigation, route }) => {
   };
 
   const handleUsername = () => {
-    setBirthdayContext(birthday)
-    navigation.navigate('Register_Username');
+    navigation.navigate('Register_Username', { 'email': email, 'password': password, 'birthday': birthday});
   };
 
   const handleCheckAge = async () => {
