@@ -15,7 +15,7 @@ const ENDPOINTS = {
         SIGN_IN: `${API_BASE_URL}/users`,
         SIGN_UP:``,
         MY_INFORMATION:`${API_BASE_URL}/users/my-info`,
-        GET_USER_PROFILE: `${API_BASE_URL}/user/profile`,
+        GET_USER_PROFILE: `${API_BASE_URL}/users`,
         UPDATE_USER_PROFILE: `${API_BASE_URL}/user/update-profile`,
         DELETE_USER_ACCOUNT: `${API_BASE_URL}/user/delete`
     },
@@ -23,6 +23,12 @@ const ENDPOINTS = {
     OTP:{
         SEND_OTP:`${API_BASE_URL}/verification/send-code`,
         VERIFY_OTP:`${API_BASE_URL}/verification/verify`
+    },
+
+    GROUP:{
+        GET_GROUP: `${API_BASE_URL}/groups`,   //get method
+        GET_GROUPS: `${API_BASE_URL}/groups`,   //get method
+        CREATE_GROUP: `${API_BASE_URL}/groups`, //post method
     },
 
     WEBSOCKET: {

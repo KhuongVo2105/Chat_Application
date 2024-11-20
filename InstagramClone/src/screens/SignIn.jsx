@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator, Pressable } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator, Pressable, Keyboard } from 'react-native';
 import axios from 'axios';
 import images from './../config/images';
 import ENDPOINTS from "./../config/endpoints";
+import { AuthContext } from '../context/AuthContext';
 
 const SignIn = ({ navigation, route }) => {
 
@@ -13,7 +14,10 @@ const SignIn = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  const {tokenContext, setTokenContext} = useContext(AuthContext)
+
   const handleCheckFormat = () => {
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (email.trim() === '') {
@@ -57,8 +61,9 @@ const SignIn = ({ navigation, route }) => {
           // Trường hợp đăng nhập thành công
           const { authenticated, token } = result;
           if (authenticated) {
-            console.log("Token:", token);
-            // Alert.alert("Success", "Login successful!");
+            setTokenContext(token)
+
+            console.log("Token:", token, "Token context:", tokenContext);
             navigation.replace("(tabs)");
           } else {
             Alert.alert("Error", "Authentication failed. Please try again.");
@@ -133,9 +138,10 @@ const SignIn = ({ navigation, route }) => {
   const handleTogglePassword = () => {
     setIsPasswordVisible(prevState => !prevState);
   };
-
+  
   return (
     <View className="w-full h-full flex justify-center items-center bg-white">
+
       {/* Image */}
       <View className="w-80 h-auto mb-10">
         <Image className="w-full h-20" source={images.logo_text} resizeMode='contain' />
@@ -168,7 +174,7 @@ const SignIn = ({ navigation, route }) => {
       </TouchableOpacity>
 
       {/* Log in button */}
-      <TouchableOpacity
+      <Pressable
         className="w-96 bg-blue-600 py-3 rounded-2xl"
         onPress={handleSignIn}
         disabled={loading}
@@ -178,7 +184,7 @@ const SignIn = ({ navigation, route }) => {
         ) : (
           <Text className="text-center text-xl font-medium text-white">Log in</Text>
         )}
-      </TouchableOpacity>
+      </Pressable>
 
       <View className="relative justify-center items-center my-7">
         <View className="w-96 bg-gray-300 h-0.5" />
