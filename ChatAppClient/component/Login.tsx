@@ -38,7 +38,7 @@ function LoginScreen({ navigation }) {
         console.log("username or password must not empty!");
         Alert.alert("Error", "Username or password must not empty!");
         return;
-      }
+      }                                                                                                                       
       const response = await axios.post(endpoint, loginRequest);
       console.log("--------------------------");
       console.log("response.data.result : ", response.data.result);

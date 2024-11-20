@@ -44,7 +44,7 @@ export default function VerifyScreen({ route, navigation }) {
 
   const handleSubmit = async () => {
     const otpCode = otp.join("");
-    const endpoint = `${REACT_APP_API_BASE_URL}/users/verify`;
+    const endpoint = `${REACT_APP_API_BASE_URL}/v1/users/verify`;
     console.log(`Instagram_VerifyToken_endpoint: ${endpoint}`)
     console.log("userId : ",userId +"otp : ",otpCode)
     const response = await axios.post(endpoint, 

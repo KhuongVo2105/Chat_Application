@@ -2,11 +2,10 @@ package com.chat_application.ChatApplication.Services;
 
 import com.chat_application.ChatApplication.Dto.Request.AvatUserReq;
 import com.chat_application.ChatApplication.Dto.Request.InfoUserReq;
-import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
-import com.chat_application.ChatApplication.Dto.Response.AvatUserResp;
-import com.chat_application.ChatApplication.Dto.Response.InfoUserResp;
 import com.chat_application.ChatApplication.Dto.Request.UserCreateReq;
 import com.chat_application.ChatApplication.Dto.Request.UserReq;
+import com.chat_application.ChatApplication.Dto.Response.AvatUserResp;
+import com.chat_application.ChatApplication.Dto.Response.InfoUserResp;
 import com.chat_application.ChatApplication.Dto.Response.UserResponse;
 import com.chat_application.ChatApplication.Entities.Role;
 import com.chat_application.ChatApplication.Entities.User;
@@ -64,8 +63,6 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
         user.setRoles(roles);
-
-        user = userRepository.save(user);
         return userMapper.toUserResponse(user);
     }
 
@@ -124,7 +121,7 @@ public class UserService {
     public AvatUserResp updateAvatUser(AvatUserReq req) {
         try {
             User user = userRepository.findByUsername(req.getUsername()).orElseThrow(() -> new Exception("User not found"));
-            user.setAvatar(req.getAvatar());
+            user.setAvatar(req.getFile().toString());
             userRepository.save(user);
 
             return AvatUserResp.builder()

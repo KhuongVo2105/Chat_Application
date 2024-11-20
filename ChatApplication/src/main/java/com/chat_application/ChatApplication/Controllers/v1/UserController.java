@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -48,13 +50,32 @@ public class UserController {
     }
 
     @PostMapping("/updateAvat")
-    public ResponseEntity<String> updateProfilePicture(@RequestParam("file") MultipartFile file, @RequestParam("username") String username) {
+    public ResponseEntity<String> updateProfilePicture(@RequestBody AvatUserReq req) {
+        MultipartFile file = req.getFile();
+
+        // Kiểm tra xem file có rỗng hay không
+        if (file == null || file.isEmpty()) {
+            return new ResponseEntity<>("File is empty", HttpStatus.BAD_REQUEST);
+        }
+
         String imageUrl = uploadImage(file); // Gọi hàm upload hình ảnh
+        if (imageUrl == null) {
+            return new ResponseEntity<>("Failed to upload image", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        AvatUserReq avatUserReq = AvatUserReq.builder()
+                .username(req.getUsername())
+                .file(file)
+                .build();
+
         // Lưu imageUrl vào cơ sở dữ liệu của user với userId tương ứng
-        userService.updateAvatUser(username, imageUrl); // Gọi hàm updateAvatUser trong UserService
+        userService.updateAvatUser(avatUserReq); // Gọi hàm updateAvatUser trong UserService
 
         return new ResponseEntity<>("Profile picture updated", HttpStatus.OK);
     }
+
+
+
     @PostMapping("/upload")
     public String uploadImage(@RequestParam("file") MultipartFile file) {
         try {
@@ -68,14 +89,17 @@ public class UserController {
             Blob blob = bucket.create(fileName, file.getBytes(), file.getContentType());
 
             // Get the public download URL
-            String fileUrl = "https://firebasestorage.googleapis.com/v0/b/" + bucket.getName() + "/o/" + fileName + "?alt=media";
+            String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/%s/o/%s?alt=media",
+                    bucket.getName(),
+                    URLEncoder.encode(fileName, StandardCharsets.UTF_8));
 
-            return new ResponseEntity<>(fileUrl, HttpStatus.OK);
+            return fileUrl; // Trả về URL
         } catch (IOException e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Failed to upload file", HttpStatus.INTERNAL_SERVER_ERROR);
+            return null; // Trả về null khi có lỗi
         }
     }
+
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers() {
         return ApiResponse.<List<UserResponse>>builder()

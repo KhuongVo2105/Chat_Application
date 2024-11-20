@@ -35,7 +35,6 @@ public class EmailService {
     @NonFinal
     @Value("${spring.mail.username}")
     String FROM_EMAIL;
-
     public VerifyEmailResponse sendVerificationEmail(String toEmail) {
         // Tạo mới mã OTP và thời gian hết hạn
         int otp = generateVerificationCode();

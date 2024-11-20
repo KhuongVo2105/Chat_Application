@@ -14,20 +14,16 @@ public class FirebaseInitialize {
 
     @PostConstruct
     public void initialize() {
-        try {
-            FileInputStream serviceAccount =
-                new FileInputStream("/path/firebase/webblog-6eee4-firebase-adminsdk-3ja5x-89dda28363.json");
-
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setStorageBucket("webblog-6eee4.appspot.com")
-                .build();
-
-            if (FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //            FileInputStream serviceAccount =
+//                new FileInputStream("/path/firebase/webblog-6eee4-firebase-adminsdk-3ja5x-89dda28363.json");
+//
+//            FirebaseOptions options = new FirebaseOptions.Builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                .setStorageBucket("webblog-6eee4.appspot.com")
+//                .build();
+//
+//            if (FirebaseApp.getApps().isEmpty()) {
+//                FirebaseApp.initializeApp(options);
+//            }
     }
 }

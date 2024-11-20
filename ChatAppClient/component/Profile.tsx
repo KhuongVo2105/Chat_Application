@@ -28,6 +28,7 @@ interface User {
 
 function Profile({ navigation }) {
   const { userToken, setUserToken } = useContext(AuthContext);
+  console.log('userToken : ',userToken)
   const [selectedItem, setSelectedItem] = useState("table");
   const [loading, setLoading] = useState<boolean>(true);
   const [userData, setUserData] = useState<User | null>(null);
@@ -39,8 +40,7 @@ function Profile({ navigation }) {
   };
   useEffect(() => {
     const getUserInfo = async () => {
-      // Kiểm tra token có tồn tại không
-      if (!userToken) {
+      if (userToken == "" || userToken == null) {
         Alert.alert("Error", "No user token found", [
           {
             text: "OK",

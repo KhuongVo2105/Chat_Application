@@ -48,7 +48,7 @@ function RegisterScreen({ navigation }) {
   //         const response = await axios.post(
   //           "http://192.168.1.24:8080/spring/facebookLogin",
   //           {
-  //             accessToken: data.accessToken.toString(),
+  //             accessToken: data.accessToken.to(),
   //           }
   //         );
 
@@ -100,7 +100,7 @@ function RegisterScreen({ navigation }) {
 
     setLoading(true);
     try {
-      const endpoint = `${REACT_APP_API_BASE_URL}/users`;
+      const endpoint = `${REACT_APP_API_BASE_URL}/v1/users`;
       console.log(`Instagram_Register_endpoint: ${endpoint}`)
       const response = await axios.post(endpoint, createUserRequeste);
       console.log("response.data",response.data)
@@ -129,7 +129,7 @@ function RegisterScreen({ navigation }) {
     <ScrollView style={styles.container}>
       <View>
         <Text style={styles.title}>InstaClone</Text>
-        <Text>...</Text>
+        
         <TouchableOpacity style={{ alignItems: "center", marginBottom: 20 }}>
           <Text style={styles.loginFacebook}>
             <Icon name="facebook-square" size={40} color="#0095f6" /> Login with

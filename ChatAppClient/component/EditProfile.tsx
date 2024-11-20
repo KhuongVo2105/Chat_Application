@@ -9,6 +9,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import * as ImagePicker from "react-native-image-picker";
 import axios from "axios";
 import { AuthContext } from "./Context";
 import { REACT_APP_API_BASE_URL } from "@env"; // Import biến môi trường
@@ -29,6 +30,58 @@ function EditProfile({ navigation }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [userData, setUserData] = useState<User | null>(null);
   const [updateUserData, setUpdateUserData] = useState<UpdateUser | null>(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const selectImage = () => {
+    const options: ImagePicker.ImageLibraryOptions = {
+      mediaType: "photo",
+      quality: 1,
+    };
+
+    ImagePicker.launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.assets) {
+        setSelectedImage(response.assets[0]); // Lưu hình ảnh đã chọn
+      } else {
+        console.log("ImagePicker Error: ", response);
+      }
+    });
+  };
+
+  const uploadImage = async () => {
+    if (!selectedImage) {
+      Alert.alert("Please select an image first!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("username", userData.username); // Thay thế bằng username thực tế
+    formData.append("file", {
+      uri: selectedImage.uri,
+      type: selectedImage.type || "image/jpeg", // Đặt loại tệp tin mặc định
+      name: selectedImage.fileName || "photo.jpg", // Tên tệp tin mặc định
+    } as any); // Dùng `as any` để bỏ qua kiểm tra kiểu
+
+    try {
+      const endpoint = `${REACT_APP_API_BASE_URL}/v1/users/updateAvat`;
+      console.log(`updateAvatar: ${endpoint}`);
+      console.log(`formData: ${formData}`);
+      const response = await axios.post(
+        endpoint,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      Alert.alert("Success", response.data);
+    } catch (error) {
+      console.error("Upload error:", error);
+      Alert.alert("Error", "Failed to upload image");
+    }
+  };
 
   const handleBack = () => {
     navigation.navigate("Profile");
@@ -137,7 +190,10 @@ function EditProfile({ navigation }) {
             style={styles.avatar}
           />
         )}
-        <TouchableOpacity onPress={handleUploadAvatar}>
+        <TouchableOpacity
+          // onPress={handleUploadAvatar}
+          onPress={selectImage}
+        >
           <Text style={{ color: "#0095f6", fontSize: 15, fontWeight: 500 }}>
             Chỉnh sửa ảnh hoặc avatar
           </Text>
