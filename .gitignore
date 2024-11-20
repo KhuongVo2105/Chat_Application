@@ -194,3 +194,5 @@ vendor/
 .circleci/generated_config.yml
 
 /path
+# Firebase service account credentials
+ChatApplication/path/firebase/*.json
