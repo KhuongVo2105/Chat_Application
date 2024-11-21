@@ -1,5 +1,5 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-const SERVER_ADDRESS = `192.168.1.32`
+const SERVER_ADDRESS = `192.168.1.29`
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`
 
 const API_BASE_URL  = REACT_APP_API_BASE_URL;
@@ -26,7 +26,6 @@ const ENDPOINTS = {
     },
 
     GROUP:{
-        GET_GROUP: `${API_BASE_URL}/groups`,   //get method
         GET_GROUPS: `${API_BASE_URL}/groups`,   //get method
         CREATE_GROUP: `${API_BASE_URL}/groups`, //post method
     },

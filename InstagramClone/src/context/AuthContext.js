@@ -4,22 +4,28 @@ import React, { createContext, useState } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Khởi tạo state cho email
-  const [emailContext, setEmailContext] = useState('');
-  const [passwordContext, setPasswordContext] = useState('')
-  const [usernameContext, setUsernameContext] = useState('')
-  const [birthdayContext, setBirthdayContext] = useState()
+
   const [tokenContext, setTokenContext] = useState('')
+
+  // user profile
+  const [idContext, setIdContext] = useState('')
+  const [usernameContext, setUsernameContext] = useState('')
+  const [emailContext, setEmailContext] = useState('');
+  const [createdAtContext, setCreatedAtContext] = useState()
+  const [birthdayContext, setBirthdayContext] = useState()
+  const [roleContext, setRoleContext] = useState({ roles: [] })
 
   // Provider cung cấp emailContext và setEmailContext
   return (
     <AuthContext.Provider
       value={{
-        emailContext, setEmailContext,
-        passwordContext, setPasswordContext,
-        usernameContext, setUsernameContext,
-        birthdayContext, setBirthdayContext,
         tokenContext, setTokenContext,
+        idContext, setIdContext,
+        usernameContext, setUsernameContext,
+        emailContext, setEmailContext,
+        createdAtContext, setCreatedAtContext,
+        birthdayContext, setBirthdayContext,
+        roleContext, setRoleContext,
       }}
     >
       {children}

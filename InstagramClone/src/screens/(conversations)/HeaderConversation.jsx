@@ -14,7 +14,7 @@ const HeaderConverstaions = ({ navigation, route }) => {
                     <AntDesign name='arrowleft' style={styles.arrow_left} />
                 </Pressable>
                 <Text className="ml-4 text-lg font-bold">
-                    {(route.params && route.params.email) ? route.params.email : "example@gmail.com"}
+                    {(route.params && route.params.conversationName) ? route.params.conversationName : "example@gmail.com"}
                 </Text>
                 <View className="grow"></View>
                 <View className="flex flex-row">

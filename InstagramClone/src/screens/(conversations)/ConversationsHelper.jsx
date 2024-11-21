@@ -46,8 +46,9 @@ export const useLoadGroup = async (token) => {
 
 // 2. Function: loadGroupDetails
 export const loadGroupDetails = async ({ token, groupId }) => {
-    const endpoint = `${ENDPOINTS.GROUP.GET_GROUP}/${groupId}`;
+    const endpoint = `${ENDPOINTS.GROUP.GET_GROUPS}/${groupId}`;
     try {
+        // console.log(`Instagram-Load Group Details-endpoint: ${endpoint}`, 'token:', token);
         const response = await axios.get(endpoint, {
             headers: { Authorization: `Bearer ${token}` },
         });
@@ -65,6 +66,7 @@ export const loadGroupDetails = async ({ token, groupId }) => {
             ? `Error: ${err.response.data.message || err.message}`
             : "Network Error: Unable to connect to server.";
         console.error(errorMessage);
+        console.error(`\tError fetching details for group ${groupId}:`, err.response?.data || err.message);
         return { data: null, error: errorMessage };
     }
 };
@@ -90,6 +92,29 @@ export const loadUserDetails = async ({ token, userId }) => {
             ? `Error: ${err.response.data.message || err.message}`
             : "Network Error: Unable to connect to server.";
         console.error(errorMessage);
+        console.error(`\tError fetching details for group ${groupId}:`, err.response?.data || err.message);
+        return { data: null, error: errorMessage };
+    }
+};
+
+export const fetchGroups = async (token) => {
+    const endpoint = ENDPOINTS.GROUP.GET_GROUPS;
+    try {
+        const response = await axios.get(endpoint, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        const { data, status } = response;
+
+        if (status === 200 && data.result) {
+            return { data: data.result, error: null };
+        } else {
+            const errorMessage = data.message || "Unable to load groups.";
+            return { data: null, error: errorMessage };
+        }
+    } catch (err) {
+        const errorMessage = err.response
+            ? `Server Error: ${err.response.data.message || err.message}`
+            : "Network Error: Unable to connect to server.";
         return { data: null, error: errorMessage };
     }
 };

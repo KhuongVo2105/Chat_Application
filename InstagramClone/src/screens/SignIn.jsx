@@ -63,7 +63,7 @@ const SignIn = ({ navigation, route }) => {
           if (authenticated) {
             setTokenContext(token)
 
-            console.log("Token:", token, "Token context:", tokenContext);
+            console.log("Token:", token);
             navigation.replace("(tabs)");
           } else {
             Alert.alert("Error", "Authentication failed. Please try again.");

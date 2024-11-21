@@ -1,72 +1,51 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View, ActivityIndicator, Alert } from 'react-native';
 import { IconUserProfile } from '../../components/IconComponents';
-import { useLoadGroup, loadGroupDetails, loadUserDetails } from './ConversationsHelper'; // Import các hook và hàm từ helper
+import { fetchGroups, loadGroupDetails, loadUserDetails } from './ConversationsHelper'; // Import các hook và hàm từ helper
 import { AuthContext } from '../../context/AuthContext';
 
-const Conversations = ({navigation, route}) => {
-  const { tokenContext } = useContext(AuthContext); // Lấy token từ Context
+const Conversations = ({ navigation, route }) => {
+  const { tokenContext, idContext } = useContext(AuthContext); // Lấy token từ Context
   const [conversations, setConversations] = useState([]); // Lưu trữ danh sách các cuộc trò chuyện
   const [loading, setLoading] = useState(false); // Trạng thái loading
   const [error, setError] = useState(null); // Trạng thái lỗi
-  
+
   // Hàm để tải tất cả dữ liệu
   const loadAllData = async () => {
     console.log("Starting to load data...");
-
     setLoading(true);
     setError(null); // Reset lỗi khi bắt đầu tải lại dữ liệu
 
     try {
       console.log("Fetching groups...");
-      // 1. Tải danh sách nhóm (group)
-      const { conversations: groups, error: groupError } = await useLoadGroup(tokenContext);
-      console.log("Fetched groups:", groups);
-      
+      // 1. Gọi fetchGroups thay vì useLoadGroup
+      const { data: groups, error: groupError } = await fetchGroups(tokenContext);
       if (groupError) throw new Error(groupError);
 
       console.log("Fetching group details...");
-      // 2. Lấy chi tiết từng nhóm
+      // 2. Tải chi tiết từng nhóm
       const groupDetails = await Promise.all(
         groups.map(async (group) => {
-          console.log("Fetching details for group:", group.id);
           const { data: groupData, error: groupDetailError } = await loadGroupDetails({
-            tokenContext,
+            token: tokenContext,
             groupId: group.id,
           });
+          if (groupDetailError) return null;
 
-          if (groupDetailError) {
-            console.log(`Error fetching group details for group ${group.id}:`, groupDetailError);
-            return null;
-          }
-
-          console.log("Fetching users for group:", group.id);
-          // 3. Lấy thông tin người dùng trong nhóm
           const users = await Promise.all(
             groupData.userIds.map(async (userId) => {
-              console.log("Fetching user details for userId:", userId);
               const { data: userData, error: userDetailError } = await loadUserDetails({
-                tokenContext,
-                userId,
+                token: tokenContext,
+                userId: userId,
               });
-
-              if (userDetailError) {
-                console.log(`Error fetching user details for userId ${userId}:`, userDetailError);
-                return null;
-              }
-              return userData;
+              return userDetailError ? null : userData;
             })
           );
 
-          return {
-            ...groupData,
-            users: users.filter((user) => user !== null),
-          };
+          return { ...groupData, users: users.filter((user) => user !== null) };
         })
       );
 
-      console.log("Fetched all group details:", groupDetails);
-      // 4. Lọc nhóm có đầy đủ dữ liệu
       setConversations(groupDetails.filter((group) => group !== null));
     } catch (error) {
       console.error("Error loading all data:", error);
@@ -110,13 +89,14 @@ const Conversations = ({navigation, route}) => {
 
   // Component hiển thị từng cuộc trò chuyện
   const Conversation = ({ item }) => {
-    console.log("Rendering conversation:", item);
+    const conversationName = getConversationName(item.userIds, item.users, idContext);
+
     return (
       <TouchableOpacity
         style={{ flexDirection: 'row', padding: 10, alignItems: 'center' }}
         onPress={() => {
           console.log("Navigating to conversation with groupId:", item.id);
-          navigation.navigate('Conversation', { groupId: item.id });
+          navigation.navigate('Conversation', { groupId: item.id, conversationName: conversationName });
         }}
       >
         <IconUserProfile
@@ -126,30 +106,87 @@ const Conversations = ({navigation, route}) => {
           seen={true}
           source={item.avatar}
         />
-        <Text style={{ marginLeft: 10, fontWeight: 'bold' }}>
-          {item.username || 'Unknown User'}
+        <Text
+          style={{
+            marginLeft: 10,
+            fontWeight: 'bold',
+            maxWidth: '75%', // Hạn chế chiều ngang tối đa
+          }}
+          numberOfLines={1} // Giới hạn hiển thị trong một dòng
+          ellipsizeMode="tail" // Thêm "..." nếu nội dung vượt quá
+        >
+          {conversationName}
         </Text>
       </TouchableOpacity>
     );
   };
 
+  // Lọc các group có userIds không trống
+  const filteredConversations = conversations.filter(
+    (item) => item.userIds && item.userIds.length > 0
+  );
+
   // Render danh sách cuộc trò chuyện
-  console.log("Rendering conversations list...");
+  console.log("Rendering conversations list...",
+    // filteredConversations
+  );
+
+  // Hàm xử lý đặt tên
+  const getConversationName = (userIds, users, idContext) => {
+    if (!userIds || !users || !idContext) return "Unknown Conversation";
+
+    // Tìm tất cả username trừ idContext
+    const otherUsers = users.filter(user => user.id !== idContext);
+
+    // Nếu không có người dùng khác
+    if (otherUsers.length === 0) return "Empty Conversation";
+
+    // Trường hợp có 2 người trong nhóm
+    if (userIds.length === 2) {
+      return otherUsers[0]?.username || "Unknown User";
+    }
+
+    // Trường hợp có 3 người trong nhóm
+    if (userIds.length === 3) {
+      return otherUsers.map(user => user.username).join(", ");
+    }
+
+    // Trường hợp có nhiều hơn 3 người
+    if (userIds.length > 3) {
+      // Chọn ngẫu nhiên 2 username
+      const randomUsers = otherUsers.sort(() => 0.5 - Math.random()).slice(0, 2);
+      const remainingCount = userIds.length - randomUsers.length - 1;
+      return `${randomUsers.map(user => user.username).join(", ")} + ${remainingCount}`;
+    }
+
+    return "Unknown Conversation";
+  };
+
+
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        data={conversations}
-        renderItem={({ item }) => (
-          <Conversation
-            item={{
-              id: item.id,
-              username: item.users[0]?.username || 'Unknown User',
-              avatar: item.users[0]?.avatar || require('../../assets/portaits/portait_2.jpg'),
-            }}
-          />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-      />
+      {filteredConversations.length > 0 ? (
+        <FlatList
+          data={filteredConversations}
+          renderItem={({ item }) => (
+            <Conversation
+              item={{
+                id: item.group.id,
+                userIds: item.userIds,
+                users: item.users,
+                avatar:
+                  item.users?.[0]?.avatar ||
+                  require('../../assets/portaits/default_profile.png'),
+              }}
+            />
+          )}
+          keyExtractor={(item) => item.group.id.toString()}
+        />
+      ) : (
+        <Text style={{ textAlign: 'center', marginTop: 20 }}>
+          No conversations available.
+        </Text>
+      )}
     </View>
   );
 };
