@@ -78,6 +78,7 @@ react {
     //
     //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
     // hermesFlags = ["-O", "-output-source-map"]
+    enableHermes: false
 
     if (rnVersion >= versionToNumber(0, 75, 0)) {
         /* Autolinking */

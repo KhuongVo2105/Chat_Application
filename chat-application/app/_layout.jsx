@@ -6,6 +6,10 @@ import SignIn from './SignIn';
 import TabsLayout from './(tabs)/_layout';
 import AuthsLayout from "./(auths)/_layout";
 import { AuthProvider } from "../constants/AuthContext";
+<<<<<<< HEAD
+=======
+import ConversationLayout from "./(conversations)/_layout";
+>>>>>>> EjectExpoToCLI
 
 SplashScreen.preventAutoHideAsync();
 
@@ -37,9 +41,15 @@ const RootLayout = () => {
                 <Stack.Screen name='SignIn' component={SignIn} options={{ headerShown: false }} />
                 <Stack.Screen name='(tabs)' options={{ headerShown: false }} component={TabsLayout} />
                 <Stack.Screen name='(auths)' options={{ headerShown: false }} component={AuthsLayout} />
+<<<<<<< HEAD
             </Stack.Navigator>
         </AuthProvider>
 
+=======
+                <Stack.Screen name="(conversations)" options={{ headerShown: false }} component={ConversationLayout} />
+            </Stack.Navigator>
+        </AuthProvider>
+>>>>>>> EjectExpoToCLI
     )
 }
 
