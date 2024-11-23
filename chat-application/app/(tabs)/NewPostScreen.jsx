@@ -21,7 +21,7 @@ import ENDPOINTS from "../../constants/endpoints";
 
 export default function NewPostScreen() {
   const token =
-    "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzIwMDk4NDcsImlhdCI6MTczMjAwNjI0Nywic2NvcGUiOiIifQ.AXs0jsIdWnr4cbYF3vlj2O5J6YncF1KOyf9Nv2OYxRXzu0-p_SVDBpnkWhZREtsANBlqxB620ujYUX7Ju5frHg";
+    "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzIxNzgwNzcsImlhdCI6MTczMjE3NDQ3Nywic2NvcGUiOiIifQ.l0h7UFJbowJSGqAG4mEaLxfey3svcdO8DQWrnm3-7CVWYD0G5ddG0uPNbNBZjZuugQdl5vf6RNxULqVKDO9Qbg";
   const [media, setMedia] = useState([]);
   const [text, setText] = useState("");
 

@@ -9,9 +9,12 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Feather from '@expo/vector-icons/Feather';
 import images from "./../../constants/images";
+import Entypo from '@expo/vector-icons/Entypo';
+import Modal from "react-native-modal";
 import { useState, useEffect } from "react";
-import { useVideoPlayer, VideoView } from "expo-video";
 import axios from "axios";
 import ENDPOINTS from "./../../constants/endpoints";
 import { IconUserProfile } from "../../constants/IconComponents";
@@ -19,16 +22,19 @@ import { AuthContext } from "../../constants/AuthContext";
 import { Video } from "expo-av";
 
 const Home = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
   const token =
-    "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzIwMjg2NzAsImlhdCI6MTczMjAyNTA3MCwic2NvcGUiOiIifQ.P3DLFb7qgrRGEDPtUbZk0_Tc96S75_kcWaeK-Y58zCajVXFqo95gvFrHQK4Pfvd4e0CjcQ6D6XyBfwxWenvR8w";
+  "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJpbnN0YWdyYW0uY29tIiwic3ViIjoibmFtY2FvMTIzYUBnbWFpbC5jb20iLCJleHAiOjE3MzIxNzgwNzcsImlhdCI6MTczMjE3NDQ3Nywic2NvcGUiOiIifQ.l0h7UFJbowJSGqAG4mEaLxfey3svcdO8DQWrnm3-7CVWYD0G5ddG0uPNbNBZjZuugQdl5vf6RNxULqVKDO9Qbg"
   const [loading, setLoading] = useState(false);
   const [yourComment, setYourComment] = useState();
   const [medias, setMedias] = useState([]);
   const [follow, setFollow] = useState([]);
   const [posts, setPosts] = useState([]);
   const [foldersCloudinary, setFoldersCloudinary] = useState([]);
-  const authContext = useContext(AuthContext);
-
+  const {authContext} = useContext(AuthContext);
+  const [selectedPostId, setSelectedPostId] = useState(null)
+  console.log("authContext: " + authContext);
+  
   const user = { id: "c0a65020-1681-441f-90b9-4a846f9f328b" };
 
   useEffect(() => {
@@ -115,6 +121,20 @@ const Home = () => {
     }
   };
 
+  const toggleModal = (postId) => {
+    setSelectedPostId(postId)
+    setModalVisible(!isModalVisible);
+  };
+
+  const handleEdit = () => {
+    console.log("Edit option clicked: " + selectedPostId);
+    toggleModal(); // Close modal after action
+  };
+
+  const handleDelete = () => {
+    console.log("Delete option clicked: " + selectedPostId);
+    toggleModal(); // Close modal after action
+  };
   return (
     <View className="w-full h-full flex justify-center items-center bg-white">
       <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
@@ -225,7 +245,10 @@ const Home = () => {
                 </TouchableOpacity>
 
                 {/* Header right */}
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => toggleModal(post.id)}
+                  style={styles.optionsButton}
+                >
                   <Image
                     source={images.icon_triple_dot}
                     style={{
@@ -236,11 +259,34 @@ const Home = () => {
                 </TouchableOpacity>
               </View>
 
-              <View
+              {/* Modal */}
+              <Modal
+                isVisible={isModalVisible}
+                onBackdropPress={() => setModalVisible(false)}
+                backdropOpacity={0.1}
+                style={styles.modal}
+              >
+                <View style={styles.modalContent}>
+                  <TouchableOpacity onPress={() => handleEdit()} style={styles.option}>
+                    <Entypo name="edit" size={24} color="black" />
+                    <Text style={styles.optionText}>Edit</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleDelete()}
+                    style={styles.option}
+                  >
+                    <FontAwesome name="trash-o" size={24} color="black" />
+                    <Text style={styles.optionText}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+
+              <View 
                 style={{
                   flexl: 1,
                   justifyContent: "center",
                   alignItems: "center",
+                  marginBottom: 5
                 }}
               >
                 <FlatList
@@ -252,13 +298,6 @@ const Home = () => {
                   bounces={false}
                 />
               </View>
-
-              {/* Content post */}
-              {/* <View className="w-full bg-red-200 relative mb-2">
-                <Text className="absolute right-3 top-3 bg-gray-500 px-2 py-1 rounded-full fs-sm text-white">
-                  1/1
-                </Text>
-              </View> */}
 
               {/* Footer post */}
               <View className="flex flew-column">
@@ -325,8 +364,8 @@ const styles = StyleSheet.create({
     height: 28,
   },
   selectedVideo: {
-    width: 411,
-    height: 500,
+    width: 412,
+    height: 600,
     borderRadius: 5,
     shadowColor: "black",
     shadowOffset: { width: 0, height: 5 },
@@ -334,13 +373,36 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   selectedImage: {
-    width: 411,
+    width: 412,
     height: 600,
     borderRadius: 5,
     shadowColor: "black",
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.8,
     shadowRadius: 10,
+  },
+  optionsButton: {
+    padding: 10,
+  },
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    elevation: 5,
+  },
+  option: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  optionText: {
+    marginLeft: 10,
+    fontSize: 18,
   },
 });
 
