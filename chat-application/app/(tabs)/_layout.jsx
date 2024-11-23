@@ -46,22 +46,6 @@ const Tab = createBottomTabNavigator()
 
 const TabsLayout = () => {
   return (
-<<<<<<< HEAD
-    <AuthProvider>
-      <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name="Home" component={Home} options={{
-          headerShown: true,
-          header: () => <Header />
-        }} />
-        <Stack.Screen name="NewPostScreen" component={NewPostScreen} options={{
-          headerShown: true,
-          header: () => <Header />
-        }} />
-        {/* Bạn có thể thêm các tab khác vào đây nếu cần */}
-      </Stack.Navigator>
-      <FooterBar />
-    </AuthProvider>
-=======
     <Tab.Navigator initialRouteName='Home'
       screenOptions={{
         headerShown: true,
@@ -95,7 +79,6 @@ const TabsLayout = () => {
         )
       }} />
     </Tab.Navigator>
->>>>>>> EjectExpoToCLI
   );
 };
 
