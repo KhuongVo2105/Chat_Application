@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { router, useNavigation } from "expo-router";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Video as ExpoVideo } from "expo-av";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -40,7 +41,6 @@ export default function NewPostScreen() {
     }
   };
 
-  const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
   const navigation = useNavigation();
   const handleCreatePost = async () => {
     const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;

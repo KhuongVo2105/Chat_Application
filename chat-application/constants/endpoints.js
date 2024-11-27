@@ -1,10 +1,6 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-<<<<<<< HEAD
-const REACT_APP_API_BASE_URL = "http://192.168.101.7:8080/chat-application/v1"
-=======
 const SERVER_ADDRESS = `192.168.197.234`
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`
->>>>>>> EjectExpoToCLI
 
 const API_BASE_URL  = REACT_APP_API_BASE_URL;
 
@@ -29,7 +25,6 @@ const ENDPOINTS = {
         VERIFY_OTP:`${API_BASE_URL}/verification/verify`
     },
 
-<<<<<<< HEAD
     POST: {
         GET: `${API_BASE_URL}/post/findAll`,
         ADD: `${API_BASE_URL}/post/add`,
@@ -52,11 +47,10 @@ const ENDPOINTS = {
     },
     FOLLOW: {
         GET_FOLLOWING: `${API_BASE_URL}/follow/findAllByUserId`,
-=======
     WEBSOCKET: {
         SOCKET_URL :`ws://${SERVER_ADDRESS}:8080/chat-application/socket`
->>>>>>> EjectExpoToCLI
     }
+}
 }
 
 export default ENDPOINTS;
