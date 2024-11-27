@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { StyleSheet } from 'react-native'
 import { useFonts } from "expo-font";
 import React, { useEffect } from 'react'
@@ -13,6 +14,17 @@ import Register_Birthday from './Register_Birthday'
 import Register_Username from './Register_Username'
 import Register from './Register'
 import Home from "./Home";
+=======
+import { useFonts } from "expo-font";
+import React, { useEffect } from 'react'
+import { SplashScreen } from 'expo-router';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SignIn from './SignIn';
+import TabsLayout from './(tabs)/_layout';
+import AuthsLayout from "./(auths)/_layout";
+import { AuthProvider } from "../constants/AuthContext";
+import ConversationLayout from "./(conversations)/_layout";
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,6 +51,7 @@ const RootLayout = () => {
     const Stack = createNativeStackNavigator();
 
     return (
+<<<<<<< HEAD
         <Stack.Navigator initialRouteName='SignIn'>
             <Stack.Screen name='SignIn' component={SignIn} options={{ headerShown: false }} />
             <Stack.Screen name='SignUp' component={SignUp} options={{ headerShown: false }} />
@@ -56,3 +69,17 @@ const RootLayout = () => {
 export default RootLayout
 
 const styles = StyleSheet.create({})
+=======
+        <AuthProvider>
+            <Stack.Navigator initialRouteName='SignIn'>
+                <Stack.Screen name='SignIn' component={SignIn} options={{ headerShown: false }} />
+                <Stack.Screen name='(tabs)' options={{ headerShown: false }} component={TabsLayout} />
+                <Stack.Screen name='(auths)' options={{ headerShown: false }} component={AuthsLayout} />
+                <Stack.Screen name="(conversations)" options={{ headerShown: false }} component={ConversationLayout} />
+            </Stack.Navigator>
+        </AuthProvider>
+    )
+}
+
+export default RootLayout;
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1

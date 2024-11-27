@@ -2,9 +2,11 @@ package com.chat_application.ChatApplication.Services;
 
 import com.chat_application.ChatApplication.Dto.Response.VerifyEmailResponse;
 import com.chat_application.ChatApplication.Entities.Token;
+import com.chat_application.ChatApplication.Entities.User;
 import com.chat_application.ChatApplication.Exceptions.AppException;
 import com.chat_application.ChatApplication.Exceptions.ErrorCode;
 import com.chat_application.ChatApplication.Repositories.TokenRepository;
+import com.chat_application.ChatApplication.Repositories.UserRepository;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +34,21 @@ public class EmailService {
 
     JavaMailSender mailSender;
     TokenRepository tokenRepository;
+    UserRepository userRepository;
     @NonFinal
     @Value("${spring.mail.username}")
     String FROM_EMAIL;
+
     public VerifyEmailResponse sendVerificationEmail(String toEmail) {
+
+        if(toEmail.isBlank()){
+            throw new AppException(ErrorCode.EMAIL_CANNOT_BE_BLANK);
+        }
+
+        boolean emailExists = userRepository.findByEmail(toEmail).isPresent();
+        if (emailExists) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
         // Tạo mới mã OTP và thời gian hết hạn
         int otp = generateVerificationCode();
         Date expiredAt = new Date(Instant.now().plus(5, ChronoUnit.MINUTES).toEpochMilli());
@@ -76,7 +89,7 @@ public class EmailService {
     }
 
     private String verificationLink(int token, String toEmail) {
-        return "http://localhost:8080/chat-application/v1/verification/verify?otp="+token+"&email="+toEmail;
+        return "http://localhost:8080/chat-application/v1/verification/verify?otp=" + token + "&email=" + toEmail;
     }
 
     private int generateVerificationCode() {

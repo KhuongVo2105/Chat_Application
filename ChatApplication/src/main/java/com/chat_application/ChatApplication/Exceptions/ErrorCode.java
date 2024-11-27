@@ -16,8 +16,8 @@ public enum ErrorCode {
     // Username Group (code 100x)
     USERNAME_CANNOT_BE_BLANK(1000, "Username cannot be blank", HttpStatus.BAD_REQUEST),
     USERNAME_INVALID(1001, "Username must be at least 3 characters long and can only contain letters, numbers, dots, underscores, and hyphens (e.g., user_name123).", HttpStatus.BAD_REQUEST),
-    USERNAME_EXISTED(1002, "", HttpStatus.BAD_REQUEST),
-    USERNAME_NOT_EXISTED(1003, "", HttpStatus.NOT_FOUND),
+    USERNAME_EXISTED(1002, "Username already exists. Please choose a different username.", HttpStatus.BAD_REQUEST),
+    USERNAME_NOT_EXISTED(1003, "Username not found. Please check the username and try again.", HttpStatus.NOT_FOUND),
 
     // User Group (code 101x)
     USER_EXISTED(1012, "User existed", HttpStatus.BAD_REQUEST),
@@ -26,17 +26,17 @@ public enum ErrorCode {
     // Email Group (code 102x)
     EMAIL_CANNOT_BE_BLANK(1020, "Email cannot be blank.", HttpStatus.BAD_REQUEST),
     EMAIL_INVALID(1021, "The email format is incorrect. Please use a valid email format (e.g., example@domain.com).", HttpStatus.BAD_REQUEST),
-    EMAIL_EXISTED(1022, "", HttpStatus.BAD_REQUEST),
-    EMAIL_NOT_EXISTED(1023, "", HttpStatus.NOT_FOUND),
+    EMAIL_EXISTED(1022, "Email already exists. Please use a different email address.", HttpStatus.BAD_REQUEST),
+    EMAIL_NOT_EXISTED(1023, "Email not found. Please check the email and try again.", HttpStatus.NOT_FOUND),
 
     // Password Group (code 103x)
     PASSWORD_CANNOT_BE_BLANK(1030, "Password cannot be blank.", HttpStatus.BAD_REQUEST),
     PASSWORD_INVALID(1031, "Password must be at least 6 characters.", HttpStatus.BAD_REQUEST),
-    PASSWORD_EXISTED(1032, "", HttpStatus.BAD_REQUEST),
-    PASSWORD_NOT_EXISTED(1033, "", HttpStatus.NOT_FOUND),
+    PASSWORD_EXISTED(1032, "Password is already in use. Please choose a different password.", HttpStatus.BAD_REQUEST),
+    PASSWORD_NOT_EXISTED(1033, "Password not found. Please check your credentials.", HttpStatus.NOT_FOUND),
 
     // Authentication and Authorization (code 104x)
-    UNAUTHENTICATED(1040, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    UNAUTHENTICATED(1040, "Invalid email or password. Please try again.", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1041, "You do not have permission", HttpStatus.FORBIDDEN),
 
     // Role Group (code 105x)
@@ -53,9 +53,17 @@ public enum ErrorCode {
     EMAIL_NOT_MATCHED_WITH_TOKEN(1074, "The email provided does not match with the token.", HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1075, "The token has expired.", HttpStatus.BAD_REQUEST),
 
+    // Group groups (code 108x)
+    GROUP_NOT_EXISTED(1083, "Group does not exist", HttpStatus.NOT_FOUND),
+    GROUP_HAS_NO_MEMBERS(1084, "Group has no members", HttpStatus.NOT_FOUND),
+
+    // Member groups (code 109x)
+    MEMBER_NOT_EXISTED(1093, "The user is not a member of this group", HttpStatus.NOT_FOUND),
+
     // Other (code >=3000)
-    KEY_INVALID(3001, "Uncategorized error", HttpStatus.BAD_REQUEST),
-    INVALID_DOB(3004, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
+    KEY_INVALID(3001, "Invalid key provided.", HttpStatus.BAD_REQUEST),
+    INVALID_DOB(3004, "Your age must be at least {min}.", HttpStatus.BAD_REQUEST),
+
     ;
 
     ErrorCode(int code, String message, HttpStatus status) {

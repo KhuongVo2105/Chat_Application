@@ -18,10 +18,5 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User user; // chỗ này là member
-
     Timestamp createdAt;
 }

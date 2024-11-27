@@ -5,11 +5,9 @@ import com.chat_application.ChatApplication.Dto.Request.IntrospectReq;
 import com.chat_application.ChatApplication.Dto.Request.LoginRequest;
 import com.chat_application.ChatApplication.Dto.Response.AuthenticationRes;
 import com.chat_application.ChatApplication.Dto.Response.IntrospectRes;
-import com.chat_application.ChatApplication.Entities.EmailVerify;
 import com.chat_application.ChatApplication.Entities.User;
 import com.chat_application.ChatApplication.Exceptions.AppException;
 import com.chat_application.ChatApplication.Exceptions.ErrorCode;
-import com.chat_application.ChatApplication.Repositories.EmailVerifyRepository;
 import com.chat_application.ChatApplication.Repositories.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -28,16 +26,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.mail.MessagingException;
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Random;
 import java.util.StringJoiner;
-import java.util.UUID;
 
 @Slf4j
 @Data
@@ -49,8 +42,6 @@ public class AuthenticationService {
     @NonFinal
     @Value("${jwt.signerKey}")
     String SIGNER_KEY;
-    EmailVerifyRepository emailVerifyRepository;
-    MailService mailService;
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
@@ -60,15 +51,7 @@ public class AuthenticationService {
      */
     public AuthenticationRes authenticate(AuthenticationReq request) {
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        if (user == null) {
-            throw new RuntimeException("Username not found");
-        }
-        if (user.getStatusAccount() == -1) {
-            throw new RuntimeException("Account is locked");
-        } else if (user.getStatusAccount() == 0) {
-            throw new RuntimeException("Please active to login!");
-        }
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -77,56 +60,6 @@ public class AuthenticationService {
                 .authenticated(true)
                 .token(generateToken(user))
                 .build();
-    }
-
-    public boolean activeByEmailVerify(String userId, String passTemp) {
-        EmailVerify emailVerify = emailVerifyRepository.findByUserId(userId);
-        if (emailVerify == null) {
-            throw new RuntimeException("Email verify not found");
-        } else {
-            if (emailVerify.getPassword().equals(passTemp) && emailVerify.getExpiredAt().after(new Timestamp(new Date().getTime()))) {
-                User user = userRepository.findById(UUID.fromString(userId)).orElse(null);
-                if (user == null) {
-                    throw new RuntimeException("User not found");
-                } else {
-                    user.setStatusAccount((byte) 1);
-                    userRepository.save(user);
-                    emailVerifyRepository.delete(emailVerify);
-                    return true;
-                }
-            } else {
-                throw new RuntimeException("Password is incorrect or is expired");
-            }
-        }
-    }
-
-    public boolean resendEmailVerify(String userId) {
-        EmailVerify emailVerify = emailVerifyRepository.findByUserId(userId);
-        if (emailVerify == null) {
-            throw new RuntimeException("Email verify not found");
-        }
-        User user = userRepository.findById(UUID.fromString(userId)).orElse(null);
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        }
-
-        try {
-            String passTemp = randomPassword(6);
-            boolean sended = mailService.sendEmail(user, passTemp);
-            if (sended) {
-                log.info("Email sent successfully");
-                emailVerify.setExpiredAt(Timestamp.from(Instant.now().plus(Duration.ofMinutes(5))));
-                emailVerify.setPassword(passTemp);
-                emailVerifyRepository.save(emailVerify);
-            } else {
-                log.warn("Failed to send email");
-                return false;
-            }
-            return true;
-        } catch (MessagingException | jakarta.mail.MessagingException e) {
-            log.error("Error sending email", e);
-            throw new RuntimeException("Error sending email", e);
-        }
     }
 
     private String generateToken(User user) {
@@ -177,16 +110,5 @@ public class AuthenticationService {
 //            user.getRoles().forEach(stringJoiner::add);
 
         return stringJoiner.toString();
-    }
-
-    public String randomPassword(int lenght) {
-        String password = "";
-        String number = "0123456789";
-        String allChar = number;
-        Random random = new Random();
-        for (int i = 0; i < lenght; i++) {
-            password += allChar.charAt(random.nextInt(allChar.length()));
-        }
-        return password;
     }
 }

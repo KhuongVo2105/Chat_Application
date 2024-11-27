@@ -1,6 +1,10 @@
 {
+<<<<<<< HEAD
   "urlRandomness": "lw3Gu9Y",
   "dev": true,
   "minify": false,
   "https": false
+=======
+  "urlRandomness": "lw3Gu9Y"
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
 }

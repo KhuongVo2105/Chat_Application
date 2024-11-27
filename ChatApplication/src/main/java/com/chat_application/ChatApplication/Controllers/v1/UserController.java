@@ -5,10 +5,8 @@ import com.chat_application.ChatApplication.Dto.Request.InfoUserReq;
 import com.chat_application.ChatApplication.Dto.Request.UserReq;
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Dto.Request.UserCreateReq;
-import com.chat_application.ChatApplication.Dto.Response.AvatUserResp;
 import com.chat_application.ChatApplication.Dto.Response.InfoUserResp;
 import com.chat_application.ChatApplication.Dto.Response.UserResponse;
-import com.chat_application.ChatApplication.Entities.User;
 import com.chat_application.ChatApplication.Services.UserService;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
@@ -25,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +35,6 @@ public class UserController {
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateReq req) {
-
         return ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(req))
                 .build();

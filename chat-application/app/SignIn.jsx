@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
 import images from '../constants/image';
@@ -6,6 +7,16 @@ import axios from 'axios';
 import ENDPOINTS from "../constants/endpoints";
 
 const SignIn = ({ navigation }) => {
+=======
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
+import images from '../constants/images';
+import axios from 'axios';
+import ENDPOINTS from "../constants/endpoints";
+import { router } from 'expo-router';
+
+const SignIn = () => {
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -44,8 +55,13 @@ const SignIn = ({ navigation }) => {
             const userData = userInfoResponse.data.result;
             console.log("User Data:", userData);
 
+<<<<<<< HEAD
             // Chuyển hướng đến màn hình chính hoặc nơi bạn muốn
             navigation.navigate("Home", { user: userData });
+=======
+            // Chuyển hướng đến trang Home.jsx sau khi đăng nhập thành công
+            router.replace("/(tabs)/Home");
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
           }
         } else {
           Alert.alert("Error", "Invalid token.");
@@ -63,7 +79,11 @@ const SignIn = ({ navigation }) => {
   };
 
   const handleSignUp = () => {
+<<<<<<< HEAD
     navigation.navigate('Register_Email', { data: { prev: 'SignIn' } });
+=======
+    router.push('/Register_Email');
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
   };
 
   const handleFacebookLogin = () => {

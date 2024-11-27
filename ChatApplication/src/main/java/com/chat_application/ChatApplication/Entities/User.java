@@ -25,8 +25,7 @@ public class User {
     @Email(message = "EMAIL_INVALID")
     String email;
     boolean privacy;
-    byte statusAccount;
-    boolean statusActive;
+    byte status;
     String avatar;
     LocalDate birthday;
     Timestamp createdAt, updatedAt;

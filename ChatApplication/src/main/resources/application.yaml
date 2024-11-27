@@ -12,8 +12,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  main:
-    allow-bean-definition-overriding: true
   mail:
     host: smtp.gmail.com
     port: 587

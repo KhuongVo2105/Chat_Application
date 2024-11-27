@@ -1,11 +1,16 @@
 package com.chat_application.ChatApplication.Services;
 
+<<<<<<< HEAD
 import com.chat_application.ChatApplication.Dto.Request.AvatUserReq;
 import com.chat_application.ChatApplication.Dto.Request.InfoUserReq;
 import com.chat_application.ChatApplication.Dto.Request.UserCreateReq;
 import com.chat_application.ChatApplication.Dto.Request.UserReq;
 import com.chat_application.ChatApplication.Dto.Response.AvatUserResp;
 import com.chat_application.ChatApplication.Dto.Response.InfoUserResp;
+=======
+import com.chat_application.ChatApplication.Dto.Request.UserCreateReq;
+import com.chat_application.ChatApplication.Dto.Request.UserReq;
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
 import com.chat_application.ChatApplication.Dto.Response.UserResponse;
 import com.chat_application.ChatApplication.Entities.Role;
 import com.chat_application.ChatApplication.Entities.User;
@@ -48,7 +53,11 @@ public class UserService {
 
         // Mapper
         User user = userMapper.toUser(req);
+<<<<<<< HEAD
         user.setStatusAccount((byte) 1);
+=======
+        user.setStatus((byte) 1);
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setCreatedAt(Timestamp.from(Instant.now()));
         user.setUpdatedAt(Timestamp.from(Instant.now()));
@@ -63,6 +72,11 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
         user.setRoles(roles);
+<<<<<<< HEAD
+=======
+
+        user = userRepository.save(user);
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
         return userMapper.toUserResponse(user);
     }
 
@@ -100,6 +114,7 @@ public class UserService {
 
         return userMapper.toUserResponse(user);
     }
+<<<<<<< HEAD
 
     public InfoUserResp updateInfoUser(InfoUserReq req) {
         try {
@@ -146,4 +161,6 @@ public class UserService {
         user.setStatusActive(true);
         userRepository.save(user);
     }
+=======
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
 }
