@@ -12,5 +12,7 @@ public interface IPostService {
     ApiResponse<List<Post>> findAllByUserList(List<User> users);
     ApiResponse<Post> add(Post post);
     ApiResponse<String> delete(int id);
-    ApiResponse<Post> updateCaption(Post post);
+    ApiResponse<Post> updateCaption(int postId, String caption);
+
+    ApiResponse<Post> updateVisible(int postId, boolean visible);
 }

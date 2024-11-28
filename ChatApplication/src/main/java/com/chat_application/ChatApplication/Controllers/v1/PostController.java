@@ -34,7 +34,6 @@ public class PostController {
         return response;
     }
 
-
     @PostMapping("/add")
     public ApiResponse<Post> add(@RequestBody Post post) {
         System.out.println(post);
@@ -42,16 +41,15 @@ public class PostController {
         return response;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ApiResponse<String> delete(@PathVariable int id) {
-        ApiResponse<String> response = service.delete(id);
+    @PostMapping("/updateCaption")
+    public ApiResponse<Post> updateCaption(@RequestBody Post post) {
+        ApiResponse<Post> response = service.updateCaption(post.getId(), post.getCaption());
         return response;
     }
 
-    @PutMapping("/update")
-    public ApiResponse<Post> update(@RequestBody Post post) {
-        System.out.println(post);
-        ApiResponse<Post> response = service.updateCaption(post);
+    @PostMapping("/updateVisible")
+    public ApiResponse<Post> updateVisible(@RequestBody Post post) {
+        ApiResponse<Post> response = service.updateVisible(post.getId(), post.isVisible());
         return response;
     }
 }

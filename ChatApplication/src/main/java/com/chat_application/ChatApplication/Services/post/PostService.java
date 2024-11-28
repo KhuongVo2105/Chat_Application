@@ -79,13 +79,27 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public ApiResponse<Post> updateCaption(Post post) {
-        int id = post.getId();
-        String newCaption = post.getCaption();
+    public ApiResponse<Post> updateCaption(int postId, String caption) {
+        if (dao.existsById(postId)) {
+            Post oldPost = dao.findById(postId).orElseThrow();
+            oldPost.setCaption(caption);
+            dao.save(oldPost);
 
-        if (dao.existsById(id)) {
-            Post oldPost = dao.findById(id).orElseThrow();
-            oldPost.setCaption(newCaption);
+            return ApiResponse.<Post>builder()
+                    .message("Update post successfully")
+                    .build();
+        }
+
+        return ApiResponse.<Post>builder()
+                .message("Post not found")
+                .build();
+    }
+
+    @Override
+    public ApiResponse<Post> updateVisible(int postId, boolean visible) {
+        if (dao.existsById(postId)) {
+            Post oldPost = dao.findById(postId).orElseThrow();
+            oldPost.setVisible(visible);
             dao.save(oldPost);
 
             return ApiResponse.<Post>builder()

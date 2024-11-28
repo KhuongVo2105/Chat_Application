@@ -31,6 +31,9 @@ public class CloudinaryController {
 
     @PostMapping("/multiple")
     public ApiResponse<String> uploadImages(@RequestParam(value = "fileUpload") MultipartFile[] files, @RequestParam String userId, @RequestParam int postId) throws IOException {
+        System.out.println(Arrays.toString(files));
+        System.out.println(userId);
+        System.out.println(postId);
         return service.uploadMediaList(Arrays.asList(files), userId, postId);
     }
 
