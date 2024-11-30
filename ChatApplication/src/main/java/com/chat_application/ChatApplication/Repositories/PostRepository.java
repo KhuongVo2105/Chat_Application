@@ -1,9 +1,13 @@
 package com.chat_application.ChatApplication.Repositories;
 
 import com.chat_application.ChatApplication.Entities.Post;
+import com.chat_application.ChatApplication.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
+    List<Post> findByUser(User user);
 }

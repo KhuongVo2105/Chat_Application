@@ -41,6 +41,10 @@ public class EmailService {
 
     public VerifyEmailResponse sendVerificationEmail(String toEmail) {
 
+        if(toEmail.isBlank()){
+            throw new AppException(ErrorCode.EMAIL_CANNOT_BE_BLANK);
+        }
+
         boolean emailExists = userRepository.findByEmail(toEmail).isPresent();
         if (emailExists) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);

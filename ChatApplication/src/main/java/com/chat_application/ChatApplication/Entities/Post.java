@@ -30,8 +30,6 @@ public class Post {
     @PrePersist
     public void prePersist() {
         Date date = new Date();
-
-        // Convert Date to Timestamp
         Timestamp timestamp = new Timestamp(date.getTime());
 
         this.createdAt = timestamp;

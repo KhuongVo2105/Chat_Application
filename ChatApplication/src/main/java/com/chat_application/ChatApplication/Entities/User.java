@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,4 +33,13 @@ public class User {
 
     @ManyToMany
     Set<Role> roles;
+
+    @PrePersist
+    public void prePersist() {
+        Date date = new Date();
+        Timestamp timestamp = new Timestamp(date.getTime());
+
+        this.createdAt = timestamp;
+        this.updatedAt = timestamp;
+    }
 }
