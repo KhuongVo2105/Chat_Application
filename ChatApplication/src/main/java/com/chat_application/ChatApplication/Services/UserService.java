@@ -98,4 +98,9 @@ public class UserService {
 
         return userMapper.toUserResponse(user);
     }
+
+    public List<UserResponse> findAllByUsername(String username) {
+        return userRepository.searchByUsername(username)
+                .stream().map(userMapper::toUserResponse).toList();
+    }
 }

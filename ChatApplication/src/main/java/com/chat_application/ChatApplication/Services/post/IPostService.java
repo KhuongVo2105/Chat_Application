@@ -10,4 +10,5 @@ public interface IPostService {
     ApiResponse<Post> add(Post post);
     ApiResponse<String> delete(int id);
     ApiResponse<Post> updateCaption(Post post);
+    ApiResponse<List<Post>> findAllByCaption(String caption);
 }

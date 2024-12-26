@@ -1,30 +1,29 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useEffect } from 'react'
-import AntDesign from "react-native-vector-icons/AntDesign";
-import { AuthContext } from '../../context/AuthContext';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {AuthContext} from '../../context/AuthContext';
 
-const HeaderConverstaions = ({ navigation, route }) => {
+const HeaderConverstaions = ({navigation, route}) => {
+  const {usernameContext} = useContext(AuthContext);
 
-    const {usernameContext} = useContext(AuthContext)
+  return (
+    <View className="w-full flex flex-row bg-white py-4">
+      <View className="w-96 flex flex-row items-center justify-start mx-auto">
+        <Pressable className="" onPress={() => navigation.goBack()}>
+          <AntDesign name="arrowleft" style={styles.arrow_left} />
+        </Pressable>
+        <Text className="ml-4 text-lg font-bold">
+          {usernameContext ? usernameContext : 'example@gmail.com'}
+        </Text>
+      </View>
+    </View>
+  );
+};
 
-    return (
-        <View className="w-full flex flex-row bg-white py-4">
-            <View className="w-96 flex flex-row items-center justify-start mx-auto">
-                <Pressable className="" onPress={() => navigation.goBack()}>
-                    <AntDesign name='arrowleft' style={styles.arrow_left} />
-                </Pressable>
-                <Text className="ml-4 text-lg font-bold">
-                    {(usernameContext)?usernameContext:"example@gmail.com"}
-                </Text>
-            </View>
-        </View>
-    )
-}
-
-export default HeaderConverstaions
+export default HeaderConverstaions;
 
 const styles = StyleSheet.create({
-    arrow_left: {
-        fontSize: 25
-    }
-})
+  arrow_left: {
+    fontSize: 25,
+  },
+});

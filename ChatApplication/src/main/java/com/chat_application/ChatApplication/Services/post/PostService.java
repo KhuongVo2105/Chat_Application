@@ -77,4 +77,18 @@ public class PostService implements IPostService {
                 .message("Post not found")
                 .build();
     }
+    @Override
+    public ApiResponse<List<Post>> findAllByCaption(String caption) {
+        List<Post> postList = repository.searchByCaption(caption).stream().toList();
+        if (postList.isEmpty()) {
+            return ApiResponse.<List<Post>>builder().code(404).message("Post not found").
+                    result(postList).
+                    build();
+        }
+
+        return ApiResponse.<List<Post>>builder().code(200)
+                .message("List Post")
+                .result(postList)
+                .build();
+    }
 }
