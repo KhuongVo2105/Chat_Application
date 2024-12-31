@@ -52,7 +52,7 @@ public class AuthenticationService {
      */
     public AuthenticationRes authenticate(AuthenticationReq request) {
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 

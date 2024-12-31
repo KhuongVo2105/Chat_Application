@@ -36,7 +36,7 @@ public enum ErrorCode {
     PASSWORD_NOT_EXISTED(1033, "Password not found. Please check your credentials.", HttpStatus.NOT_FOUND),
 
     // Authentication and Authorization (code 104x)
-    UNAUTHENTICATED(1040, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    UNAUTHENTICATED(1040, "Invalid email or password. Please try again.", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1041, "You do not have permission", HttpStatus.FORBIDDEN),
 
     // Role Group (code 105x)
@@ -53,9 +53,17 @@ public enum ErrorCode {
     EMAIL_NOT_MATCHED_WITH_TOKEN(1074, "The email provided does not match with the token.", HttpStatus.BAD_REQUEST),
     TOKEN_EXPIRED(1075, "The token has expired.", HttpStatus.BAD_REQUEST),
 
+    // Group groups (code 108x)
+    GROUP_NOT_EXISTED(1083, "Group does not exist", HttpStatus.NOT_FOUND),
+    GROUP_HAS_NO_MEMBERS(1084, "Group has no members", HttpStatus.NOT_FOUND),
+
+    // Member groups (code 109x)
+    MEMBER_NOT_EXISTED(1093, "The user is not a member of this group", HttpStatus.NOT_FOUND),
+
     // Other (code >=3000)
     KEY_INVALID(3001, "Invalid key provided.", HttpStatus.BAD_REQUEST),
     INVALID_DOB(3004, "Your age must be at least {min}.", HttpStatus.BAD_REQUEST),
+
     ;
 
     ErrorCode(int code, String message, HttpStatus status) {
