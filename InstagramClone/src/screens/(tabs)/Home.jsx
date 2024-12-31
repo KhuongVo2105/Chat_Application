@@ -17,9 +17,9 @@ import {AuthContext} from '../../context/AuthContext';
 import ENDPOINTS from '../../config/endpoints';
 import axios from 'axios';
 import Modal from 'react-native-modal';
-import {VLCPlayer} from 'react-native-vlc-media-player';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
+import Video from 'react-native-video';
 
 const Home = ({navigation, route}) => {
   const {
@@ -183,12 +183,14 @@ const Home = ({navigation, route}) => {
       );
     } else {
       return (
-        <VLCPlayer
+        <Video
           key={idxChild}
-          paused={true}
-          autoplay={false}
           style={[styles.selectedVideo]}
           source={{uri: url}}
+          controls={true}               
+          resizeMode="contain"                    
+          onBuffer={this.onBuffer}      
+          onError={this.videoError} 
         />
       );
     }
@@ -238,6 +240,7 @@ const Home = ({navigation, route}) => {
       },
     });
 
+    fetchData();
     toggleModal(); // Close modal after action
   };
 

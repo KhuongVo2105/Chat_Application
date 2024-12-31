@@ -15,9 +15,10 @@ import axios from 'axios';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ENDPOINTS from '../../config/endpoints';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {VLCPlayer, VlCPlayerView} from 'react-native-vlc-media-player';
+// import {VLCPlayer, VlCPlayerView} from 'react-native-vlc-media-player';
 import {AuthContext} from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import Video from 'react-native-video';
 
 const NewPostScreen = () => {
   const [media, setMedia] = useState([]);
@@ -164,12 +165,14 @@ const NewPostScreen = () => {
                   style={styles.image}
                 />
               ) : values.type.includes('video') ? (
-                <VLCPlayer
+                <Video
                   key={index}
-                  paused={true}
-                  autoplay={false}
-                  style={[styles.selectedVideo]}
+                  style={styles.selectedVideo}
                   source={{uri: values.uri}}
+                  controls={true}               
+                  resizeMode="contain"                    
+                  onBuffer={this.onBuffer}      
+                  onError={this.videoError}     
                 />
               ) : null
             ) : null,
