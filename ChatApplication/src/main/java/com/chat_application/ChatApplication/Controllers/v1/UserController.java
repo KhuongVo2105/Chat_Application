@@ -1,10 +1,7 @@
 package com.chat_application.ChatApplication.Controllers.v1;
 
-import com.chat_application.ChatApplication.Dto.Request.AvatUserReq;
-import com.chat_application.ChatApplication.Dto.Request.InfoUserReq;
-import com.chat_application.ChatApplication.Dto.Request.UserReq;
+import com.chat_application.ChatApplication.Dto.Request.*;
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
-import com.chat_application.ChatApplication.Dto.Request.UserCreateReq;
 import com.chat_application.ChatApplication.Dto.Response.InfoUserResp;
 import com.chat_application.ChatApplication.Dto.Response.UserResponse;
 import com.chat_application.ChatApplication.Services.UserService;
@@ -131,5 +128,14 @@ public class UserController {
     @PostMapping("/my-info")
     ApiResponse<UserResponse> getMyInfo(){
         return ApiResponse.<UserResponse>builder().result(userService.getMyInfo()).build();
+    }
+
+    @PostMapping("/alluser")
+    List<UserResponse> allUser() {
+        return userService.allUser();
+    }
+    @PostMapping("/lockAccount")
+    void allUser(@RequestBody UsernameRequest request) {
+        userService.lockAccount(request);
     }
 }

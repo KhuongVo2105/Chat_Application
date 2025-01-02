@@ -39,4 +39,15 @@ public class PostController {
         ApiResponse<Post> response = service.updateCaption(post);
         return response;
     }
+
+    @PostMapping("/{id}")
+    public Post getPost(@PathVariable int id) {
+        return service.getPostById(id);
+    }
+
+    @PostMapping("/postOfUsername")
+    public List<Post> postOfUsername(@RequestBody String username) {
+        List<Post> response = service.postOfUsername(username);
+        return response;
+    }
 }

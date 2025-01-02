@@ -3,7 +3,7 @@ import React, { createContext, useState, ReactNode } from "react";
 // Tạo Context với giá trị mặc định
 export const AuthContext = createContext<{
   userToken: string | null;
-  setUserToken: React.Dispatch<React.SetStateAction<string | null>>;
+  setUserToken: React.Dispatch<React.SetStateAction<string | null>>;//452
 }>({
   userToken: null,
   setUserToken: () => {}, // Hàm này không làm gì, dùng cho trường hợp không có Provider

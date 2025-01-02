@@ -10,4 +10,6 @@ public interface IPostService {
     ApiResponse<Post> add(Post post);
     ApiResponse<String> delete(int id);
     ApiResponse<Post> updateCaption(Post post);
+    List<Post> postOfUsername(String username);
+    Post getPostById(int id);
 }
