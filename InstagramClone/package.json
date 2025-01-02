@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-community/cli": "^15.1.2",
+    "@react-native-community/cli": "^11.4.1",
     "@react-native-community/cli-plugin-metro": "^12.3.6",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-navigation/bottom-tabs": "^7.0.4",
