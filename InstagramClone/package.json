@@ -12,7 +12,7 @@
   "dependencies": {
     "@react-native-community/cli": "^11.4.1",
     "@react-native-community/cli-plugin-metro": "^12.3.6",
-    "@react-native-community/datetimepicker": "^8.2.0",
+    "@react-native-community/datetimepicker": "^7.6.2",
     "@react-navigation/bottom-tabs": "^7.0.4",
     "@react-navigation/native": "^7.0.3",
     "@react-navigation/native-stack": "^7.0.3",
