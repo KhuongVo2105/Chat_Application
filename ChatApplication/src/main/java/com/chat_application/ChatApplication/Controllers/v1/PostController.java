@@ -52,4 +52,15 @@ public class PostController {
         ApiResponse<Post> response = service.updateVisible(post.getId(), post.isVisible());
         return response;
     }
+
+    @PostMapping("/{id}")
+    public Post getPost(@PathVariable int id) {
+        return service.getPostById(id);
+    }
+
+    @PostMapping("/postOfUsername")
+    public List<Post> postOfUsername(@RequestBody String username) {
+        List<Post> response = service.postOfUsername(username);
+        return response;
+    }
 }

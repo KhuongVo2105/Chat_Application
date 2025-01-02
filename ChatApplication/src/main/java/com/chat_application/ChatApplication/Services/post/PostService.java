@@ -4,21 +4,24 @@ import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Entities.User;
 import com.chat_application.ChatApplication.Repositories.PostRepository;
+import com.chat_application.ChatApplication.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService implements IPostService {
+    private PostRepository repository;
     @Autowired
-    private PostRepository dao;
+    private UserRepository userRepository;
 
     @Override
     public ApiResponse<List<Post>> findAll() {
-        List<Post> postList = dao.findAll();
+        List<Post> postList = repository.findAll();
 
         return ApiResponse.<List<Post>>builder()
                 .message("Get list post successfully")
@@ -28,7 +31,7 @@ public class PostService implements IPostService {
 
     @Override
     public ApiResponse<List<Post>> findAllByOneUser(User user) {
-        List<Post> postList = dao.findByUser(user);
+        List<Post> postList = repository.findByUser(user);
 
         return ApiResponse.<List<Post>>builder()
                 .message("Get list post successfully")
@@ -40,7 +43,7 @@ public class PostService implements IPostService {
     public ApiResponse<List<Post>> findAllByUserList(List<User> users) {
         List<Post> postList = new ArrayList<>();
         for (User user : users) {
-            List<Post> post = dao.findByUser(user);
+            List<Post> post = repository.findByUser(user);
             if (!post.isEmpty()) {
                 postList.addAll(post);
             }
@@ -53,7 +56,7 @@ public class PostService implements IPostService {
 
     @Override
     public ApiResponse<Post> add(Post post) {
-        Post postAdded = dao.save(post);
+        Post postAdded = repository.save(post);
 
         return ApiResponse.<Post>builder()
                 .message("Add post successfully")
@@ -64,8 +67,8 @@ public class PostService implements IPostService {
     @Override
     @Transactional
     public ApiResponse<String> delete(int id) {
-        if (dao.existsById(id)) {
-            Post post = dao.findById(id).orElseThrow();
+        if (repository.existsById(id)) {
+            Post post = repository.findById(id).orElseThrow();
             post.setVisible(false);
 
             return ApiResponse.<String>builder()
@@ -80,10 +83,10 @@ public class PostService implements IPostService {
 
     @Override
     public ApiResponse<Post> updateCaption(int postId, String caption) {
-        if (dao.existsById(postId)) {
-            Post oldPost = dao.findById(postId).orElseThrow();
+        if (repository.existsById(postId)) {
+            Post oldPost = repository.findById(postId).orElseThrow();
             oldPost.setCaption(caption);
-            dao.save(oldPost);
+            repository.save(oldPost);
 
             return ApiResponse.<Post>builder()
                     .message("Update post successfully")
@@ -97,10 +100,10 @@ public class PostService implements IPostService {
 
     @Override
     public ApiResponse<Post> updateVisible(int postId, boolean visible) {
-        if (dao.existsById(postId)) {
-            Post oldPost = dao.findById(postId).orElseThrow();
+        if (repository.existsById(postId)) {
+            Post oldPost = repository.findById(postId).orElseThrow();
             oldPost.setVisible(visible);
-            dao.save(oldPost);
+            repository.save(oldPost);
 
             return ApiResponse.<Post>builder()
                     .message("Update post successfully")
@@ -110,5 +113,23 @@ public class PostService implements IPostService {
         return ApiResponse.<Post>builder()
                 .message("Post not found")
                 .build();
+    }
+
+    @Override
+    public List<Post> postOfUsername(String username) {
+        if (userRepository.findByUsername(username) == null) {
+            throw new RuntimeException("User not found");
+        }
+        Optional<User> user = userRepository.findByUsername(username);
+        return repository.findByUser_IdAndVisibleTrue(user.get().getId());
+    }
+
+    @Override
+    public Post getPostById(int id) {
+        if (repository.existsById(id)) {
+            return repository.findById(id).orElseThrow();
+        }else{
+            throw new RuntimeException("Post not found");
+        }
     }
 }

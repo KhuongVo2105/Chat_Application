@@ -9,7 +9,10 @@ entity "Users" as u {
     privacy:boolean  /'Public || Private'/
     status:byte     /'trang thai cua nguoi dung. Han che, thoai mai, chua xac thuc'/
     avatar:String   /'anh dai dien nguoi dung'/
+<<<<<<< HEAD
+=======
     birthday: LocalDate
+>>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
     createdAt:Timestamp
     updatedAt:Timestamp
 }
