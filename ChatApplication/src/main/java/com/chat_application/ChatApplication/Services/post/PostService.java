@@ -4,16 +4,20 @@ import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Entities.User;
 import com.chat_application.ChatApplication.Repositories.PostRepository;
+import com.chat_application.ChatApplication.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService implements IPostService {
     @Autowired
     private PostRepository repository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public ApiResponse<List<Post>> findAll() {
@@ -76,5 +80,23 @@ public class PostService implements IPostService {
                 .code(404)
                 .message("Post not found")
                 .build();
+    }
+
+    @Override
+    public List<Post> postOfUsername(String username) {
+        if (userRepository.findByUsername(username) == null) {
+            throw new RuntimeException("User not found");
+        }
+        Optional<User> user = userRepository.findByUsername(username);
+        return repository.findByUser_IdAndVisibleTrue(user.get().getId());
+    }
+
+    @Override
+    public Post getPostById(int id) {
+        if (repository.existsById(id)) {
+            return repository.findById(id).orElseThrow();
+        }else{
+            throw new RuntimeException("Post not found");
+        }
     }
 }
