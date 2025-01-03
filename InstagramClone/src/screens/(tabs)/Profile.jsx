@@ -28,18 +28,19 @@ const Profile = ({ navigation }) => {
     { id: '10', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '11', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '12', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
-];
+  ];
 
   const { tokenContext } = useContext(AuthContext);
+
+
   const [selectedItem, setSelectedItem] = useState("table");
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
-  const handleEdit = () => {
-    navigation.navigate("EditProfile");
-  };
+
   const handleSelectItem = (item) => {
     setSelectedItem(item);
   };
+
   // useEffect(() => {
   //   const getUserInfo = async () => {
   //     if (tokenContext == "" || tokenContext == null) {
@@ -132,7 +133,8 @@ const Profile = ({ navigation }) => {
           <Text className='text-sm text-slate-500 mb-3'>Add your name and bio.</Text>
 
           <View className='flex flex-row items-center mb-3'>
-            <Pressable className='flex-1 bg-gray-200 rounded-md py-1 mx-1' onPress={handleEdit}>
+            <Pressable className='flex-1 bg-gray-200 rounded-md py-1 mx-1'
+              onPress={() => navigation.navigate('EditProfile')}>
               <Text className='text-base font-medium text-center'>Edit profile</Text>
             </Pressable>
             <Pressable className='flex-1 bg-gray-200 rounded-md py-1 mx-1' >

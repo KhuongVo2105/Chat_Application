@@ -9,11 +9,22 @@ import Search from './Search';
 import Notification from './Notification';
 import Header from './Header';
 import Profile from './Profile';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import EditProfile from './EditProfile';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Tab = createBottomTabNavigator()
+const Stack = createNativeStackNavigator();
 const size = 32
+
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+      <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+};
 
 const ProfileHeader = ({ navigation, route }) => {
   return (
@@ -64,18 +75,14 @@ const TabsLayout = () => {
           <Ionicons name="heart-outline" color={color} size={size} />
         )
       }} />
-      <Tab.Screen name='Profile' component={Profile} options={{
+      <Tab.Screen name='Profile' component={ProfileStack} options={{
         tabBarIcon: () => (
           <IconUserProfileStatic width={32} height={32} source={require('./../../assets/portaits/portait_1.jpg')} />
         ),
         headerShown: true,
         header: ({ navigation, route }) => <ProfileHeader navigation={navigation} route={route} />
       }} />
-      {/* <Tab.Screen name='EditProfile' component={EditProfile} options={{
-        tabBarButton: () => null,
-        headerShown: true,
-        header: ({ navigation, route }) => <ProfileHeader navigation={navigation} route={route} />
-      }} /> */}
+
     </Tab.Navigator>
   );
 };
