@@ -10,6 +10,7 @@ import Notification from './Notification';
 import Header from './Header';
 import Profile from './Profile';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import EditProfile from './EditProfile';
 
 const Tab = createBottomTabNavigator()
 const size = 32
@@ -70,6 +71,11 @@ const TabsLayout = () => {
         headerShown: true,
         header: ({ navigation, route }) => <ProfileHeader navigation={navigation} route={route} />
       }} />
+      {/* <Tab.Screen name='EditProfile' component={EditProfile} options={{
+        tabBarButton: () => null,
+        headerShown: true,
+        header: ({ navigation, route }) => <ProfileHeader navigation={navigation} route={route} />
+      }} /> */}
     </Tab.Navigator>
   );
 };
