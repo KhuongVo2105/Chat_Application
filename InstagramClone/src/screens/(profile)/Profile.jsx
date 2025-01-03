@@ -183,9 +183,6 @@ const Profile = ({ navigation }) => {
         </View>
       </View>
     </ScrollView>
-
-
-
   );
 }
 

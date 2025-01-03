@@ -2,17 +2,21 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
-  TextInput,
   Button,
   Image,
   Alert,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
+  Pressable,
 } from "react-native";
 import axios from "axios";
 import { launchImageLibrary } from 'react-native-image-picker';
 import ENDPOINTS from "../../config/endpoints";
 import { AuthContext } from "../../context/AuthContext";
+import { TextInput, useTheme } from 'react-native-paper';
+import { Dropdown } from 'react-native-element-dropdown';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 export const User = {
   username: "", // String
@@ -27,9 +31,17 @@ export const UpdateUser = {
 };
 
 function EditProfile({ navigation }) {
-  const { userToken, setUserToken } = useContext(AuthContext);
+  const theme = useTheme()
+
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+
+  const { tokenContext, usernameContext } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const [name, setName] = useState('Name')
+  const [username, setUsername] = useState('Username')
+  const [bio, setBio] = useState('')
   const [updateUserData, setUpdateUserData] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -80,10 +92,6 @@ function EditProfile({ navigation }) {
     }
   };
 
-  const handleBack = () => {
-    navigation.navigate("Profile");
-  };
-
   const handleUpdate = async () => {
     const endpoint = ENDPOINTS.USER.UPDATE_USER_PROFILE;
     console.log(`updateUser: ${endpoint}`);
@@ -103,7 +111,7 @@ function EditProfile({ navigation }) {
   useEffect(() => {
     const getUserInfo = async () => {
       // Kiểm tra token có tồn tại không
-      if (!userToken) {
+      if (!tokenContext) {
         Alert.alert("Error", "No user token found", [
           {
             text: "OK",
@@ -115,13 +123,13 @@ function EditProfile({ navigation }) {
       try {
         const endpoint = ENDPOINTS.USER.MY_INFORMATION;
         console.log(`getUser: ${endpoint}`);
-        console.log(`token: ${userToken}`);
+        console.log(`token: ${tokenContext}`);
         const response = await axios.post(
           endpoint,
           {},
           {
             headers: {
-              Authorization: `Bearer ${userToken}`, // Gửi token theo định dạng Bearer
+              Authorization: `Bearer ${tokenContext}`, // Gửi token theo định dạng Bearer
             },
           }
         );
@@ -158,96 +166,113 @@ function EditProfile({ navigation }) {
     };
 
     getUserInfo();
-  }, [userToken, navigation]);
+  }, [tokenContext, navigation]);
 
   return (
-    <View style={styles.editProfileContainer}>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          padding: 2,
-          justifyContent: "space-between",
-          marginBottom: 20,
-        }}
-      >
-        <Button title="<" onPress={handleBack} />
-        <Text style={styles.title}>Chỉnh sửa trang cá nhân</Text>
-        <Button title="Xong" onPress={handleUpdate} />
-      </View>
-      <View style={styles.editAvatar}>
-        {userData?.avatar == null ? (
-          <Image
-            source={require("../../assets/avatarDefine.jpg")}
-            style={styles.avatar}
-          />
-        ) : (
-          <Image
-            source={require("../../assets/avatarDefine.jpg")}
-            style={styles.avatar}
-          />
-        )}
-        <TouchableOpacity
-          // onPress={handleUploadAvatar}
-          onPress={selectImage}
-        >
-          <Text style={{ color: "#0095f6", fontSize: 15, fontWeight: 500 }}>
-            Chỉnh sửa ảnh hoặc avatar
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.editInfo}>
-        <View style={styles.formGroup}>
-          <Text style={styles.fieldName}>Tên</Text>
-          <TextInput
-            style={styles.input}
-            value={updateUserData?.newUsername}
-            onChangeText={(text) =>
-              setUpdateUserData({ ...updateUserData, newUsername: text })
-            }
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.fieldName}>Tên người dùng</Text>
-          <TextInput
-            style={styles.input}
-            value={userData?.bio}
-            onChangeText={(text) => setUserData({ ...userData, bio: text })}
-            multiline
-          />
-        </View>
-        <TouchableOpacity>
-          <Text
-            style={{
-              color: "#0095f6",
-              fontSize: 16,
-              fontWeight: "500",
-              marginTop: 30,
-            }}
+    <ScrollView
+      className="w-100 bg-white py-4"
+      horizontal={false}
+      showsVerticalScrollIndicator={false}>
+
+      <View className="w-96 mx-auto">
+        <View style={styles.editAvatar}>
+          {userData?.avatar == null ? (
+            <Image
+              source={require("../../assets/avatarDefine.jpg")}
+              style={styles.avatar}
+            />
+          ) : (
+            <Image
+              source={require("../../assets/avatarDefine.jpg")}
+              style={styles.avatar}
+            />
+          )}
+          <TouchableOpacity
+            // onPress={handleUploadAvatar}
+            onPress={selectImage}
           >
-            Chuyển sang tài khoản công việc
-          </Text>
-        </TouchableOpacity>
+            <Text style={{ color: "#0095f6", fontSize: 15, fontWeight: 500 }}>
+              Chỉnh sửa ảnh hoặc avatar
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View >
+
+          <TextInput
+            className="mb-3"
+            label="Name"
+            value={name}
+            onChangeText={text => setName(text)}
+            theme={theme}
+            mode="outlined"
+          />
+
+          <TextInput
+            className="mb-3"
+            label="Username"
+            value={username}
+            onChangeText={text => setUsername(text)}
+            mode="outlined"
+          />
+
+          <TextInput
+            className="mb-3"
+            label="Bio"
+            value={bio}
+            onChangeText={text => setBio(text)}
+            mode="outlined"
+          />
+
+          {/* <Text className="text-lg font-normal">
+            Banners
+          </Text> */}
+
+          {/* Genre */}
+          {/* <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={[
+              { label: 'male', value: 'male' },
+              { label: 'female', value: 'female' },
+              { label: 'other', value: 'other' },
+            ]}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? 'Select item' : '...'}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+            renderLeftIcon={() => (
+              <AntDesign
+                style={styles.icon}
+                color={isFocus ? 'blue' : 'black'}
+                name="Safety"
+                size={20}
+              />
+            )}
+          /> */}
+
+          <Pressable className="w-full p-2 border-b border-b-neutral-400">
+            <Text className="text-base text-sky-500">Switch to professinal account</Text>
+          </Pressable>
+
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  editProfileContainer: {
-    flex: 1,
-    display: "flex",
-    width: "100%",
-    margin: 0,
-    padding: 20,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-  },
-  title: {
-    fontSize: 20,
-    marginTop: 5,
-    fontWeight: "600",
-  },
   editAvatar: {
     alignItems: "center",
     marginBottom: 20,
@@ -258,27 +283,6 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     marginBottom: 10,
     backgroundColor: "black",
-  },
-  fieldName: {
-    width: 100,
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  input: {
-    width: 280,
-    height: 40,
-    padding: 10,
-    borderColor: "#ccc",
-    borderBottomWidth: 1,
-  },
-  editInfo: {
-    width: "100%",
-  },
-  formGroup: {
-    marginBottom: 5,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
   },
 });
 
