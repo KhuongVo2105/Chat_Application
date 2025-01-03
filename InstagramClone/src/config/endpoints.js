@@ -1,5 +1,5 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-const SERVER_ADDRESS = `192.168.1.21`
+const SERVER_ADDRESS = `192.168.47.85`
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`
 
 const API_BASE_URL  = REACT_APP_API_BASE_URL;
@@ -16,8 +16,9 @@ const ENDPOINTS = {
         SIGN_UP:``,
         MY_INFORMATION:`${API_BASE_URL}/users/my-info`,
         GET_USER_PROFILE: `${API_BASE_URL}/users`,
-        UPDATE_USER_PROFILE: `${API_BASE_URL}/user/update-profile`,
-        DELETE_USER_ACCOUNT: `${API_BASE_URL}/user/delete`
+        UPDATE_USER_PROFILE: `${API_BASE_URL}/users/updateInfo`,
+        DELETE_USER_ACCOUNT: `${API_BASE_URL}/user/delete`,
+        UPDATE_AVATAR: `${API_BASE_URL}/users/updateAvat`,
     },
 
     OTP:{
@@ -59,7 +60,9 @@ const ENDPOINTS = {
 
     FOLLOW: {
         GET_FOLLOWING: `${API_BASE_URL}/follow/findAllByUserId`,
-    }
+    },
+
+
 }
 
 export default ENDPOINTS;

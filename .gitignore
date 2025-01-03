@@ -192,10 +192,11 @@ vendor/
 
 # CircleCI
 .circleci/generated_config.yml
-<<<<<<< HEAD
 
 /path
 # Firebase service account credentials
 ChatApplication/path/firebase/*.json
-=======
->>>>>>> d8acec4626ac1a67da46ba8f53d5880fa674d8b1
+
+# Ignore CMake build files
+/android/app/.cxx/
+
