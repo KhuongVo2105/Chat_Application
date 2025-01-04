@@ -194,9 +194,7 @@ vendor/
 .circleci/generated_config.yml
 
 /path
-# Firebase service account credentials
-ChatApplication/path/firebase/*.json
+ChatApplication/src/main/resources/firebase
 
 # Ignore CMake (C++) build files
 InstagramClone/android/app/.cxx/
-

@@ -33,7 +33,10 @@ public class SecurityConfig {
     private String SIGNER_KEY;
     private final String[] PUBLIC_ENDPOINTS_POST = {
             "/v1/users", "/v1/auth/token", "/v1/auth/introspect", "/v1/verification/send-code",
-            "/v1/post/postOfUsername", "/v1/post/{id}"
+            "/v1/post/postOfUsername", "/v1/post/{id}",
+            "v1/post/allPostInMonth", "v1/user/allUserInMonth",
+            "v1/post/allPostInDay", "v1/user/allUserInDay",
+            "v1/post/allPost", "v1/users/alluserNum"
     }, PUBLIC_ENDPOINTS_GET = {"/v1/verification/verify"};
 
     @Bean

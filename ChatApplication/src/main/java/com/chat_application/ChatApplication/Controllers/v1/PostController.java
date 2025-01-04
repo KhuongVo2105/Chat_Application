@@ -63,4 +63,19 @@ public class PostController {
         List<Post> response = service.postOfUsername(username);
         return response;
     }
+
+    @PostMapping("/allPostInMonth")
+    int allPostInMonth() {
+        return service.allPostInMonth();
+    }
+
+    @PostMapping("/allPostInDay")
+    int allPostInDay() {
+        return service.allPostInDay();
+    }
+
+    @PostMapping("/allPost")
+    int allPost() {
+        return service.allPost();
+    }
 }

@@ -155,4 +155,22 @@ public class UserService {
             throw new RuntimeException("User not exist");
         }
     }
+
+    public int alluserInMonth() {
+        return userRepository.findAll().stream()
+                .filter(user -> !user.getUsername().equals("admin") && user.getCreatedAt().toLocalDateTime().getMonthValue() == Timestamp.from(Instant.now()).toLocalDateTime().getMonthValue())
+                .toList().size();
+    }
+
+    public int alluserNum() {
+        return userRepository.findAll().stream()
+                .filter(user -> !user.getUsername().equals("admin"))
+                .toList().size();
+    }
+
+    public int alluserInDay() {
+        return userRepository.findAll().stream()
+                .filter(user -> !user.getUsername().equals("admin") && user.getCreatedAt().toLocalDateTime().getDayOfMonth() == Timestamp.from(Instant.now()).toLocalDateTime().getDayOfMonth())
+                .toList().size();
+    }
 }

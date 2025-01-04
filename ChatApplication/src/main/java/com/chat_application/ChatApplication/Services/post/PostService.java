@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -131,5 +133,24 @@ public class PostService implements IPostService {
         }else{
             throw new RuntimeException("Post not found");
         }
+    }
+
+    @Override
+    public int allPost() {
+        return repository.findAll().size();
+    }
+
+    @Override
+    public int allPostInDay() {
+        return repository.findAll().stream()
+                .filter(post -> post.getCreatedAt().toLocalDateTime().getDayOfMonth() == Timestamp.from(Instant.now()).toLocalDateTime().getDayOfMonth())
+                .toList().size();
+    }
+
+    @Override
+    public int allPostInMonth() {
+        return repository.findAll().stream()
+                .filter(post -> post.getCreatedAt().toLocalDateTime().getMonthValue() == Timestamp.from(Instant.now()).toLocalDateTime().getMonthValue())
+                .toList().size();
     }
 }
