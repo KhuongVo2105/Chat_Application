@@ -12,4 +12,8 @@ public interface IPostService {
     ApiResponse<Post> updateCaption(Post post);
     List<Post> postOfUsername(String username);
     Post getPostById(int id);
+
+    int allPost();
+    int allPostInMonth();
+    int allPostInDay();
 }

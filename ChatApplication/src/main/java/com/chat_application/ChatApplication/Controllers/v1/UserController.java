@@ -130,6 +130,21 @@ public class UserController {
     List<UserResponse> allUser() {
         return userService.allUser();
     }
+
+    @PostMapping("/alluserNum")
+    int alluserNum() {
+        return userService.alluserNum();
+    }
+
+    @PostMapping("/alluserInMonth")
+    int alluserInMonth() {
+        return userService.alluserInMonth();
+    }
+    @PostMapping("/alluserInDay")
+    int alluserInDay() {
+        return userService.alluserInDay();
+    }
+
     @PostMapping("/lockAccount")
     void allUser(@RequestBody UsernameRequest request) {
         userService.lockAccount(request);
