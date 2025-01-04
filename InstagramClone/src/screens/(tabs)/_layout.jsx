@@ -1,12 +1,13 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { IconUserProfile } from '../../components/IconComponents';
+import { IconUserProfileStatic } from '../../components/IconComponents';
 import Home from './Home';
 import NewPostScreen from './NewPostScreen';
 import Search from './Search';
 import Notification from './Notification';
 import Header from './Header';
+import ProfileLayout from '../(profile)/_layout';
 
 const Tab = createBottomTabNavigator()
 
@@ -17,7 +18,7 @@ const TabsLayout = () => {
         headerShown: true,
         header: ({ navigation, route }) => <Header navigation={navigation} route={route} />,
         tabBarShowLabel: false,
-        tabBarIconStyle:{
+        tabBarIconStyle: {
           size: 100,
         },
       }}>
@@ -42,11 +43,13 @@ const TabsLayout = () => {
           <Ionicons name="heart-outline" color={color} size={size} />
         )
       }} />
-      <Tab.Screen name="Profile" component={Home} options={{
+      <Tab.Screen name='Profile' component={ProfileLayout} options={{
         tabBarIcon: () => (
-          <IconUserProfile width={32} height={32} source={require('./../../assets/portaits/portait_1.jpg')} />
-        )
+          <IconUserProfileStatic width={32} height={32} source={require('./../../assets/portaits/portait_1.jpg')} />
+        ),
+        headerShown: false
       }} />
+
     </Tab.Navigator>
   );
 };

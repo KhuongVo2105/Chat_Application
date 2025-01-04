@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,4 +27,12 @@ public class Media {
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     Post post;
+
+    @PrePersist
+    public void prePersist() {
+        Date date = new Date();
+        Timestamp timestamp = new Timestamp(date.getTime());
+
+        this.createdAt = timestamp;
+    }
 }

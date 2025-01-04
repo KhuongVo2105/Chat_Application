@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PostService implements IPostService {
-    @Autowired
     private PostRepository repository;
     @Autowired
     private UserRepository userRepository;
@@ -26,7 +26,31 @@ public class PostService implements IPostService {
         List<Post> postList = repository.findAll();
 
         return ApiResponse.<List<Post>>builder()
-                .code(200)
+                .message("Get list post successfully")
+                .result(postList)
+                .build();
+    }
+
+    @Override
+    public ApiResponse<List<Post>> findAllByOneUser(User user) {
+        List<Post> postList = repository.findByUser(user);
+
+        return ApiResponse.<List<Post>>builder()
+                .message("Get list post successfully")
+                .result(postList)
+                .build();
+    }
+
+    @Override
+    public ApiResponse<List<Post>> findAllByUserList(List<User> users) {
+        List<Post> postList = new ArrayList<>();
+        for (User user : users) {
+            List<Post> post = repository.findByUser(user);
+            if (!post.isEmpty()) {
+                postList.addAll(post);
+            }
+        }
+        return ApiResponse.<List<Post>>builder()
                 .message("Get list post successfully")
                 .result(postList)
                 .build();
@@ -37,7 +61,6 @@ public class PostService implements IPostService {
         Post postAdded = repository.save(post);
 
         return ApiResponse.<Post>builder()
-                .code(200)
                 .message("Add post successfully")
                 .result(postAdded)
                 .build();
@@ -51,35 +74,45 @@ public class PostService implements IPostService {
             post.setVisible(false);
 
             return ApiResponse.<String>builder()
-                    .code(200)
                     .message("Delete post successfully")
                     .build();
         }
 
         return ApiResponse.<String>builder()
-                .code(404)
                 .message("Post not found")
                 .build();
     }
 
     @Override
-    public ApiResponse<Post> updateCaption(Post post) {
-        int id = post.getId();
-        String newCaption = post.getCaption();
-
-        if (repository.existsById(id)) {
-            Post oldPost = repository.findById(id).orElseThrow();
-            oldPost.setCaption(newCaption);
+    public ApiResponse<Post> updateCaption(int postId, String caption) {
+        if (repository.existsById(postId)) {
+            Post oldPost = repository.findById(postId).orElseThrow();
+            oldPost.setCaption(caption);
             repository.save(oldPost);
 
             return ApiResponse.<Post>builder()
-                    .code(404)
                     .message("Update post successfully")
                     .build();
         }
 
         return ApiResponse.<Post>builder()
-                .code(404)
+                .message("Post not found")
+                .build();
+    }
+
+    @Override
+    public ApiResponse<Post> updateVisible(int postId, boolean visible) {
+        if (repository.existsById(postId)) {
+            Post oldPost = repository.findById(postId).orElseThrow();
+            oldPost.setVisible(visible);
+            repository.save(oldPost);
+
+            return ApiResponse.<Post>builder()
+                    .message("Update post successfully")
+                    .build();
+        }
+
+        return ApiResponse.<Post>builder()
                 .message("Post not found")
                 .build();
     }
