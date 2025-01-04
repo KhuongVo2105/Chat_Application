@@ -197,6 +197,6 @@ vendor/
 # Firebase service account credentials
 ChatApplication/path/firebase/*.json
 
-# Ignore CMake build files
-/android/app/.cxx/
+# Ignore CMake (C++) build files
+InstagramClone/android/app/.cxx/
 

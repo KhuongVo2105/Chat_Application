@@ -16,10 +16,10 @@ export const User = {
 
 const Profile = ({ navigation }) => {
   const images = [
-    { id: '1', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
-    { id: '2', quantity: 2, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
-    { id: '3', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
-    { id: '4', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '1', quantity: 1, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '2', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '3', quantity: 1, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '4', quantity: 10, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
     { id: '5', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '6', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '7', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
@@ -28,7 +28,45 @@ const Profile = ({ navigation }) => {
     { id: '10', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '11', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '12', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
-  ];
+    { id: '13', quantity: 3, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '14', quantity: 4, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '15', quantity: 6, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '16', quantity: 7, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '17', quantity: 8, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '18', quantity: 9, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '19', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '20', quantity: 3, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '21', quantity: 4, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '22', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '23', quantity: 6, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '24', quantity: 7, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '25', quantity: 8, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '26', quantity: 9, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '27', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '28', quantity: 1, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '29', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '30', quantity: 3, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '31', quantity: 4, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '32', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '33', quantity: 6, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '34', quantity: 7, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '35', quantity: 8, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '36', quantity: 9, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '37', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '38', quantity: 1, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '39', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '40', quantity: 3, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '41', quantity: 4, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '42', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '43', quantity: 6, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '44', quantity: 7, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '45', quantity: 8, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '46', quantity: 9, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '47', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '48', quantity: 1, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '49', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '50', quantity: 3, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+];
 
   const { tokenContext } = useContext(AuthContext);
 
@@ -93,14 +131,12 @@ const Profile = ({ navigation }) => {
 
   //   getUserInfo();
   // }, [tokenContext, navigation]);
-
   return (
 
     <ScrollView
-      className=""
+      className="bg-white"
       horizontal={false}
       showsVerticalScrollIndicator={false}>
-      <View className='bg-white'>
         <View className='w-96 mx-auto'>
           <View className='mb-3' style={styles.header}>
             {userData?.avatar == null ? (
@@ -181,7 +217,6 @@ const Profile = ({ navigation }) => {
           <ImageGrid images={images} />
 
         </View>
-      </View>
     </ScrollView>
   );
 }
