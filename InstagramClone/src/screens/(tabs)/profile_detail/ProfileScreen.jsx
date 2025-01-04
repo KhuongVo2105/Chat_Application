@@ -62,14 +62,14 @@ const ProfileScreen = ({userId, username}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     padding: 20,
   },
   header: {
     marginBottom: 20,
   },
   username: {
-    color: '#fff',
+    color: '#000',
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   name: {
-    color: '#fff',
+    color: '#000',
     fontSize: 18,
     marginTop: 10,
   },
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statNumber: {
-    color: '#fff',
+    color: '#000',
     fontSize: 16,
     fontWeight: 'bold',
   },

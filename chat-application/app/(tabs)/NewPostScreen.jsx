@@ -21,10 +21,12 @@ import { Text, View } from "react-native";
 
 // export default NewPostScreen;
 
-const NewPostScreen = () =>{
+const NewPostScreen = () => {
   return (
-    <View><Text>New Post</Text></View>
-  )
-}
+    <View>
+      <Text>New Post</Text>
+    </View>
+  );
+};
 
 export default NewPostScreen;

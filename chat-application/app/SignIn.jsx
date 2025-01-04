@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
-import images from '../constants/images';
-import axios from 'axios';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import images from "../constants/images";
+import axios from "axios";
 import ENDPOINTS from "../constants/endpoints";
-import { router } from 'expo-router';
+import { router } from "expo-router";
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -16,7 +24,7 @@ const SignIn = () => {
     try {
       const endpoint = ENDPOINTS.AUTH.GET_TOKEN;
       console.log(`Instagram-SignIn-endpoint: ${endpoint}`);
-      
+
       const signInRequest = {
         email: email,
         password: password,
@@ -31,14 +39,24 @@ const SignIn = () => {
         // Kiểm tra tính hợp lệ của token
         const introspectEndpoint = ENDPOINTS.AUTH.INTROSPECT;
         const introspectRequest = { token: token };
-        const introspectResponse = await axios.post(introspectEndpoint, introspectRequest);
+        const introspectResponse = await axios.post(
+          introspectEndpoint,
+          introspectRequest,
+        );
 
-        if (introspectResponse.data.code === 200 && introspectResponse.data.result.valid) {
+        if (
+          introspectResponse.data.code === 200 &&
+          introspectResponse.data.result.valid
+        ) {
           // Nếu token hợp lệ, lấy thông tin người dùng
           const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
-          const userInfoResponse = await axios.post(userInfoEndpoint, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
+          const userInfoResponse = await axios.post(
+            userInfoEndpoint,
+            {},
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },
+          );
 
           if (userInfoResponse.data.code === 200) {
             const userData = userInfoResponse.data.result;
@@ -51,9 +69,11 @@ const SignIn = () => {
           Alert.alert("Error", "Invalid token.");
         }
       } else {
-        Alert.alert("Error", "Authentication failed. Please check your email and password.");
+        Alert.alert(
+          "Error",
+          "Authentication failed. Please check your email and password.",
+        );
       }
-
     } catch (error) {
       console.error("SignIn error:", error);
       Alert.alert("Error", "Network error or unexpected response.");
@@ -63,29 +83,33 @@ const SignIn = () => {
   };
 
   const handleSignUp = () => {
-    router.push('/Register_Email');
+    router.push("/Register_Email");
   };
 
   const handleFacebookLogin = () => {
-    Alert.alert('', 'This feature will be updated later');
+    Alert.alert("", "This feature will be updated later");
   };
 
   const handleTogglePassword = () => {
-    setIsPasswordVisible(prevState => !prevState);
+    setIsPasswordVisible((prevState) => !prevState);
   };
 
   return (
     <View className="w-full h-full flex justify-center items-center bg-white">
       {/* Image */}
       <View className="w-80 h-auto mb-10">
-        <Image className="w-full h-20" source={images.logo_text} resizeMode='contain' />
+        <Image
+          className="w-full h-20"
+          source={images.logo_text}
+          resizeMode="contain"
+        />
       </View>
 
       {/* Email field */}
       <TextInput
         className="enabled:hover:border-gray-40 border py-2 px-4 w-96 hover:shadow mb-3 rounded-2xl drop-shadow-2xl"
         onChangeText={setEmail}
-        placeholder='Phone number, username or email address'
+        placeholder="Phone number, username or email address"
         value={email}
       />
       {/* Password field */}
@@ -93,18 +117,30 @@ const SignIn = () => {
         <TextInput
           className="enabled:hover:border-gray-40 border py-2 px-4 w-full hover:shadow mb-3 rounded-2xl"
           onChangeText={setPassword}
-          placeholder='Password'
+          placeholder="Password"
           value={password}
           secureTextEntry={!isPasswordVisible}
         />
-        <TouchableOpacity className="absolute right-0 top-1/2 -translate-y-4" onPress={handleTogglePassword}>
-          <Image className="h-5" source={isPasswordVisible ? images.icon_show : images.icon_hide} resizeMode='contain' />
+        <TouchableOpacity
+          className="absolute right-0 top-1/2 -translate-y-4"
+          onPress={handleTogglePassword}
+        >
+          <Image
+            className="h-5"
+            source={isPasswordVisible ? images.icon_show : images.icon_hide}
+            resizeMode="contain"
+          />
         </TouchableOpacity>
       </View>
 
       {/* Forgot password redirect */}
-      <TouchableOpacity className="w-96 mb-3" onPress={() => Alert.alert("Feature not implemented")}>
-        <Text className="text-blue-600 text-right drop-shadow-md font-medium">Forgotten password?</Text>
+      <TouchableOpacity
+        className="w-96 mb-3"
+        onPress={() => Alert.alert("Feature not implemented")}
+      >
+        <Text className="text-blue-600 text-right drop-shadow-md font-medium">
+          Forgotten password?
+        </Text>
       </TouchableOpacity>
 
       {/* Log in button */}
@@ -116,7 +152,9 @@ const SignIn = () => {
         {loading ? (
           <ActivityIndicator size="small" color="#ffffff" />
         ) : (
-          <Text className="text-center text-xl font-medium text-white">Log in</Text>
+          <Text className="text-center text-xl font-medium text-white">
+            Log in
+          </Text>
         )}
       </TouchableOpacity>
 
@@ -126,9 +164,14 @@ const SignIn = () => {
       </View>
 
       {/* Log in with Facebook account */}
-      <TouchableOpacity className="flex flex-row justify-items-center items-center" onPress={handleFacebookLogin}>
-        <Image className="h-6" source={images.icon_fb} resizeMode='contain' />
-        <Text className="text-base text-blue-600 font-medium">Log in with Facebook</Text>
+      <TouchableOpacity
+        className="flex flex-row justify-items-center items-center"
+        onPress={handleFacebookLogin}
+      >
+        <Image className="h-6" source={images.icon_fb} resizeMode="contain" />
+        <Text className="text-base text-blue-600 font-medium">
+          Log in with Facebook
+        </Text>
       </TouchableOpacity>
 
       {/* Sign up redirect */}

@@ -24,7 +24,7 @@ const Search = () => {
   const [isSearchUser, setIsSearchUser] = useState(true);
   const [isSearchPost, setIsSearchPost] = useState(false);
   const [content, setContent] = useState('');
-  const {tokenContext} = useContext(AuthContext);
+  const {tokenContext, idContext} = useContext(AuthContext);
   const navigation = useNavigation();
   const [isCameraOpen, setIsCameraOpen] = useState(false);
 
@@ -32,9 +32,12 @@ const Search = () => {
     try {
       console.log('Token: ', tokenContext);
       const endpoint = ENDPOINTS.SEARCH.FIND_USERNAME;
-      const response = await axios.get(endpoint + '?content=' + content, {
-        headers: {Authorization: `Bearer ${tokenContext}`},
-      });
+      const response = await axios.get(
+        endpoint + '?content=' + content + '&id=' + idContext,
+        {
+          headers: {Authorization: `Bearer ${tokenContext}`},
+        },
+      );
       if (response.data.code === 200) {
         setUsers(response.data.result);
         console.log(users);
@@ -106,8 +109,9 @@ const Search = () => {
       </TouchableOpacity>
     );
   };
-  // Open camera
+
   const onSuccess = e => {
+    setIsCameraOpen(false);
     Linking.openURL(e.data).catch(err => console.log('Scan error: ', err));
   };
 
@@ -132,7 +136,7 @@ const Search = () => {
           style={styles.searchInput}
         />
         <TouchableOpacity onPress={openCamera} style={styles.cameraButton}>
-          <Icon name="camera-alt" size={24} color="#000" />
+          <Text style={{color: '#000'}}>C</Text>
         </TouchableOpacity>
       </View>
 
@@ -165,6 +169,7 @@ const Search = () => {
       <Modal visible={isCameraOpen} animationType="slide">
         <QRCodeScanner
           onRead={onSuccess}
+          showMarker={true}
           topContent={<Text style={styles.cameraText}>Quét mã QR</Text>}
           bottomContent={
             <TouchableOpacity
@@ -271,10 +276,6 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     marginTop: 20,
-  },
-  cameraButton: {
-    marginLeft: 10,
-    padding: 5,
   },
   cameraText: {
     fontSize: 16,

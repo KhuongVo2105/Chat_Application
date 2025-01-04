@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/search")
@@ -19,11 +22,17 @@ public class SearchController {
     UserService userService;
     PostService postService;
     @GetMapping("/username")
-    public ApiResponse<List<UserResponse>> searchByUsername(@RequestParam String content) {
-        List<UserResponse> userList =userService.findAllByUsername(content);
+    public ApiResponse<List<UserResponse>> searchByUsername(@RequestParam String content, @RequestParam String id) {
+        if (content.isEmpty())
+            return ApiResponse.<List<UserResponse>>builder()
+                    .code(200)
+                    .message("Content is empty")
+                    .result(new ArrayList<UserResponse>()).build();
+        UUID uuid = UUID.fromString(id);
+        List<UserResponse> userList =userService.findAllByUsername(content, uuid);
         if (userList.isEmpty()) {
             return ApiResponse.<List<UserResponse>>builder()
-                    .code(404)
+                    .code(200)
                     .message("User not found")
                     .result(userList).build();
         }

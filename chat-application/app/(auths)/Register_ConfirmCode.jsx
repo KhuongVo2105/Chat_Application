@@ -1,11 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
-import axios from 'axios';
+import React, { useContext, useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
+import axios from "axios";
 import ENDPOINTS from "../../constants/endpoints";
-import { AuthContext } from '../../constants/AuthContext';
+import { AuthContext } from "../../constants/AuthContext";
 
 const RegisterConfirmCode = ({ navigation, route }) => {
-  const [confirmCode, setConfirmCode] = useState('');
+  const [confirmCode, setConfirmCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [isResendEnabled, setIsResendEnabled] = useState(false);
   const [countdown, setCountdown] = useState(60);
@@ -13,7 +13,7 @@ const RegisterConfirmCode = ({ navigation, route }) => {
   const { emailContext, setEmailContext } = useContext(AuthContext); // Sử dụng context
 
   useEffect(() => {
-    startCountdown();  // Bắt đầu đếm ngược khi component được mount
+    startCountdown(); // Bắt đầu đếm ngược khi component được mount
   }, [route.params]);
 
   const handleRegisterCode = async () => {
@@ -21,20 +21,22 @@ const RegisterConfirmCode = ({ navigation, route }) => {
 
     try {
       const endpoint = ENDPOINTS.OTP.VERIFY_OTP;
-      console.log(`Verifying OTP at ${endpoint} with email: ${emailContext} and OTP: ${confirmCode}`);
+      console.log(
+        `Verifying OTP at ${endpoint} with email: ${emailContext} and OTP: ${confirmCode}`,
+      );
 
       const response = await axios.get(endpoint, {
-        params: { otp: confirmCode, email: emailContext }
+        params: { otp: confirmCode, email: emailContext },
       });
 
       if (response.data && response.data.result) {
         Alert.alert("Success", "OTP verified successfully.");
-        navigation.navigate('Register_CreatePasswd');  // Điều hướng đến trang tạo mật khẩu
+        navigation.navigate("Register_CreatePasswd"); // Điều hướng đến trang tạo mật khẩu
       } else {
         Alert.alert("Error", "Invalid OTP or email.");
       }
     } catch (error) {
-      console.log('Error verifying OTP:', error);
+      console.log("Error verifying OTP:", error);
       Alert.alert("Error", "Failed to verify OTP. Please try again later.");
     } finally {
       setLoading(false);
@@ -43,7 +45,9 @@ const RegisterConfirmCode = ({ navigation, route }) => {
 
   const handleResendCode = async () => {
     if (!isResendEnabled) {
-      Alert.alert(`Please wait ${countdown} seconds before resending the code.`);
+      Alert.alert(
+        `Please wait ${countdown} seconds before resending the code.`,
+      );
       return;
     }
 
@@ -51,19 +55,21 @@ const RegisterConfirmCode = ({ navigation, route }) => {
 
     try {
       const endpoint = ENDPOINTS.OTP.SEND_OTP;
-      console.log(`Sending OTP request to ${endpoint} with email: ${emailContext}`);
+      console.log(
+        `Sending OTP request to ${endpoint} with email: ${emailContext}`,
+      );
 
       const response = await axios.post(endpoint, { email: emailContext });
 
       if (response.data && response.data.result) {
-        Alert.alert('Success', 'OTP sent successfully to your email.');
-        startCountdown();  // Bắt đầu lại đếm ngược sau khi gửi thành công
+        Alert.alert("Success", "OTP sent successfully to your email.");
+        startCountdown(); // Bắt đầu lại đếm ngược sau khi gửi thành công
       } else {
-        Alert.alert('Error', 'No response data received.');
+        Alert.alert("Error", "No response data received.");
       }
     } catch (error) {
-      console.error('Error sending OTP:', error);
-      Alert.alert('Error', 'Failed to send OTP. Please try again later.');
+      console.error("Error sending OTP:", error);
+      Alert.alert("Error", "Failed to send OTP. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -87,13 +93,18 @@ const RegisterConfirmCode = ({ navigation, route }) => {
   return (
     <View className="w-full h-full flex items-center bg-white">
       <View className="w-96 mt-3">
-        <Text className="text-3xl font-semibold mb-1">Enter the confirmation code</Text>
-        <Text className="text-base mb-7">To confirm your account, enter the 6-digit code we sent to {emailContext}.</Text>
+        <Text className="text-3xl font-semibold mb-1">
+          Enter the confirmation code
+        </Text>
+        <Text className="text-base mb-7">
+          To confirm your account, enter the 6-digit code we sent to{" "}
+          {emailContext}.
+        </Text>
 
         <TextInput
           className="enabled:hover:border-gray-40 border py-2 px-4 w-96 hover:shadow mb-5 rounded-2xl drop-shadow-2xl"
           onChangeText={setConfirmCode}
-          placeholder='Confirmation code'
+          placeholder="Confirmation code"
           value={confirmCode}
         />
 
@@ -102,7 +113,9 @@ const RegisterConfirmCode = ({ navigation, route }) => {
           onPress={handleRegisterCode}
           disabled={loading}
         >
-          <Text className="text-center text-lg font-medium text-white">{loading ? 'Verifying...' : 'Next'}</Text>
+          <Text className="text-center text-lg font-medium text-white">
+            {loading ? "Verifying..." : "Next"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -111,7 +124,9 @@ const RegisterConfirmCode = ({ navigation, route }) => {
           disabled={!isResendEnabled}
         >
           <Text className="text-center text-lg font-medium text-gray-700">
-            {isResendEnabled ? "I didn't get the code" : `I didn't get the code (${countdown})`}
+            {isResendEnabled
+              ? "I didn't get the code"
+              : `I didn't get the code (${countdown})`}
           </Text>
         </TouchableOpacity>
       </View>

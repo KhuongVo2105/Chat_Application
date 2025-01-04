@@ -8,9 +8,9 @@ import Search from './search/Search';
 import Notification from './Notification';
 import Header from './Header';
 import Profile from './profile_detail/Profile';
+import {AuthContext} from '../../context/AuthContext';
 
 const Tab = createBottomTabNavigator();
-
 const TabsLayout = () => {
   return (
     <Tab.Navigator

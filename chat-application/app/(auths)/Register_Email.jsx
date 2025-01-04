@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
-import axios from 'axios';
+import React, { useContext, useState } from "react";
+import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
+import axios from "axios";
 import ENDPOINTS from "../../constants/endpoints";
-import { AuthContext } from '../../constants/AuthContext';
+import { AuthContext } from "../../constants/AuthContext";
 
 const RegisterEmail = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { emailContext, setEmailContext } = useContext(AuthContext); // Sử dụng context
@@ -13,12 +13,18 @@ const RegisterEmail = ({ navigation }) => {
   const handleCheckFormat = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (email.trim() === '') {
-      Alert.alert('Error', 'Email field cannot be left blank. Please enter your email.');
+    if (email.trim() === "") {
+      Alert.alert(
+        "Error",
+        "Email field cannot be left blank. Please enter your email.",
+      );
       return false;
     }
     if (!emailRegex.test(email)) {
-      Alert.alert('Error', 'The email you entered is not valid. Please provide a valid email address.');
+      Alert.alert(
+        "Error",
+        "The email you entered is not valid. Please provide a valid email address.",
+      );
       return false;
     }
 
@@ -37,9 +43,12 @@ const RegisterEmail = ({ navigation }) => {
 
     // Check network connectivity
     try {
-      await axios.get('https://www.google.com');
+      await axios.get("https://www.google.com");
     } catch (error) {
-      Alert.alert('Error', 'Network error. Please check your internet connection.');
+      Alert.alert(
+        "Error",
+        "Network error. Please check your internet connection.",
+      );
       setLoading(false);
       return;
     }
@@ -53,16 +62,14 @@ const RegisterEmail = ({ navigation }) => {
 
       // Assuming success if response code is 200
       if (response.data && response.data.code === 200 && response.data.result) {
-        
         // update emailContext when reponse is successfully
-        setEmailContext(email)
+        setEmailContext(email);
 
-        Alert.alert('Success', 'OTP sent successfully to your email.');
-        navigation.navigate('Register_ConfirmCode');
+        Alert.alert("Success", "OTP sent successfully to your email.");
+        navigation.navigate("Register_ConfirmCode");
       } else {
-        Alert.alert('Error', 'Unexpected response.');
+        Alert.alert("Error", "Unexpected response.");
       }
-
     } catch (error) {
       setLoading(false);
 
@@ -73,16 +80,19 @@ const RegisterEmail = ({ navigation }) => {
         // Switch case for handling specific error codes from the response data
         switch (errorCode) {
           case 1022: // EMAIL_EXISTED
-            Alert.alert('Error', 'Email already exists. Please use a different email.');
+            Alert.alert(
+              "Error",
+              "Email already exists. Please use a different email.",
+            );
             break;
           default:
-            Alert.alert('Error', 'An unexpected error occurred.');
+            Alert.alert("Error", "An unexpected error occurred.");
         }
 
-        console.error('Error details:', error.response.data);
+        console.error("Error details:", error.response.data);
       } else {
-        Alert.alert('Error', 'Failed to send OTP. Please try again later.');
-        console.error('Error message:', error.message);
+        Alert.alert("Error", "Failed to send OTP. Please try again later.");
+        console.error("Error message:", error.message);
       }
     }
   };
@@ -91,14 +101,17 @@ const RegisterEmail = ({ navigation }) => {
     <View className="w-full h-full flex items-center bg-white">
       <View className="w-96 mt-3">
         <Text className="text-3xl font-semibold mb-1">What's your email?</Text>
-        <Text className="text-base mb-7">Enter the email where you can be contacted. No one will see this on your profile.</Text>
+        <Text className="text-base mb-7">
+          Enter the email where you can be contacted. No one will see this on
+          your profile.
+        </Text>
 
         {/* Email field */}
         <TextInput
           className="enabled:hover:border-gray-40 border py-2 px-4 w-96 hover:shadow mb-4 rounded-2xl drop-shadow-2xl"
           onChangeText={setEmail}
           placeholder="Email"
-          value={emailContext? emailContext: email}
+          value={emailContext ? emailContext : email}
         />
 
         {/* Send OTP message button */}
@@ -108,7 +121,7 @@ const RegisterEmail = ({ navigation }) => {
           disabled={loading}
         >
           <Text className="text-center text-xl font-medium text-white">
-            {loading ? 'Sending...' : 'Next'}
+            {loading ? "Sending..." : "Next"}
           </Text>
         </TouchableOpacity>
       </View>

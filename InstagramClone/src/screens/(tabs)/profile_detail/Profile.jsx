@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../../../context/AuthContext';
 import ProfileScreen from './ProfileScreen';
 import {useRoute} from '@react-navigation/native';
-import {loadUserDetails} from '../../(conversations)/ConversationsHelper';
 import {View, ActivityIndicator} from 'react-native';
 import ENDPOINTS from '../../../config/endpoints';
 import axios from 'axios';
@@ -12,16 +11,19 @@ const Profile = () => {
   const route = useRoute();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const {userId} = route.params || {userId: idContext};
+  const [userId, setUserId] = useState('');
   useEffect(() => {
+    const newUserId = route.params?.userId || idContext;
+    console.log('newUserId ', newUserId);
+    if (newUserId !== userId) {
+      setUserId(newUserId);
+      setUser(null);
+      setLoading(false);
+    }
+  }, [route.params?.userId, idContext, userId]);
+  useEffect(() => {
+    if (!userId) return;
     const fetchUserById = async () => {
-      // const response = await loadUserDetails({tokenContext, userId});
-      // if (response.data) {
-      //   setUser(response.data);
-      //   setLoading(true);
-      // } else {
-      //   console.log(response.error);
-      // }
       const endpoint = `${ENDPOINTS.USER.GET_USER_PROFILE}/${userId}`;
       try {
         const response = await axios.get(endpoint, {
@@ -36,7 +38,8 @@ const Profile = () => {
       }
     };
     fetchUserById();
-  }, [tokenContext, userId]);
+  }, [userId, tokenContext]);
+
   if (loading) {
     return <ProfileScreen userId={user.id} username={user.username} />;
   } else {
