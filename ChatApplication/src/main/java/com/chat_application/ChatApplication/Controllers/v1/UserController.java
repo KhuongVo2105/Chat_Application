@@ -43,9 +43,8 @@ public class UserController {
     }
 
     @PostMapping("/updateAvat")
-    public ResponseEntity<String> updateProfilePicture(@RequestBody AvatUserReq req) {
-        MultipartFile file = req.getFile();
-
+    public ResponseEntity<String> updateProfilePicture(@RequestParam("file") MultipartFile file,
+                                                       @RequestParam("username") String username) {
         // Kiểm tra xem file có rỗng hay không
         if (file == null || file.isEmpty()) {
             return new ResponseEntity<>("File is empty", HttpStatus.BAD_REQUEST);
@@ -57,8 +56,8 @@ public class UserController {
         }
 
         AvatUserReq avatUserReq = AvatUserReq.builder()
-                .username(req.getUsername())
-                .file(file)
+                .username(username)
+                .file(imageUrl)
                 .build();
 
         // Lưu imageUrl vào cơ sở dữ liệu của user với userId tương ứng
@@ -67,10 +66,7 @@ public class UserController {
         return new ResponseEntity<>("Profile picture updated", HttpStatus.OK);
     }
 
-
-
-    @PostMapping("/upload")
-    public String uploadImage(@RequestParam("file") MultipartFile file) {
+    public String uploadImage(MultipartFile file) {
         try {
             // Generate a random file name
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
