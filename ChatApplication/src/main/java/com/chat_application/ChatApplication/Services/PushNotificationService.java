@@ -64,4 +64,8 @@ public class PushNotificationService {
         return response.getStatusCode().is2xxSuccessful();
     }
 
+    public static void main(String[] args) {
+        PushNotificationService pushNotificationService = new PushNotificationService();
+        pushNotificationService.createUser("9836ce95-2337-4ce2-9f10-44ffba72eeada");
+    }
 }

@@ -27,8 +27,9 @@ public class SecurityConfig {
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
     private final String[] PUBLIC_ENDPOINTS_POST = {
-            "/v1/users", "/v1/auth/token", "/v1/auth/introspect", "/v1/verification/send-code"
-    }, PUBLIC_ENDPOINTS_GET = {"/v1/verification/verify"};
+            "/v1/users", "/v1/auth/token", "/v1/auth/introspect", "/v1/verification/send-code", "/v1/notify"
+    }, PUBLIC_ENDPOINTS_GET = {"/v1/verification/verify", "/v1/notify"};
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
