@@ -32,13 +32,20 @@ public class ChatController {
 //    }
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public void sendMessage1(@Payload ChatMessage message){
+    public void sendMessage1(@Payload ChatMessage message){     //status true: nhóm false: 1vs1
         System.out.println(message.toString());
         Message message1 = new Message();
         message1.setUserIdSend(UUID.fromString(message.getUserIdSend()));
-        message1.setUserIdTo(UUID.fromString(message.getUserIdTo()));
+        if(message.isType()) {
+            System.out.println("có zô group");
+            message1.setGroupChatId(Long.valueOf(message.getUserIdTo()));
+            message1.setUserIdTo(null);
+        }else {
+            message1.setUserIdTo(UUID.fromString(message.getUserIdTo()));
+        }
         message1.setContent(message.getContent());
         message1.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        System.out.println("có lưu gr");
         messageService.saveMessage(message1);
 //        //Giúp gưửi tin nhắn riêng
 //        String destination = "/user/" + message.getReceiverId() + "/queue/messages";

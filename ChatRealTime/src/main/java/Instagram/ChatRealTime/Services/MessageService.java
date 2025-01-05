@@ -4,21 +4,24 @@ import Instagram.ChatRealTime.Dto.Request.MessegeRequest;
 import Instagram.ChatRealTime.Repositories.MessageRepository;
 import Instagram.ChatRealTime.model.Message;
 import Instagram.ChatRealTime.model.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 public class MessageService {
     private final MessageRepository messageRepository;
+    private final GroupChatService groupChatService;
 
-    public MessageService(MessageRepository messageRepository) {
+    public MessageService(MessageRepository messageRepository, GroupChatService groupChatService) {
         this.messageRepository = messageRepository;
+        this.groupChatService = groupChatService;
     }
 
     //    Lấy tin nhắn cũ
@@ -37,8 +40,9 @@ public class MessageService {
             List<Message> messages = messageRepository.findLastMessagesBetweenUsers(userIdSend,item.getId());
             Message lastMessage = messages.get(0);
             System.out.println(lastMessage);
+
             boolean visible = false;
-            boolean status = true;
+            boolean status = false;
 
             LocalDateTime currentTime = LocalDateTime.now();
             LocalDateTime createdAt = lastMessage.getCreatedAt().toLocalDateTime();
@@ -63,7 +67,8 @@ public class MessageService {
             }
 
             if(lastMessage.getUserIdSend().equals(userIdSend)) visible = true;
-            if(lastMessage.isVisible()) status = false;
+            Timestamp timeCreateAt = lastMessage.getCreatedAt();
+            int type = 0;
             result.add(new MessegeRequest(
                     String.valueOf(item.getId()),
                     lastMessage.getContent(),
@@ -71,12 +76,20 @@ public class MessageService {
                     item.getAvatar(),
                     time,
                     visible,
-                    status
+                    status,
+                    timeCreateAt
             ));
-            System.out.println(result.toString());
+
         }
+        List<MessegeRequest> groupChatList = groupChatService.listGroup(userIdSend);
+        if(groupChatList!=null){
+            result.addAll(groupChatList);
+            result.sort(Comparator.comparing(MessegeRequest::getTimeCreateAt).reversed());
+        }
+
         return result;
     }
+
     public List<User> listFollowing(UUID userId){
         return messageRepository.listFollowers(userId);
     }
