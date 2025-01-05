@@ -1,11 +1,18 @@
 package com.chat_application.ChatApplication.Services.post;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.PostResponseWithoutUser;
 import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Entities.User;
+import com.chat_application.ChatApplication.Exceptions.AppException;
+import com.chat_application.ChatApplication.Exceptions.ErrorCode;
+import com.chat_application.ChatApplication.Mapper.PostMapper;
 import com.chat_application.ChatApplication.Repositories.PostRepository;
 import com.chat_application.ChatApplication.Repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,13 +20,17 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PostService implements IPostService {
-    private PostRepository repository;
-    @Autowired
-    private UserRepository userRepository;
+     PostRepository repository;
+
+     UserRepository userRepository;
+     PostMapper postMapper;
 
     @Override
     public ApiResponse<List<Post>> findAll() {
@@ -33,7 +44,7 @@ public class PostService implements IPostService {
 
     @Override
     public ApiResponse<List<Post>> findAllByOneUser(User user) {
-        List<Post> postList = repository.findByUser(user);
+        List<Post> postList = repository.findByUser_IdAndVisibleTrue(user.getId());
 
         return ApiResponse.<List<Post>>builder()
                 .message("Get list post successfully")
@@ -118,12 +129,20 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<Post> postOfUsername(String username) {
+    public List<PostResponseWithoutUser > postOfUsername(String username) {
         if (userRepository.findByUsername(username) == null) {
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("User  not found");
         }
-        Optional<User> user = userRepository.findByUsername(username);
-        return repository.findByUser_IdAndVisibleTrue(user.get().getId());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_EXISTED));
+
+        // Lấy danh sách Post
+        List<Post> posts = repository.findByUser_IdAndVisibleTrue(user.getId());
+
+        // Chuyển đổi List<Post> thành List<PostResponseWithoutUser >
+        return posts.stream()
+                .map(postMapper::toUserResponse) // Sử dụng phương thức ánh xạ
+                .collect(Collectors.toList()); // Thu thập kết quả vào List
     }
 
     @Override

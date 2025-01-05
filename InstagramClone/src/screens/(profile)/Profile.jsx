@@ -7,6 +7,8 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import { AuthContext } from "../../context/AuthContext";
 import UserSuggestion from '../../components/UserSuggestion'
 import ImageGrid from "../../components/ImageGrid";
+import ENDPOINTS from "../../config/endpoints";
+import { handleError } from "../../utils/handleError";
 
 
 export const User = {
@@ -66,77 +68,99 @@ const Profile = ({ navigation }) => {
     { id: '48', quantity: 1, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
     { id: '49', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
     { id: '50', quantity: 3, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
-];
+  ];
 
-  const { tokenContext } = useContext(AuthContext);
-
+  const { tokenContext, usernameContext } = useContext(AuthContext);
 
   const [selectedItem, setSelectedItem] = useState("table");
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const [numPost, setNumPost] = useState(0)
+  const [numFollowing, setNumFollowing] = useState(0)
+  const [numFollower, setNumFollower] = useState(0)
 
   const handleSelectItem = (item) => {
     setSelectedItem(item);
   };
 
-  // useEffect(() => {
-  //   const getUserInfo = async () => {
-  //     if (tokenContext == "" || tokenContext == null) {
-  //       Alert.alert("Error", "No user token found", [
-  //         {
-  //           text: "OK",
-  //           onPress: () => navigation.navigate("Login"), // Chuyển về trang Login nếu không có token
-  //         },
-  //       ]);
-  //       return;
-  //     }
-  //     try {
-  //       const endpoint = `${REACT_APP_API_BASE_URL}/v1/users/my-info`;
-  //       console.log(`getUser: ${endpoint}`);
-  //       console.log(`token: ${tokenContext}`);
-  //       const response = await axios.post(
-  //         endpoint,
-  //         {},
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${tokenContext}`, // Gửi token theo định dạng Bearer
-  //           },
-  //         }
-  //       );
+  async function fetchSuggestion() {
+    
+  }
 
-  //       // Kiểm tra mã code trong phản hồi
-  //       if (response.status === 200) {
-  //         // Token hợp lệ, xử lý dữ liệu người dùng
-  //         console.log("result : ", response.data.result);
-  //         const user = response.data.result;
-  //         setUserData({
-  //           username: user.username,
-  //           avatar: user?.avatar,
-  //         });
-  //       } else {
-  //         throw new Error("Failed to fetch user data");
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching user data", err);
-  //       Alert.alert("Error", "Failed to fetch user data. Please try again.", [
-  //         {
-  //           text: "OK",
-  //           onPress: () => navigation.navigate("Login"),
-  //         },
-  //       ]);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  async function fetchPost() {
+    const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME
+    console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
+    try {
+      const response = await axios.post(
+        endpoint,
+        { "username": usernameContext },
+        { headers: { Authorization: `Bearer ${tokenContext}` } }
+      )
+      const { result } = response.data;
+      console.log(result)
+      setNumPost(result.length)
+    } catch (error) {
+      handleError(error)
+    }
+  }
 
-  //   getUserInfo();
-  // }, [tokenContext, navigation]);
+  async function fetchMedia({postId}) {
+    
+  }
+
+  async function renderPost() {
+    
+  }
+
+  // const fetchFollower = async () => {
+  //   const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME
+  //   console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
+  //   try {
+  //     const response = await axios.post(
+  //       endpoint,
+  //       { "username": usernameContext },
+  //       { headers: { Authorization: `Bearer ${tokenContext}` } }
+  //     )
+  //     const { result } = response.data;
+  //     console.log(result)
+  //     setNumPost(result.length)
+  //   } catch (error) {
+  //     handleError(error)
+  //   }
+  // }
+
+  // const fetchFollowing = async ()=>{
+  //   const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME
+  //   console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
+  //   try {
+  //     const response = await axios.post(
+  //       endpoint,
+  //       { "username": usernameContext },
+  //       { headers: { Authorization: `Bearer ${tokenContext}` } }
+  //     )
+  //     const { result } = response.data;
+  //     console.log(result)
+  //     setNumPost(result.length)
+  //   } catch (error) {
+  //     handleError(error)
+  //   }
+  // }
+
+  useEffect(() => {
+    setLoading(true)
+    fetchPost(); // Gọi hàm fetchPost khi component được mount
+
+    setLoading(false)
+  }, []);
+
   return (
 
-    <ScrollView
-      className="bg-white"
-      horizontal={false}
-      showsVerticalScrollIndicator={false}>
+    <View>
+
+      <ScrollView
+        className="bg-white"
+        horizontal={false}
+        showsVerticalScrollIndicator={false}>
         <View className='w-96 mx-auto'>
           <View className='mb-3' style={styles.header}>
             {userData?.avatar == null ? (
@@ -152,15 +176,15 @@ const Profile = ({ navigation }) => {
             )}
             <View style={styles.statsContainer}>
               <View style={styles.stat}>
-                <Text style={styles.statNumber}>100</Text>
+                <Text style={styles.statNumber}>{numPost}</Text>
                 <Text style={styles.statLabel}>posts</Text>
               </View>
               <View style={styles.stat}>
-                <Text style={styles.statNumber}>200</Text>
+                <Text style={styles.statNumber}>{numFollower}</Text>
                 <Text style={styles.statLabel}>followers</Text>
               </View>
               <View style={styles.stat}>
-                <Text style={styles.statNumber}>180</Text>
+                <Text style={styles.statNumber}>{numFollowing}</Text>
                 <Text style={styles.statLabel}>following</Text>
               </View>
             </View>
@@ -212,12 +236,12 @@ const Profile = ({ navigation }) => {
               </Pressable>
             </View>
           </View>
-
-          {/* Grid */}
-          <ImageGrid images={images} />
-
         </View>
-    </ScrollView>
+      </ScrollView>
+
+      {/* Grid */}
+      <ImageGrid images={images} />
+    </View>
   );
 }
 

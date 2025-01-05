@@ -45,6 +45,7 @@ public class UserService {
 
         // Mapper
         User user = userMapper.toUser(req);
+        user.setPrivacy(true);
         user.setStatus((byte) 1);
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setCreatedAt(Timestamp.from(Instant.now()));
@@ -102,18 +103,18 @@ public class UserService {
 
     public InfoUserResp updateInfoUser(InfoUserReq req) {
         try {
-            User user = userRepository.findByUsername(req.getUsername()).orElseThrow(() -> new Exception("User not found"));
-            user.setUsername(req.getNewUsername());
+            User user = userRepository.findById(req.getId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+            user.setUsername(req.getUsername());
             user.setPrivacy(req.isPrivacy());
             user.setUpdatedAt(Timestamp.from(Instant.now()));
             userRepository.save(user);
 
             return InfoUserResp.builder()
-                    .username(req.getNewUsername())
+                    .username(req.getUsername())
                     .privacy(user.isPrivacy())
                     .build();
         } catch (Exception e) {
-            throw new RuntimeException("User not exist");
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
     }
 

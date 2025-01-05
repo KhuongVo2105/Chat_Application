@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useLayoutEffect } from "react";
 import {
   View,
   Text,
@@ -14,36 +14,33 @@ import axios from "axios";
 import { launchImageLibrary } from 'react-native-image-picker';
 import ENDPOINTS from "../../config/endpoints";
 import { AuthContext } from "../../context/AuthContext";
-import { TextInput, useTheme } from 'react-native-paper';
+import { Dialog, Portal, Switch, TextInput, useTheme } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from 'react-native-vector-icons/AntDesign'
-
-export const User = {
-  username: "", // String
-  avatar: "",   // String
-  bio: ""       // String
-};
-
-export const UpdateUser = {
-  username: "",     // String
-  newUsername: "",  // String
-  privacy: 0        // Number (e.g., 0 or 1)
-};
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { handleError } from "../../utils/handleError";
 
 function EditProfile({ navigation }) {
   const theme = useTheme()
 
-  const [value, setValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
+  // Context
+  const { tokenContext,
+    idContext,
+    usernameContext, setUsernameContext,
+    privacyContext, setPrivacyContext
+  } = useContext(AuthContext);
 
-  const { tokenContext, usernameContext } = useContext(AuthContext);
-  const [loading, setLoading] = useState(true);
+  // Field user information
+  const [name, setName] = useState()
+  const [username, setUsername] = useState()
+  const [bio, setBio] = useState()
   const [userData, setUserData] = useState(null);
-  const [name, setName] = useState('Name')
-  const [username, setUsername] = useState('Username')
-  const [bio, setBio] = useState('')
-  const [updateUserData, setUpdateUserData] = useState(null);
+  const [privacy, setPrivacy] = useState(true)
+
+  // Other
+  const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [visibleDialog, setVisibleDialog] = useState(false)
 
   const selectImage = () => {
     const options = {
@@ -95,78 +92,70 @@ function EditProfile({ navigation }) {
   const handleUpdate = async () => {
     const endpoint = ENDPOINTS.USER.UPDATE_USER_PROFILE;
     console.log(`updateUser: ${endpoint}`);
-    const response = await axios.post(endpoint, updateUserData);
-    if (response.status === 200) {
-      console.log("result : ", response.data.username);
-      userData.username = response.data.username;
-      navigation.navigate("Profile");
-    } else {
-      Alert.alert("Error", "Update error");
-      throw new Error("Update error");
+    console.log(`id ${idContext}\tusername ${username}\tprivacy ${privacy}`)
+    try {
+      const response = await axios.post(
+        endpoint,
+        {
+          "id": idContext,
+          "username": username,
+          "privacy": privacy
+        },
+        { headers: { Authorization: `Bearer ${tokenContext}` } }
+      );
+
+      if (response.status === 200) {
+        const { result } = response.data
+
+        setUsernameContext(result.username)
+        setPrivacyContext(result.privacy)
+
+        setUsername(result.username)
+        setPrivacy(result.privacy)
+
+        Alert.alert("Success", "Your profile has been updated successfully!");
+      }
+    } catch (error) {
+      handleError(error)
     }
-  };
+  }
 
   const handleUploadAvatar = () => { };
 
   useEffect(() => {
-    const getUserInfo = async () => {
-      // Kiểm tra token có tồn tại không
-      if (!tokenContext) {
-        Alert.alert("Error", "No user token found", [
-          {
-            text: "OK",
-            onPress: () => navigation.navigate("Login"), // Chuyển về trang Login nếu không có token
-          },
-        ]);
-        return;
-      }
-      try {
-        const endpoint = ENDPOINTS.USER.MY_INFORMATION;
-        console.log(`getUser: ${endpoint}`);
-        console.log(`token: ${tokenContext}`);
-        const response = await axios.post(
-          endpoint,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${tokenContext}`, // Gửi token theo định dạng Bearer
-            },
-          }
-        );
+    setLoading(true)
 
-        // Kiểm tra mã code trong phản hồi
-        if (response.status === 200) {
-          // Token hợp lệ, xử lý dữ liệu người dùng
-          console.log("result : ", response.data.result);
-          const user = response.data.result;
-          setUserData({
-            username: user.username,
-            avatar: user?.avatar,
-            bio: user?.bio,
-          });
-          setUpdateUserData({
-            username: user.username,
-            newUsername: user?.username,
-            privacy: 0,
-          });
-        } else {
-          throw new Error("Failed to fetch user data");
-        }
-      } catch (err) {
-        console.error("Error fetching user data", err);
-        Alert.alert("Error", "Failed to fetch user data. Please try again.", [
-          {
-            text: "OK",
-            onPress: () => navigation.navigate("Login"),
-          },
-        ]);
-      } finally {
-        setLoading(false);
+    if (!tokenContext) navigation.goBack()
+    else {
+      if (usernameContext) {
+        console.log(`usernameContext: ${usernameContext}`)
+        setUsername(usernameContext);
       }
-    };
+      if (privacyContext) {
+        console.log(`privacyContext: ${privacyContext}`)
+        setPrivacy(privacyContext);
+      }
+    }
 
-    getUserInfo();
-  }, [tokenContext, navigation]);
+    setLoading(false);
+  }, [tokenContext]);
+
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Edit Profile',
+      headerLeft: () => (
+        <Pressable onPress={() => navigation.goBack()}>
+          <MaterialCommunityIcons name='arrow-left' size={24} />
+        </Pressable>
+      ),
+      headerRight: () => (
+        <Pressable onPress={() => { handleUpdate() }}>
+          <MaterialIcons name="done" size={24} color='blue' />
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <ScrollView
@@ -261,6 +250,19 @@ function EditProfile({ navigation }) {
               />
             )}
           /> */}
+
+          <Text className="border-b border-b-neutral-400 text-lg font-normal mb-2">Account privacy</Text>
+          <View className="flex flex-row items-center mb-2">
+            <Text className="w-1/2 text-base">Private account</Text>
+            <Switch className="w-1/2" value={privacy} onValueChange={() => setPrivacy(!privacy)} color={theme.colors.primary} />
+          </View>
+          <Text className="text-xs font-light mb-1">
+            When your account is public, your profile and posts can be seen by anyone, on or off Instagram, even if they don't have an Instagram account.
+          </Text>
+          <Text className="text-xs font-light mb-10">
+            When your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists. Certain info on your profile, like your profile picture and username, is visible to everyone on and off instagram.
+          </Text>
+
 
           <Pressable className="w-full p-2 border-b border-b-neutral-400">
             <Text className="text-base text-sky-500">Switch to professinal account</Text>

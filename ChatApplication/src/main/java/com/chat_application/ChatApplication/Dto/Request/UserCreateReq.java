@@ -22,6 +22,7 @@ public class UserCreateReq {
     @NotBlank(message = "PASSWORD_CANNOT_BE_BLANK")
     @Size(min = 6, message = "PASSWORD_INVALID")
     String password;
+    @NotBlank(message = "BIRTHDAY_CANNOT_BE_BLANK")
     @Past(message = "INVALID_DOB")
     LocalDate birthday;
 }
