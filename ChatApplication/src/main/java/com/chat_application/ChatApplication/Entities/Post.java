@@ -17,7 +17,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     boolean visible;
     String caption;
@@ -26,12 +26,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     User user;
-
     @PrePersist
     public void prePersist() {
         Date date = new Date();
-
-        // Convert Date to Timestamp
         Timestamp timestamp = new Timestamp(date.getTime());
 
         this.createdAt = timestamp;

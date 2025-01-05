@@ -19,6 +19,7 @@ import java.text.ParseException;
 @RequestMapping("/v1/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     AuthenticationService authService;
@@ -38,7 +39,6 @@ public class AuthController {
                 .result(authService.authenticate(loginRequest))
                 .build();
     }
-
 
     /**
      * This method handles the introspection of a given token to determine its validity.

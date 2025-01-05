@@ -2,6 +2,7 @@ package com.chat_application.ChatApplication.Services;
 
 import com.chat_application.ChatApplication.Dto.Request.RoleRequest;
 import com.chat_application.ChatApplication.Dto.Response.RoleResponse;
+import com.chat_application.ChatApplication.Entities.Role;
 import com.chat_application.ChatApplication.Mapper.RoleMapper;
 import com.chat_application.ChatApplication.Repositories.PermissionRepository;
 import com.chat_application.ChatApplication.Repositories.RoleRepository;
@@ -37,5 +38,9 @@ public class RoleService {
 
     public void delete(String role) {
         roleRepository.deleteById(role);
+    }
+
+    public Role findByName(String name) {
+        return roleRepository.findByName(name);
     }
 }

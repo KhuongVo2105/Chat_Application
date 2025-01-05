@@ -26,7 +26,6 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     Group group;
-
     @OneToOne
     User user;
 }

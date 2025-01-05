@@ -107,12 +107,31 @@ const IconUserProfile = props => {
   );
 };
 
+const IconUserProfileStatic = (props) => {
+    const { width, height, source, seen, containerStyles } = props
+
+    return (
+        <View className={`overflow-hidden flex flex-row justify-center items-center ${containerStyles}`}
+            style={{
+                width: width, height: height
+            }}>
+            {/* Hình ảnh chính (phía dưới) */}
+            <Image
+                className="absolute z-0 rounded-full"  // Đặt dưới cùng với z-0
+                style={{ width: '85%', height: '85%' }}
+                resizeMode="cover"
+                source={source}
+            />
+
+            {/* Khung viền PNG (phía trên) */}
+            <Image
+                className="w-full h-full justify-center items-center absolute z-10 rounded-full"  // Đặt trên cùng với z-10
+                source={seen != true ? images.story_unseen : images.story_seen}
+            />
+        </View>
+    )
+}
+
 // Xuất các component
-export {
-  IconHome,
-  IconSearch,
-  IconCreateNewPost,
-  IconHeart,
-  IconMessage,
-  IconUserProfile,
-};
+export { IconHome, IconSearch, IconCreateNewPost, IconHeart, IconMessage, IconUserProfile, IconUserProfileStatic };
+

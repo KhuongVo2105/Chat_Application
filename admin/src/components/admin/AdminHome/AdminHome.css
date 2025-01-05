@@ -1,0 +1,99 @@
+body{
+    overflow-y: scroll; /* Luôn hiển thị thanh cuộn dọc */
+}
+.container {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    min-height: 100vh;
+    overflow: hidden; /* Ẩn thanh cuộn của toàn bộ trang */
+}
+
+.sidebar {
+    width: 20%;
+    background-color: #009879;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    text-align: center;
+    color: white;
+    font-size: 25px;
+    font-weight: 700;
+    padding-bottom: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+}
+.sidebar ul li .Click {
+    background: #005f4c;
+    padding-left:20px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+.sidebar ul li a:hover {
+    background-color: #005f4c;
+    padding-left:20px;
+    border-radius: 8px;
+}
+
+.main-content {
+    width: 80%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar a {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    z-index: 100;
+    color: white;
+    font-size: 20px;
+}
+.navbar a:hover {
+    color: #005f4c;
+}
+.navbar {
+    background-color: #1edfb8;
+    color: white;
+    padding: 15px;
+    position: relative;
+}
+.navbar h1 {
+    color: #005f4c;
+    margin: auto;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 700;
+}
+.navbar p {
+    color: white;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.solid {
+    background: white;
+    height: 2px;
+    width: 100%;
+}

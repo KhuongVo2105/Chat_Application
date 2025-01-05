@@ -49,7 +49,6 @@ public class EmailService {
         if (emailExists) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
-
         // Tạo mới mã OTP và thời gian hết hạn
         int otp = generateVerificationCode();
         Date expiredAt = new Date(Instant.now().plus(5, ChronoUnit.MINUTES).toEpochMilli());

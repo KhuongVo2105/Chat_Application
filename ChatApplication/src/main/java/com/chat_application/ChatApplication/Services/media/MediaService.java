@@ -29,6 +29,24 @@ public class MediaService implements IMediaService {
     }
 
     @Override
+    public ApiResponse<List<List<Media>>> findAllByPost(List<Post> posts) {
+        System.out.println(posts);
+        List<List<Media>> res = new ArrayList<>();
+        for(Post post : posts){
+            List<Media> medias = repository.findByPost(post);
+            if(!medias.isEmpty()){
+                res.add(medias);
+            }
+        }
+
+        return ApiResponse.<List<List<Media>>>builder()
+                .code(200)
+                .message("Get list media successfully")
+                .result(res)
+                .build();
+    }
+
+    @Override
     public ApiResponse<List<Media>> add(List<Media> mediaList) {
         List<Media> mediaAdded = repository.saveAll(mediaList);
 
