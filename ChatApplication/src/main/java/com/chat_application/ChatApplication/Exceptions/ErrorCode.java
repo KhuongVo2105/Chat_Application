@@ -35,7 +35,7 @@ public enum ErrorCode {
     PASSWORD_EXISTED(1032, "Password is already in use. Please choose a different password.", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_EXISTED(1033, "Password not found. Please check your credentials.", HttpStatus.NOT_FOUND),
 
-    // Authentication and Authorization (code 104x)
+    // Authentication and Authorization (code 104x),
     UNAUTHENTICATED(1040, "Invalid email or password. Please try again.", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1041, "You do not have permission", HttpStatus.FORBIDDEN),
 
@@ -60,9 +60,12 @@ public enum ErrorCode {
     // Member groups (code 109x)
     MEMBER_NOT_EXISTED(1093, "The user is not a member of this group", HttpStatus.NOT_FOUND),
 
-    // Other (code >=3000)
+    // Birthday
+    BIRTHDAY_CANNOT_BE_BLANK(2000, "Birthday cannot be blank.", HttpStatus.BAD_REQUEST),
+
+    // Other (code >=3000),
     KEY_INVALID(3001, "Invalid key provided.", HttpStatus.BAD_REQUEST),
-    INVALID_DOB(3004, "Your age must be at least {min}.", HttpStatus.BAD_REQUEST),
+    INVALID_DOB(3004, "Your age must be at least {min}.", HttpStatus.BAD_REQUEST)
 
     ;
 

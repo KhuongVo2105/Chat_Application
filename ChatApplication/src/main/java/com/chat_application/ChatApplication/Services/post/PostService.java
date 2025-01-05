@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Service
 public class PostService implements IPostService {
+    @Autowired
     private PostRepository repository;
     @Autowired
     private UserRepository userRepository;

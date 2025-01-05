@@ -16,16 +16,16 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Follow {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false)
     User followerUser;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false)
-    User followingUser;
+    User followingUser; // Người mà follower đang theo dõi
 
     Timestamp createdAt;
 

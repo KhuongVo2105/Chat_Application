@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/updateInfo")
-    ResponseEntity<InfoUserResp> updateInfoUser(@RequestBody InfoUserReq req){
+    ResponseEntity<InfoUserResp> updateInfoUser(@RequestBody InfoUserReq req) {
         return ResponseEntity.ok(userService.updateInfoUser(req));
     }
 
@@ -122,7 +122,7 @@ public class UserController {
     }
 
     @PostMapping("/my-info")
-    ApiResponse<UserResponse> getMyInfo(){
+    ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder().result(userService.getMyInfo()).build();
     }
 
@@ -140,6 +140,7 @@ public class UserController {
     int alluserInMonth() {
         return userService.alluserInMonth();
     }
+
     @PostMapping("/alluserInDay")
     int alluserInDay() {
         return userService.alluserInDay();
@@ -149,4 +150,5 @@ public class UserController {
     void allUser(@RequestBody UsernameRequest request) {
         userService.lockAccount(request);
     }
+
 }

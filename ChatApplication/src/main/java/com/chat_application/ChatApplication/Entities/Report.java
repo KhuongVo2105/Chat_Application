@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Report {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     byte context;
@@ -26,7 +26,7 @@ public class Report {
     User reporter;
 
     @OneToOne
-    @JoinColumn(name = "reported_id",nullable = false)
+    @JoinColumn(name = "reported_id",nullable = true)
     User reported;
 
     @OneToOne

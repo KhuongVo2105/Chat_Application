@@ -10,6 +10,7 @@ import Dashboard from "./admin/Dashboard/Dashboard";
 import Unauthorized from "./admin/users/Unauthorized";
 import UserList from "./admin/users/UserList";
 import AdminRegister from "./admin/users/AdminRegister";
+import ReportBlog from "./admin/reportPost/ReportBlog";
 
 function RouterConfig() {
   return (
@@ -23,6 +24,7 @@ function RouterConfig() {
         <Route path="/admin" element={<AdminHome />}>
           <Route index element={<Dashboard />} />
           <Route path="blogs" element={<Blog />} />
+          <Route path="reportBlog" element={<ReportBlog />} />
           <Route path="blogDetail" element={<BlogForm />} />
           <Route path="blogDetail/:blogId" element={<BlogForm />} />
           <Route path="users" element={<UserList />} />
