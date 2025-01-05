@@ -192,3 +192,9 @@ vendor/
 
 # CircleCI
 .circleci/generated_config.yml
+
+/path
+ChatApplication/src/main/resources/firebase
+
+# Ignore CMake (C++) build files
+InstagramClone/android/app/.cxx/

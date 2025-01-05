@@ -13,6 +13,7 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GroupResponse {
+
     Group group;
     List<String> userIds;
 }
