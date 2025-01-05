@@ -111,6 +111,7 @@ node_modules
 *.log
 .nvm
 package-lock.json
+*.swp
 
 # OS X
 .DS_Store

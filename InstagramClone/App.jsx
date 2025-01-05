@@ -13,8 +13,6 @@ import { darkScheme } from './src/config/darkScheme';
 import { useColorScheme } from 'react-native';
 
 const App = () => {
-  return <RootLayout />;
-};
 
   const LightScheme = {
     ...MD3LightTheme,
