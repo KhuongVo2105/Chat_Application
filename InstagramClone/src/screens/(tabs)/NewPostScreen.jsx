@@ -55,26 +55,25 @@ const NewPostScreen = () => {
   };
 
   const handleCreatePost = async () => {
-    navigation.navigate('Home');
-    const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
-    const userInfoResponse = await axios.post(
-      userInfoEndpoint,
-      {},
-      {
-        headers: {Authorization: `Bearer ${tokenContext}`},
-      },
-    );
-    const user = userInfoResponse.data.result;
-
-    const newPost = {
-      caption: text,
-      user: {
-        id: user.id,
-      },
-    };
-
-    const endpoint = ENDPOINTS.POST.ADD;
     try {
+      navigation.navigate('Home');
+      const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
+      const userInfoResponse = await axios.post(
+        userInfoEndpoint,
+        {},
+        {
+          headers: {Authorization: `Bearer ${tokenContext}`},
+        },
+      );
+      const user = userInfoResponse.data.result;
+      const newPost = {
+        caption: text,
+        user: {
+          id: user.id,
+        },
+      };
+  
+      const endpoint = ENDPOINTS.POST.ADD;
       const introspectResponse = await axios.post(ENDPOINTS.AUTH.INTROSPECT, {
         token: tokenContext,
       });
