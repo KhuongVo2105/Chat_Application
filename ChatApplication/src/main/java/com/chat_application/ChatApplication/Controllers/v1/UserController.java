@@ -38,8 +38,10 @@ public class UserController {
     }
 
     @PostMapping("/updateInfo")
-    ResponseEntity<InfoUserResp> updateInfoUser(@RequestBody InfoUserReq req) {
-        return ResponseEntity.ok(userService.updateInfoUser(req));
+    ApiResponse<InfoUserResp> updateInfoUser(@RequestBody InfoUserReq req) {
+        return ApiResponse.<InfoUserResp>builder()
+                .result(userService.updateInfoUser(req))
+                .build();
     }
 
     @PostMapping("/updateAvat")

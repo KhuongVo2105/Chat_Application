@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,15 +9,19 @@ import Search from './Search';
 import Notification from './Notification';
 import Header from './Header';
 import ProfileLayout from '../(profile)/_layout';
+import { Avatar } from 'react-native-paper';
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 
 const TabsLayout = () => {
   return (
-    <Tab.Navigator initialRouteName='Home'
+    <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={{
         headerShown: true,
-        header: ({ navigation, route }) => <Header navigation={navigation} route={route} />,
+        header: ({navigation, route}) => (
+          <Header navigation={navigation} route={route} />
+        ),
         tabBarShowLabel: false,
         tabBarIconStyle: {
           size: 100,
@@ -43,13 +48,12 @@ const TabsLayout = () => {
           <Ionicons name="heart-outline" color={color} size={size} />
         )
       }} />
-      <Tab.Screen name='Profile' component={ProfileLayout} options={{
+      <Tab.Screen name='ProfileLayout' component={ProfileLayout} options={{
         tabBarIcon: () => (
-          <IconUserProfileStatic width={32} height={32} source={require('./../../assets/portaits/portait_1.jpg')} />
+          <Avatar.Image size={30} source={require('./../../assets/portaits/portait_1.jpg')} />
         ),
         headerShown: false
       }} />
-
     </Tab.Navigator>
   );
 };

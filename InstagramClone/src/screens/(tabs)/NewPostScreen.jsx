@@ -1,3 +1,4 @@
+
 import React, {useContext, useState} from 'react';
 import {
   View,
@@ -17,14 +18,14 @@ import ENDPOINTS from '../../config/endpoints';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import {VLCPlayer, VlCPlayerView} from 'react-native-vlc-media-player';
 import {AuthContext} from '../../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import Video from 'react-native-video';
 
 const NewPostScreen = () => {
   const [media, setMedia] = useState([]);
   const [text, setText] = useState('');
   const {tokenContext} = useContext(AuthContext);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const pickMedia = async () => {
     const options = {
@@ -49,32 +50,30 @@ const NewPostScreen = () => {
           height: asset.height,
         }));
 
-        setMedia([...media, ...selectedMedia]); 
+        setMedia([...media, ...selectedMedia]);
       }
     });
   };
 
   const handleCreatePost = async () => {
-    navigation.navigate('Home');
-    const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
-    const userInfoResponse = await axios.post(
-      userInfoEndpoint,
-      {},
-      {
-        headers: {Authorization: `Bearer ${tokenContext}`},
-      },
-    );
-    const user = userInfoResponse.data.result;
-
-    const newPost = {
-      caption: text,
-      user: {
-        id: user.id,
-      },
-    };
-
-    const endpoint = ENDPOINTS.POST.ADD;
     try {
+      const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
+      const userInfoResponse = await axios.post(
+        userInfoEndpoint,
+        {},
+        {
+          headers: {Authorization: `Bearer ${tokenContext}`},
+        },
+      );
+      const user = userInfoResponse.data.result;
+      const newPost = {
+        caption: text,
+        user: {
+          id: user.id,
+        },
+      };
+
+      const endpoint = ENDPOINTS.POST.ADD;
       const introspectResponse = await axios.post(ENDPOINTS.AUTH.INTROSPECT, {
         token: tokenContext,
       });
@@ -83,48 +82,55 @@ const NewPostScreen = () => {
         introspectResponse.data.code === 200 &&
         introspectResponse.data.result.valid
       ) {
+        console.log('prepare create new post');
+
         const responseCreateNewPost = await axios.post(endpoint, newPost, {
           headers: {Authorization: `Bearer ${tokenContext}`},
         });
 
         const postId = responseCreateNewPost.data.result.id;
         var newMedia = [];
+        console.log('success create new post');
 
-        var formData = new FormData();
-        media.forEach(values => {
-          formData.append('fileUpload', {
-            uri: values.uri,
-            type: values.type,
-            name: values.fileName,
+        if (media.length > 0) {
+          var formData = new FormData();
+          media.forEach(values => {
+            formData.append('fileUpload', {
+              uri: values.uri,
+              type: values.type,
+              name: values.fileName,
+            });
+            newMedia.push({
+              mediaUrl: values.uri,
+              post: {
+                id: postId,
+              },
+            });
           });
-          newMedia.push({
-            mediaUrl: values.uri,
-            post: {
-              id: postId,
+
+          // thêm ảnh vào db
+          await axios.post(ENDPOINTS.MEDIA.ADD, newMedia, {
+            headers: {Authorization: `Bearer ${tokenContext}`},
+          });
+          console.log('add media successfully in db');
+
+          // thêm ảnh vào cloudinary
+          await axios.post(ENDPOINTS.CLOUDINARY.ADD_MULTIPLE, formData, {
+            params: {
+              userId: user.id,
+              postId: postId,
+            },
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${tokenContext}`,
             },
           });
-        });
-
-        // thêm ảnh vào db
-        await axios.post(ENDPOINTS.MEDIA.ADD, newMedia, {
-          headers: {Authorization: `Bearer ${tokenContext}`},
-        });
-
-        // thêm ảnh vào cloudinary
-        await axios.post(ENDPOINTS.CLOUDINARY.ADD_MULTIPLE, formData, {
-          params: {
-            userId: user.id,
-            postId: postId,
-          },
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${tokenContext}`,
-          },
-        });
+        }
 
         Alert.alert('Đăng bài thành công');
-        setMedia([])
-        setText('')
+        setMedia([]);
+        setText('');
+        navigation.navigate('Home');
       } else {
         Alert.alert('Đăng bài thất bại');
       }
@@ -169,10 +175,10 @@ const NewPostScreen = () => {
                   key={index}
                   style={styles.selectedVideo}
                   source={{uri: values.uri}}
-                  controls={true}               
-                  resizeMode="contain"                    
-                  onBuffer={this.onBuffer}      
-                  onError={this.videoError}     
+                  controls={true}
+                  resizeMode="contain"
+                  onBuffer={this.onBuffer}
+                  onError={this.videoError}
                 />
               ) : null
             ) : null,

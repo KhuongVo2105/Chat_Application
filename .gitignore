@@ -196,5 +196,5 @@ vendor/
 /path
 ChatApplication/src/main/resources/firebase
 
-# Ignore CMake build files
-/android/app/.cxx
+# Ignore CMake (C++) build files
+InstagramClone/android/app/.cxx/
