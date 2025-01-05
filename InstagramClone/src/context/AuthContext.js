@@ -1,15 +1,14 @@
-import React, { createContext, useState } from 'react';
+import React, {createContext, useState} from 'react';
 
 // Tạo context
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-
-  const [tokenContext, setTokenContext] = useState('')
+export const AuthProvider = ({children}) => {
+  const [tokenContext, setTokenContext] = useState('');
 
   // user profile
-  const [idContext, setIdContext] = useState('')
-  const [usernameContext, setUsernameContext] = useState('')
+  const [idContext, setIdContext] = useState('');
+  const [usernameContext, setUsernameContext] = useState('');
   const [emailContext, setEmailContext] = useState('');
   const [createdAtContext, setCreatedAtContext] = useState()
   const [birthdayContext, setBirthdayContext] = useState()
@@ -35,5 +34,4 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-
 };

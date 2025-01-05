@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,14 +11,17 @@ import Header from './Header';
 import ProfileLayout from '../(profile)/_layout';
 import { Avatar } from 'react-native-paper';
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 
 const TabsLayout = () => {
   return (
-    <Tab.Navigator initialRouteName='Home'
+    <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={{
         headerShown: true,
-        header: ({ navigation, route }) => <Header navigation={navigation} route={route} />,
+        header: ({navigation, route}) => (
+          <Header navigation={navigation} route={route} />
+        ),
         tabBarShowLabel: false,
         tabBarIconStyle: {
           size: 100,
@@ -50,7 +54,6 @@ const TabsLayout = () => {
         ),
         headerShown: false
       }} />
-
     </Tab.Navigator>
   );
 };

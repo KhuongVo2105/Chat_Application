@@ -11,9 +11,9 @@ import {
   FlatList,
 } from 'react-native';
 import images from '../../config/images';
-import { useState, useEffect } from 'react';
-import { IconUserProfile } from '../../components/IconComponents';
-import { AuthContext } from '../../context/AuthContext';
+import {useState, useEffect} from 'react';
+import {IconUserProfile} from '../../components/IconComponents';
+import {AuthContext} from '../../context/AuthContext';
 import ENDPOINTS from '../../config/endpoints';
 import axios from 'axios';
 import Modal from 'react-native-modal';
@@ -21,7 +21,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import Video from 'react-native-video';
 
-const Home = ({ navigation, route }) => {
+const Home = ({navigation, route}) => {
+//   const [loading, setLoading] = useState(false);
+//   const [yourComment, setYourComment] = useState();
   const {
     tokenContext,
     setIdContext,
@@ -79,6 +81,10 @@ const Home = ({ navigation, route }) => {
         setEmailContext(userInfo.email);
         setCreatedAtContext(userInfo.createdAt);
         setBirthdayContext(userInfo.birthday);
+//         setRoleContext({roles: userInfo.roles});
+
+//         console.log('User information loaded successfully.');
+
         setPrivacyContext(userInfo.privacy);
         setStatusContext(userInfo.status);
         setRoleContext({ roles: userInfo.roles });
