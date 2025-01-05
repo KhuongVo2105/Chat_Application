@@ -21,12 +21,14 @@ public class MessageController {
     public MessageController(MessageService messageService) {
         this.messageService = messageService;
     }
+
     @GetMapping("/history")
-    public List<Message> getMessageHistory(@RequestParam String userIdSend, @RequestParam String userIdTo){
+    public List<Message> getMessageHistory(@RequestParam String userIdSend, @RequestParam String userIdTo) {
         UUID userIdS = UUID.fromString(userIdSend);
         UUID userIdT = UUID.fromString(userIdTo);
-        return messageService.getMessageHistory(userIdS,userIdT);
+        return messageService.getMessageHistory(userIdS, userIdT);
     }
+
     //    // Lấy tin nhắn giữa hai người dùng
     @GetMapping("/{senderId}/{receiverId}")
     public ResponseEntity<?> getMessages(@PathVariable String senderId, @PathVariable String receiverId) {
@@ -44,7 +46,8 @@ public class MessageController {
             return ResponseEntity.badRequest().body("Invalid UUID format for senderId or receiverId");
         }
     }
-//Lấy ra danh sách bạn bè có nhắn tin
+
+    //Lấy ra danh sách bạn bè có nhắn tin
     @GetMapping("/messageList")
     public List<MessegeRequest> listContactFriend(@RequestParam String userIdSend) {
         try {
@@ -52,10 +55,11 @@ public class MessageController {
             return messageService.ListFriendMessage(userId);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid UUID format");
+        }
     }
-}
+
     @GetMapping("/following")
-    public List<User> listFollowing(@RequestParam String userId){
+    public List<User> listFollowing(@RequestParam String userId) {
         try {
             UUID idUser = UUID.fromString(userId);
             return messageService.listFollowing(idUser);
@@ -63,6 +67,7 @@ public class MessageController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid UUID format");
         }
     }
+
     //Hàm thu hồi
     @PostMapping("/recall")
     public ResponseEntity<String> recallMessage(@RequestBody MessageRecall message) {

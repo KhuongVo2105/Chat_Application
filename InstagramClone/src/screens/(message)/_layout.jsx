@@ -13,9 +13,9 @@ const ChatLayout = () => {
                 component={Message}
                 options={{
                     headerShown: true,
-                    header: ({ navigation, route }) => (
-                        <HeaderConversations navigation={navigation} route={route} />
-                    ),
+                    // header: ({ navigation, route }) => (
+                    //     <HeaderConversations navigation={navigation} route={route} />
+                    // ),
                 }}
             />
             <Stack.Screen
@@ -23,9 +23,9 @@ const ChatLayout = () => {
                 component={Chat}
                 options={{
                     headerShown: true,
-                    header: ({ navigation, route }) => (
-                        <HeaderConversation navigation={navigation} route={route} />
-                    ),
+                    // header: ({ navigation, route }) => (
+                    //     <HeaderConversation navigation={navigation} route={route} />
+                    // ),
                 }}
             />
         </Stack.Navigator>

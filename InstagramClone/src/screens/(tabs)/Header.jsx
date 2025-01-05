@@ -24,7 +24,8 @@ const Header = ({navigation, route}) => {
           className="mx-1 transform scale-x-[-1]"
           onPress={() => {
             console.log('Action', 'Go to conversation');
-            navigation.navigate('(conversations)');
+            // navigation.navigate('(conversations)');
+            navigation.navigate('(message)');
           }}>
           <Feaher name="message-circle" style={styles.conversations} />
         </Pressable>

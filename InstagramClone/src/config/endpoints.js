@@ -68,7 +68,7 @@ const ENDPOINTS = {
         SOCKJS:`${API_WEBSOCKET}/ws`,
         MESSAGE: `${API_WEBSOCKET}/messages`,
         MESSAGE_LIST : `${API_WEBSOCKET}/messages/messageList`,
-        FOLLOWING: `${API_WEBSOCKET}/messages/following`
+        FOLLOWING: `${API_BASE_URL}/follow/following`
     }
 }
 
