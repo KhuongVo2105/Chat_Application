@@ -3,6 +3,7 @@ package com.chat_application.ChatApplication.Controllers.v1;
 import com.chat_application.ChatApplication.Dto.Request.FollowRequest;
 import com.chat_application.ChatApplication.Dto.Request.UsernameRequest;
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.FollowingResponse;
 import com.chat_application.ChatApplication.Dto.Response.UserResponse;
 import com.chat_application.ChatApplication.Entities.Follow;
 import com.chat_application.ChatApplication.Entities.User;
@@ -41,7 +42,7 @@ public class FollowController {
     }
 
     @PostMapping("/following")
-    List<User> followeing(@RequestBody UsernameRequest request) {
+    List<FollowingResponse> followeing(@RequestBody UsernameRequest request) {
         return service.getFollowing(request);
     }
     @PostMapping("/suggestUser")

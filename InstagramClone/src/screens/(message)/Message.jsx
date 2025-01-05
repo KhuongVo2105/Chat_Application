@@ -72,7 +72,9 @@ const Message = () => {
   
           // Lưu dữ liệu vào state
           setListMessage(response1.data); // Lấy dữ liệu từ response1
+          console.log(`Danh sach tin nhan\n${response1.data}`)
           setListFollowing(response2.data); // Lấy dữ liệu từ response2
+          console.log(`Danh sach following\n${response2.data}`)
         } catch (error) {
           console.error('Error fetching APIs:', error);
         }

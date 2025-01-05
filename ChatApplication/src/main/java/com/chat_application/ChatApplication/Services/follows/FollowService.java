@@ -3,10 +3,12 @@ package com.chat_application.ChatApplication.Services.follows;
 import com.chat_application.ChatApplication.Dto.Request.FollowRequest;
 import com.chat_application.ChatApplication.Dto.Request.UsernameRequest;
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.FollowingResponse;
 import com.chat_application.ChatApplication.Dto.Response.UserResponse;
 import com.chat_application.ChatApplication.Entities.Follow;
 import com.chat_application.ChatApplication.Entities.Media;
 import com.chat_application.ChatApplication.Entities.User;
+import com.chat_application.ChatApplication.Mapper.UserMapper;
 import com.chat_application.ChatApplication.Repositories.FollowRepository;
 import com.chat_application.ChatApplication.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,15 +26,18 @@ import java.util.UUID;
 public class FollowService implements IFollowService {
     FollowRepository followRepository;
     UserRepository userRepository;
+    UserMapper userMapper;
 
     public List<User> getFollowers(UsernameRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
         return followRepository.findFollowers(user);
     }
 
-    public List<User> getFollowing(UsernameRequest request) {
+    public List<FollowingResponse> getFollowing(UsernameRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
-        return followRepository.findFollowingUsers(user);
+        return followRepository.findFollowingUsers(user).stream()
+                .map(userMapper::toFollowingResponse) // Sử dụng userMapper để chuyển đổi
+                .collect(Collectors.toList()); // Thu thập kết quả vào danh sách;
     }
 
     @Override
