@@ -547,7 +547,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   selectedImage: {
-    width: 393,
+    width: 415,
     height: 600,
     borderRadius: 5,
     shadowColor: 'black',
