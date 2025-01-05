@@ -30,6 +30,8 @@ const Home = ({ navigation, route }) => {
     setEmailContext,
     setCreatedAtContext,
     setBirthdayContext,
+    setPrivacyContext,
+    setStatusContext,
     setRoleContext,
   } = useContext(AuthContext);
 
@@ -77,6 +79,8 @@ const Home = ({ navigation, route }) => {
         setEmailContext(userInfo.email);
         setCreatedAtContext(userInfo.createdAt);
         setBirthdayContext(userInfo.birthday);
+        setPrivacyContext(userInfo.privacy);
+        setStatusContext(userInfo.status);
         setRoleContext({ roles: userInfo.roles });
 
         console.log('User information loaded successfully.');

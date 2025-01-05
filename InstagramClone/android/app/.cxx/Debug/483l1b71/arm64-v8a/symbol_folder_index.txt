@@ -1,1 +1,0 @@
-/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/build/intermediates/cxx/Debug/483l1b71/obj/arm64-v8a

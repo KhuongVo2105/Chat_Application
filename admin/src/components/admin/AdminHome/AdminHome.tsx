@@ -8,6 +8,7 @@ import { RootState } from "../../reduxStore/Store";
 import { FaBookOpen, FaComment, FaUserCog } from "react-icons/fa";
 import { logoutCurrentUser } from "../../reduxStore/UserSlice";
 import { FaUserPlus } from "react-icons/fa6";
+import axios from "axios";
 
 const AdminHome = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);

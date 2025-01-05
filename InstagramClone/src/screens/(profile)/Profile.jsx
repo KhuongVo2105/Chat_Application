@@ -7,6 +7,8 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import { AuthContext } from "../../context/AuthContext";
 import UserSuggestion from '../../components/UserSuggestion'
 import ImageGrid from "../../components/ImageGrid";
+import ENDPOINTS from "../../config/endpoints";
+import { handleError } from "../../utils/handleError";
 
 
 export const User = {
@@ -16,10 +18,10 @@ export const User = {
 
 const Profile = ({ navigation }) => {
   const images = [
-    { id: '1', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
-    { id: '2', quantity: 2, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
-    { id: '3', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
-    { id: '4', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '1', quantity: 1, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '2', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '3', quantity: 1, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '4', quantity: 10, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
     { id: '5', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '6', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '7', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
@@ -28,79 +30,137 @@ const Profile = ({ navigation }) => {
     { id: '10', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '11', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
     { id: '12', quantity: 1, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '13', quantity: 3, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '14', quantity: 4, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '15', quantity: 6, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '16', quantity: 7, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '17', quantity: 8, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '18', quantity: 9, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '19', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '20', quantity: 3, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '21', quantity: 4, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '22', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '23', quantity: 6, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '24', quantity: 7, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '25', quantity: 8, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '26', quantity: 9, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '27', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '28', quantity: 1, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '29', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '30', quantity: 3, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '31', quantity: 4, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '32', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '33', quantity: 6, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '34', quantity: 7, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '35', quantity: 8, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '36', quantity: 9, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '37', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '38', quantity: 1, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '39', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '40', quantity: 3, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '41', quantity: 4, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '42', quantity: 5, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '43', quantity: 6, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '44', quantity: 7, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '45', quantity: 8, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
+    { id: '46', quantity: 9, uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg' },
+    { id: '47', quantity: 10, uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg' },
+    { id: '48', quantity: 1, uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg' },
+    { id: '49', quantity: 2, uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg' },
+    { id: '50', quantity: 3, uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg' },
   ];
 
-  const { tokenContext } = useContext(AuthContext);
-
+  const { tokenContext, usernameContext } = useContext(AuthContext);
 
   const [selectedItem, setSelectedItem] = useState("table");
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const [numPost, setNumPost] = useState(0)
+  const [numFollowing, setNumFollowing] = useState(0)
+  const [numFollower, setNumFollower] = useState(0)
 
   const handleSelectItem = (item) => {
     setSelectedItem(item);
   };
 
-  // useEffect(() => {
-  //   const getUserInfo = async () => {
-  //     if (tokenContext == "" || tokenContext == null) {
-  //       Alert.alert("Error", "No user token found", [
-  //         {
-  //           text: "OK",
-  //           onPress: () => navigation.navigate("Login"), // Chuyển về trang Login nếu không có token
-  //         },
-  //       ]);
-  //       return;
-  //     }
-  //     try {
-  //       const endpoint = `${REACT_APP_API_BASE_URL}/v1/users/my-info`;
-  //       console.log(`getUser: ${endpoint}`);
-  //       console.log(`token: ${tokenContext}`);
-  //       const response = await axios.post(
-  //         endpoint,
-  //         {},
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${tokenContext}`, // Gửi token theo định dạng Bearer
-  //           },
-  //         }
-  //       );
+  async function fetchSuggestion() {
+    
+  }
 
-  //       // Kiểm tra mã code trong phản hồi
-  //       if (response.status === 200) {
-  //         // Token hợp lệ, xử lý dữ liệu người dùng
-  //         console.log("result : ", response.data.result);
-  //         const user = response.data.result;
-  //         setUserData({
-  //           username: user.username,
-  //           avatar: user?.avatar,
-  //         });
-  //       } else {
-  //         throw new Error("Failed to fetch user data");
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching user data", err);
-  //       Alert.alert("Error", "Failed to fetch user data. Please try again.", [
-  //         {
-  //           text: "OK",
-  //           onPress: () => navigation.navigate("Login"),
-  //         },
-  //       ]);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  async function fetchPost() {
+    const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME
+    console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
+    try {
+      const response = await axios.post(
+        endpoint,
+        { "username": usernameContext },
+        { headers: { Authorization: `Bearer ${tokenContext}` } }
+      )
+      const { result } = response.data;
+      console.log(result)
+      setNumPost(result.length)
+    } catch (error) {
+      handleError(error)
+    }
+  }
 
-  //   getUserInfo();
-  // }, [tokenContext, navigation]);
+  async function fetchMedia({postId}) {
+    
+  }
+
+  async function renderPost() {
+    
+  }
+
+  // const fetchFollower = async () => {
+  //   const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME
+  //   console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
+  //   try {
+  //     const response = await axios.post(
+  //       endpoint,
+  //       { "username": usernameContext },
+  //       { headers: { Authorization: `Bearer ${tokenContext}` } }
+  //     )
+  //     const { result } = response.data;
+  //     console.log(result)
+  //     setNumPost(result.length)
+  //   } catch (error) {
+  //     handleError(error)
+  //   }
+  // }
+
+  // const fetchFollowing = async ()=>{
+  //   const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME
+  //   console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
+  //   try {
+  //     const response = await axios.post(
+  //       endpoint,
+  //       { "username": usernameContext },
+  //       { headers: { Authorization: `Bearer ${tokenContext}` } }
+  //     )
+  //     const { result } = response.data;
+  //     console.log(result)
+  //     setNumPost(result.length)
+  //   } catch (error) {
+  //     handleError(error)
+  //   }
+  // }
+
+  useEffect(() => {
+    setLoading(true)
+    fetchPost(); // Gọi hàm fetchPost khi component được mount
+
+    setLoading(false)
+  }, []);
 
   return (
 
-    <ScrollView
-      className=""
-      horizontal={false}
-      showsVerticalScrollIndicator={false}>
-      <View className='bg-white'>
+    <View>
+
+      <ScrollView
+        className="bg-white"
+        horizontal={false}
+        showsVerticalScrollIndicator={false}>
         <View className='w-96 mx-auto'>
           <View className='mb-3' style={styles.header}>
             {userData?.avatar == null ? (
@@ -116,15 +176,15 @@ const Profile = ({ navigation }) => {
             )}
             <View style={styles.statsContainer}>
               <View style={styles.stat}>
-                <Text style={styles.statNumber}>100</Text>
+                <Text style={styles.statNumber}>{numPost}</Text>
                 <Text style={styles.statLabel}>posts</Text>
               </View>
               <View style={styles.stat}>
-                <Text style={styles.statNumber}>200</Text>
+                <Text style={styles.statNumber}>{numFollower}</Text>
                 <Text style={styles.statLabel}>followers</Text>
               </View>
               <View style={styles.stat}>
-                <Text style={styles.statNumber}>180</Text>
+                <Text style={styles.statNumber}>{numFollowing}</Text>
                 <Text style={styles.statLabel}>following</Text>
               </View>
             </View>
@@ -176,13 +236,12 @@ const Profile = ({ navigation }) => {
               </Pressable>
             </View>
           </View>
-
-          {/* Grid */}
-          <ImageGrid images={images} />
-
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+
+      {/* Grid */}
+      <ImageGrid images={images} />
+    </View>
   );
 }
 

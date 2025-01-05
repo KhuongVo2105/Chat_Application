@@ -1,6 +1,7 @@
 package com.chat_application.ChatApplication.Services.post;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.PostResponseWithoutUser;
 import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Entities.User;
 
@@ -15,6 +16,10 @@ public interface IPostService {
     ApiResponse<Post> updateCaption(int postId, String caption);
 
     ApiResponse<Post> updateVisible(int postId, boolean visible);
-    List<Post> postOfUsername(String username);
+    List<PostResponseWithoutUser> postOfUsername(String username);
     Post getPostById(int id);
+
+    int allPost();
+    int allPostInMonth();
+    int allPostInDay();
 }

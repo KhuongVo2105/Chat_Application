@@ -38,14 +38,15 @@ public class UserController {
     }
 
     @PostMapping("/updateInfo")
-    ResponseEntity<InfoUserResp> updateInfoUser(@RequestBody InfoUserReq req){
-        return ResponseEntity.ok(userService.updateInfoUser(req));
+    ApiResponse<InfoUserResp> updateInfoUser(@RequestBody InfoUserReq req) {
+        return ApiResponse.<InfoUserResp>builder()
+                .result(userService.updateInfoUser(req))
+                .build();
     }
 
     @PostMapping("/updateAvat")
-    public ResponseEntity<String> updateProfilePicture(@RequestBody AvatUserReq req) {
-        MultipartFile file = req.getFile();
-
+    public ResponseEntity<String> updateProfilePicture(@RequestParam("file") MultipartFile file,
+                                                       @RequestParam("username") String username) {
         // Kiểm tra xem file có rỗng hay không
         if (file == null || file.isEmpty()) {
             return new ResponseEntity<>("File is empty", HttpStatus.BAD_REQUEST);
@@ -57,8 +58,8 @@ public class UserController {
         }
 
         AvatUserReq avatUserReq = AvatUserReq.builder()
-                .username(req.getUsername())
-                .file(file)
+                .username(username)
+                .file(imageUrl)
                 .build();
 
         // Lưu imageUrl vào cơ sở dữ liệu của user với userId tương ứng
@@ -67,10 +68,7 @@ public class UserController {
         return new ResponseEntity<>("Profile picture updated", HttpStatus.OK);
     }
 
-
-
-    @PostMapping("/upload")
-    public String uploadImage(@RequestParam("file") MultipartFile file) {
+    public String uploadImage(MultipartFile file) {
         try {
             // Generate a random file name
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
@@ -126,7 +124,7 @@ public class UserController {
     }
 
     @PostMapping("/my-info")
-    ApiResponse<UserResponse> getMyInfo(){
+    ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder().result(userService.getMyInfo()).build();
     }
 
@@ -134,6 +132,22 @@ public class UserController {
     List<UserResponse> allUser() {
         return userService.allUser();
     }
+
+    @PostMapping("/alluserNum")
+    int alluserNum() {
+        return userService.alluserNum();
+    }
+
+    @PostMapping("/alluserInMonth")
+    int alluserInMonth() {
+        return userService.alluserInMonth();
+    }
+
+    @PostMapping("/alluserInDay")
+    int alluserInDay() {
+        return userService.alluserInDay();
+    }
+
     @PostMapping("/lockAccount")
     void allUser(@RequestBody UsernameRequest request) {
         userService.lockAccount(request);

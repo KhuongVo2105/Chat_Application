@@ -10,22 +10,20 @@ import {
   FaThumbsUp,
   FaUsers,
 } from "react-icons/fa";
-import {Link, useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {AiFillLike} from "react-icons/ai";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AiFillLike } from "react-icons/ai";
 
 const Dashboard = () => {
-  const [TotalBlog , setTotalBlog] = useState(0);
-  const [BlogInMonth,setBlogInMonth] = useState(0);
-  const [UserInMonth,setUserInMonth] = useState(0);
-  const [ContactInMonth,setContactInMonth] = useState(0);
-  const [BlogInDate,setBlogInDate] = useState(0);
-  const [UserInDate,setUserInDate] = useState(0);
-  const [TopBlog,setTopBlog] = useState([]);
-  const [countBlog,setCountBlog] = useState([]);
-  const [TopUser,setTopUser] = useState([]);
-
-
+  const [TotalBlog, setTotalBlog] = useState(0);
+  const [BlogInMonth, setBlogInMonth] = useState(0);
+  const [UserInMonth, setUserInMonth] = useState(0);
+  const [ContactInMonth, setContactInMonth] = useState(0);
+  const [BlogInDate, setBlogInDate] = useState(0);
+  const [UserInDate, setUserInDate] = useState(0);
+  const [TopBlog, setTopBlog] = useState([]);
+  const [countBlog, setCountBlog] = useState([]);
+  const [TopUser, setTopUser] = useState([]);
 
   const now = new Date();
 
@@ -34,75 +32,57 @@ const Dashboard = () => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return date.toLocaleDateString(undefined, options);
   };
-  // useEffect(() => {
-    
-  //   axios
-  //     .get("https://localhost:7125/DashBoard/TotalBlog")
-  //     .then((response) => {
-  //       setTotalBlog(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error: ", error);
-  //     });
+  useEffect(() => {
+    axios
+      .post("http://localhost:8080/chat-application/v1/post/allPost")
+      .then((response) => {
+        setTotalBlog(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
 
-  //   axios
-  //       .get("https://localhost:7125/DashBoard/BlogInMonth")
-  //       .then((response) => {
-  //         setBlogInMonth(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error: ", error);
-  //       });
-  //   axios
-  //       .get("https://localhost:7125/DashBoard/UserInMonth")
-  //       .then((response) => {
-  //         setUserInMonth(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error: ", error);
-  //       });
-  //   axios
-  //       .get("https://localhost:7125/DashBoard/ContactInMonth")
-  //       .then((response) => {
-  //         setContactInMonth(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error: ", error);
-  //       });
-  //   axios
-  //       .get("https://localhost:7125/DashBoard/BlogInDay")
-  //       .then((response) => {
-  //         setBlogInDate(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error: ", error);
-  //       });
-  //   axios
-  //       .get("https://localhost:7125/DashBoard/UserInDay")
-  //       .then((response) => {
-  //         setUserInDate(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error: ", error);
-  //       });
-  //   axios
-  //       .get("https://localhost:7125/DashBoard/TopBlog")
-  //       .then((response) => {
-  //         setTopBlog(response.data);
-  //         console.log(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error: ", error);
-  //       });
-  //   axios
-  //       .get("https://localhost:7125/DashBoard/TopUser")
-  //       .then((response) => {
-  //         setTopUser(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error: ", error);
-  //       });
-  // }, []);
+    axios
+      .post("http://localhost:8080/chat-application/v1/post/allPostInMonth")
+      .then((response) => {
+        setBlogInMonth(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+    axios
+      .post("http://localhost:8080/chat-application/v1/users/alluserNum")
+      .then((response) => {
+        setUserInMonth(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+    axios
+      .post("http://localhost:8080/chat-application/v1/users/alluserInMonth")
+      .then((response) => {
+        setContactInMonth(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+    axios
+        .post("http://localhost:8080/chat-application/v1/post/allPostInDay")
+        .then((response) => {
+          setBlogInDate(response.data);
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
+    axios
+        .post("http://localhost:8080/chat-application/v1/users/alluserInDay")
+        .then((response) => {
+          setUserInDate(response.data);
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -169,7 +149,9 @@ const Dashboard = () => {
                   </div>
                   <div className={styles.colStats}>
                     <div className={styles.numbers}>
-                      <p className={styles.cardCategory}>Tài khoản người dùng mới (tháng)</p>
+                      <p className={styles.cardCategory}>
+                        Tổng Tài khoản người dùng
+                      </p>
                       <h4 className={styles.cardTitle}>{UserInMonth}</h4>
                     </div>
                   </div>
@@ -192,7 +174,7 @@ const Dashboard = () => {
                   <div className={styles.colStats}>
                     <div className={styles.numbers}>
                       <p className={styles.cardCategory}>
-                        Tổng số liên hệ gửi về Admin (tháng)
+                        Tài khoản người dùng mới (tháng)
                       </p>
                       <h4 className={styles.cardTitle}>{ContactInMonth}</h4>
                     </div>
@@ -223,53 +205,6 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className={styles.body_table} style={{height:'400px'}}>
-
-        <div className={styles.table_container_left} >
-          <h2>Top 5 Bài Viết Yêu Thích Nhất</h2>
-          <table className={styles.styled_table}>
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tiêu Đề</th>
-              <th><AiFillLike /></th>
-            </tr>
-            </thead>
-            <tbody>
-            {TopBlog.map(blog => (
-                <tr className={styles.active_row}>
-                  <td>{blog.blog.id}</td>
-                  <td><Link to={`http://localhost:3000/detail/${blog.blog.id}`}>{blog.blog.title}</Link></td>
-                  <td>{blog.likeCount}</td>
-                </tr>
-            ))}
-            </tbody>
-          </table>
-        </div>
-        <div className={styles.table_container_right}>
-        <h2>Top 5 Người Dùng Tương Tác Nhiều Nhất</h2>
-          <table className={styles.styled_table}>
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>Họ và Tên</th>
-              <th>Email</th>
-              {/*<th>Số Điện Thoại</th>*/}
-            </tr>
-            </thead>
-            <tbody>
-            {TopUser.map(user => (
-                <tr className={styles.active_row}>
-                  <td>{user.id}</td>
-                  <td>{user.fullName}</td>
-                  <td>{user.email}</td>
-                  {/*<td>{user.phoneNumber}</td>*/}
-                </tr>
-            ))}
-            </tbody>
-          </table>
         </div>
       </div>
     </div>

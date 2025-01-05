@@ -12,5 +12,5 @@ import org.springframework.web.multipart.MultipartFile;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AvatUserReq {
     String username;
-    MultipartFile file; // Thêm thuộc tính để nhận tệp
+    String file; // Thêm thuộc tính để nhận tệp
 }
