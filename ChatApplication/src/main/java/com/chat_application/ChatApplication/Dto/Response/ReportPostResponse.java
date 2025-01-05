@@ -17,7 +17,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportPostResponse {
-    int id;
-    String context;
+    int id, reportedPostId;
+    byte context;
+    String reporterId, reporterUsername, caption;
     Timestamp createdAt;
 }

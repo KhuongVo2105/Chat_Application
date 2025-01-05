@@ -2,6 +2,7 @@ package com.chat_application.ChatApplication.Services;
 
 import com.chat_application.ChatApplication.Dto.Request.ReportPostRequest;
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.ReportPostResponse;
 import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Entities.Report;
 import com.chat_application.ChatApplication.Entities.User;
@@ -51,7 +52,17 @@ public class ReportPostService {
         }
     }
 
-    public List<Report> getReportPort() {
-        return reportPostRepository.findAll();
+    public List<ReportPostResponse> getReportPort() {
+        return reportPostRepository.findAll().stream().map(report -> {
+            return ReportPostResponse.builder()
+                    .id(report.getId())
+                    .context(report.getContext())
+                    .createdAt(report.getCreatedAt())
+                    .reporterId(String.valueOf(report.getReporter().getId()))
+                    .reporterUsername(String.valueOf(report.getReporter().getUsername()))
+                    .reportedPostId(report.getReportedPost().getId())
+                    .caption(report.getReportedPost().getCaption())
+                    .build();
+        }).toList();
     }
 }

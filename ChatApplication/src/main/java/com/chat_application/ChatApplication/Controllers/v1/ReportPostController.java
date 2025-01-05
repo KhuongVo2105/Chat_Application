@@ -3,6 +3,7 @@ package com.chat_application.ChatApplication.Controllers.v1;
 import com.chat_application.ChatApplication.Dto.Request.ReportPostRequest;
 import com.chat_application.ChatApplication.Dto.Request.UsernameRequest;
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.ReportPostResponse;
 import com.chat_application.ChatApplication.Dto.Response.UserResponse;
 import com.chat_application.ChatApplication.Entities.Follow;
 import com.chat_application.ChatApplication.Entities.Report;
@@ -22,7 +23,7 @@ public class ReportPostController {
     private ReportPostService reportService;
 
     @PostMapping("/getReportPort")
-    public List<ReportResp> getReportPort(){
+    public List<ReportPostResponse> getReportPort(){
         return reportService.getReportPort();
     }
 

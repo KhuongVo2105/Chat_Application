@@ -25,7 +25,7 @@ public class Report {
     @JoinColumn(name = "reporter_id", nullable = false)
     User reporter;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "reported_id",nullable = true)
     User reported;
 
