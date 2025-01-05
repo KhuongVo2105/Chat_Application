@@ -13,6 +13,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import DividerWithText from './DividerWithText';
 import {AuthContext} from '../../context/AuthContext';
+import ENDPOINTS from '../../config/endpoints';
 
 const Message = () => {
   const [userId, setUserId] = useState('3ec64a1e-19a6-424f-934d-689a2c73e39c');
@@ -31,10 +32,10 @@ const Message = () => {
           // Gọi hai API song song
           const [response1, response2] = await Promise.all([
             fetch(
-              `http://172.16.0.122:8080/messages/messageList?userIdSend=${userId}`, //Thay đổi user
+              `${ENDPOINTS.CHAT.MESSAGE_LIST}?userIdSend=${userId}`, //Thay đổi user
             ),
             fetch(
-              `http://172.16.0.122:8080/messages/following?userId=${userId}`, // Thay đổi user
+              `${ENDPOINTS.CHAT.FOLLOWING}?userId=${userId}`, // Thay đổi user
             ),
           ]);
 

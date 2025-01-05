@@ -74,7 +74,12 @@ public class FollowService implements IFollowService {
 
         // Chuyển đổi danh sách User thành UserResponse
         return users.stream()
-                .map(user -> UserResponse.builder().id(String.valueOf(user.getId())).username(user.getUsername()).avatar(user.getAvatar()).birthday(user.getBirthday()).build())
+                .map(user -> UserResponse.builder()
+                        .id(String.valueOf(user.getId()))
+                        .username(user.getUsername())
+                        .avatar(user.getAvatar())
+                        .birthday(user.getBirthday())
+                        .build())
                 .toList();
     }
 
@@ -92,7 +97,7 @@ public class FollowService implements IFollowService {
                 .followingUser(followingUser)
                 .build();
         Follow f = followRepository.findByFollowerUserAndFollowingUser(followerUser, followingUser);
-        if( f != null) {
+        if (f != null) {
             followRepository.delete(f);
             return false;
         }
