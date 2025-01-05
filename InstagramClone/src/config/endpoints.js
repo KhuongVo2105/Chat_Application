@@ -2,7 +2,8 @@
 const SERVER_ADDRESS = `172.16.0.195`;
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`;
 
-const API_BASE_URL = REACT_APP_API_BASE_URL;
+const API_BASE_URL  = REACT_APP_API_BASE_URL;
+const API_WEBSOCKET = `http:${SERVER_ADDRESS}:8800`
 
 const ENDPOINTS = {
   AUTH: {
@@ -66,5 +67,13 @@ const ENDPOINTS = {
     GET_FOLLOWING: `${API_BASE_URL}/follow/findAllByUserId`,
   },
 };
+
+    CHAT: {
+        SOCKJS:`${API_WEBSOCKET}/ws`,
+        MESSAGE: `${API_WEBSOCKET}/messages`,
+        MESSAGE_LIST : `${API_WEBSOCKET}/messages/messageList`,
+        FOLLOWING: `${API_WEBSOCKET}/messages/following`
+    }
+}
 
 export default ENDPOINTS;

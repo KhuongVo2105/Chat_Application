@@ -22,6 +22,11 @@ import {useIsFocused} from '@react-navigation/native';
 import Video from 'react-native-video';
 
 const Home = ({navigation, route}) => {
+<<<<<<< HEAD
+=======
+//   const [loading, setLoading] = useState(false);
+//   const [yourComment, setYourComment] = useState();
+>>>>>>> 43794d2e9cf7abe8c8c16226b246f2f20d988365
   const {
     tokenContext,
     setIdContext,
@@ -79,6 +84,10 @@ const Home = ({navigation, route}) => {
         setEmailContext(userInfo.email);
         setCreatedAtContext(userInfo.createdAt);
         setBirthdayContext(userInfo.birthday);
+//         setRoleContext({roles: userInfo.roles});
+
+//         console.log('User information loaded successfully.');
+
         setPrivacyContext(userInfo.privacy);
         setStatusContext(userInfo.status);
         setRoleContext({roles: userInfo.roles});
@@ -95,10 +104,14 @@ const Home = ({navigation, route}) => {
               headers: {Authorization: `Bearer ${tokenContext}`},
             },
           );
-          const followingList = followingResponse.data.result;
+          var followingList = followingResponse.data.result;
           setFollow(followingList);
           console.log('followingList');
           console.log(followingList);
+
+          if(followingList === undefined){
+            followingList = []
+          }
 
           // Lấy danh sách post dựa trên following
           const followingUserIds = followingList.map(value => ({
@@ -544,7 +557,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   selectedImage: {
-    width: 393,
+    width: 415,
     height: 600,
     borderRadius: 5,
     shadowColor: 'black',

@@ -135,12 +135,4 @@ const IconUserProfileStatic = props => {
 };
 
 // Xuất các component
-export {
-  IconHome,
-  IconSearch,
-  IconCreateNewPost,
-  IconHeart,
-  IconMessage,
-  IconUserProfile,
-  IconUserProfileStatic,
-};
+export { IconHome, IconSearch, IconCreateNewPost, IconHeart, IconMessage, IconUserProfile, IconUserProfileStatic };

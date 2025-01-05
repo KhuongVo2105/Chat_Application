@@ -18,7 +18,7 @@ const HeaderConverstaions = ({navigation, route}) => {
             ? route.params.conversationName
             : 'example@gmail.com'}
         </Text>
-        <View className="grow"></View>
+        <View className="grow" />
         <View className="flex flex-row">
           <Pressable className="mx-3">
             <Ionicons name="call-outline" style={styles.call} />

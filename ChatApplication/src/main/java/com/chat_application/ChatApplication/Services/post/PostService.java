@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PostService implements IPostService {
-     PostRepository repository;
 
+     PostRepository repository;
      UserRepository userRepository;
      PostMapper postMapper;
 

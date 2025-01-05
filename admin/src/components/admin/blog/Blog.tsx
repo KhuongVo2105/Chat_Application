@@ -34,12 +34,9 @@ const Blog: React.FC = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/chat-application/v1/post/findAll",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-            },
+        const response = await axios.post("http://localhost:8080/chat-application/v1/post/findAll",{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
         );
         setBlogs(response.data.result);
@@ -54,19 +51,19 @@ const Blog: React.FC = () => {
     fetchBlogs();
   }, []);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.post(
-          "https://localhost:7125/CategoryCotroller/category",
-        );
-        setListCategory(response.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await axios.post(
+  //         "https://localhost:7125/CategoryCotroller/category"
+  //       );
+  //       setListCategory(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching categories:", error);
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, []);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = blogs.filter((row) => {

@@ -1,3 +1,4 @@
+
 import React, {useContext, useState} from 'react';
 import {
   View,
@@ -55,7 +56,6 @@ const NewPostScreen = () => {
   };
 
   const handleCreatePost = async () => {
-    navigation.navigate('Home');
     const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
     const userInfoResponse = await axios.post(
       userInfoEndpoint,
@@ -65,7 +65,6 @@ const NewPostScreen = () => {
       },
     );
     const user = userInfoResponse.data.result;
-
     const newPost = {
       caption: text,
       user: {
@@ -74,22 +73,25 @@ const NewPostScreen = () => {
     };
 
     const endpoint = ENDPOINTS.POST.ADD;
-    try {
-      const introspectResponse = await axios.post(ENDPOINTS.AUTH.INTROSPECT, {
-        token: tokenContext,
+    const introspectResponse = await axios.post(ENDPOINTS.AUTH.INTROSPECT, {
+      token: tokenContext,
+    });
+
+    if (
+      introspectResponse.data.code === 200 &&
+      introspectResponse.data.result.valid
+    ) {
+      console.log('prepare create new post');
+
+      const responseCreateNewPost = await axios.post(endpoint, newPost, {
+        headers: {Authorization: `Bearer ${tokenContext}`},
       });
 
-      if (
-        introspectResponse.data.code === 200 &&
-        introspectResponse.data.result.valid
-      ) {
-        const responseCreateNewPost = await axios.post(endpoint, newPost, {
-          headers: {Authorization: `Bearer ${tokenContext}`},
-        });
+      const postId = responseCreateNewPost.data.result.id;
+      var newMedia = [];
+      console.log('success create new post');
 
-        const postId = responseCreateNewPost.data.result.id;
-        var newMedia = [];
-
+      if (media.length > 0) {
         var formData = new FormData();
         media.forEach(values => {
           formData.append('fileUpload', {
@@ -109,6 +111,7 @@ const NewPostScreen = () => {
         await axios.post(ENDPOINTS.MEDIA.ADD, newMedia, {
           headers: {Authorization: `Bearer ${tokenContext}`},
         });
+        console.log('add media successfully in db');
 
         // thêm ảnh vào cloudinary
         await axios.post(ENDPOINTS.CLOUDINARY.ADD_MULTIPLE, formData, {
@@ -121,15 +124,14 @@ const NewPostScreen = () => {
             Authorization: `Bearer ${tokenContext}`,
           },
         });
-
-        Alert.alert('Đăng bài thành công');
-        setMedia([]);
-        setText('');
-      } else {
-        Alert.alert('Đăng bài thất bại');
       }
-    } catch (error) {
-      Alert.alert('Có lỗi xảy ra', error.message);
+
+      Alert.alert('Đăng bài thành công');
+      setMedia([]);
+      setText('');
+      navigation.navigate('Home');
+    } else {
+      Alert.alert('Đăng bài thất bại');
     }
   };
 

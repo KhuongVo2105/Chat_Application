@@ -8,6 +8,9 @@ import ConversationLayout from './(conversations)/_layout';
 import {AuthProvider} from '../context/AuthContext';
 import {config} from './Link';
 import ProfileLayout from './(profile)/_layout';
+import Message from './(message)/Message';
+import Chat from './(message)/Chat';
+import Test from './(message)/Test';
 
 const RootLayout = () => {
   console.log(
@@ -20,6 +23,18 @@ const RootLayout = () => {
     <AuthProvider>
       <NavigationContainer linking={config}>
         <Stack.Navigator initialRouteName="SignIn">
+          {/*  Giao diện hien ds bạn bè đã nhắn*/}
+          <Stack.Screen
+            name="Message"
+            component={Message}
+            options={{headerShown: false}}
+          />
+          {/*Giao diện chat*/}
+          <Stack.Screen
+            name="Chat"
+            component={Chat}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="SignIn"
             component={SignIn}

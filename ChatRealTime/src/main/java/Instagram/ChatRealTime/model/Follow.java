@@ -1,32 +1,30 @@
-package com.chat_application.ChatApplication.Entities;
+package Instagram.ChatRealTime.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
-import java.util.Set;
 
 @Entity
-@Table(name = "Messages")
+@Table(name = "Follows")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Message {
+public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
 
-    boolean visible;
-    String context;
-    Timestamp createdAt;
+    @OneToOne
+    @JoinColumn(nullable = false)
+    User followerUser;
 
     @OneToOne
-    User user;
+    @JoinColumn(nullable = false)
+    User followingUser;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
-    Group group;
+    Timestamp createdAt;
 }

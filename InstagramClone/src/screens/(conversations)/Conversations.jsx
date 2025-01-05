@@ -31,7 +31,9 @@ const Conversations = ({navigation, route}) => {
       console.log('Fetching groups...');
       // 1. Gọi fetchGroups thay vì useLoadGroup
       const {data: groups, error: groupError} = await fetchGroups(tokenContext);
-      if (groupError) throw new Error(groupError);
+      if (groupError) {
+        throw new Error(groupError);
+      }
 
       console.log('Fetching group details...');
       // 2. Tải chi tiết từng nhóm
@@ -42,7 +44,9 @@ const Conversations = ({navigation, route}) => {
               token: tokenContext,
               groupId: group.id,
             });
-          if (groupDetailError) return null;
+          if (groupDetailError) {
+            return null;
+          }
 
           const users = await Promise.all(
             groupData.userIds.map(async userId => {
@@ -153,13 +157,17 @@ const Conversations = ({navigation, route}) => {
 
   // Hàm xử lý đặt tên
   const getConversationName = (userIds, users, idContext) => {
-    if (!userIds || !users || !idContext) return 'Unknown Conversation';
+    if (!userIds || !users || !idContext) {
+      return 'Unknown Conversation';
+    }
 
     // Tìm tất cả username trừ idContext
     const otherUsers = users.filter(user => user.id !== idContext);
 
     // Nếu không có người dùng khác
-    if (otherUsers.length === 0) return 'Empty Conversation';
+    if (otherUsers.length === 0) {
+      return 'Empty Conversation';
+    }
 
     // Trường hợp có 2 người trong nhóm
     if (userIds.length === 2) {
