@@ -101,6 +101,10 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+    public List<UserResponse> findAllByUsername(String username, UUID uuid) {
+        return userRepository.searchByUsername(username, uuid)
+                .stream().map(userMapper::toUserResponse).toList();
+    }
     public InfoUserResp updateInfoUser(InfoUserReq req) {
         try {
             User user = userRepository.findById(req.getId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));

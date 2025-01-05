@@ -3,14 +3,15 @@ module.exports = {
 //   plugins: ['nativewind/babel'],
   presets: ['module:@react-native/babel-preset'],
   plugins: [
-    ['module:react-native-dotenv',
+    [
+      'module:react-native-dotenv',
       {
         envName: 'APP_ENV',
         moduleName: '@env',
         path: '.env',
       },
     ],
-    ["nativewind/babel"],
-    ['react-native-paper/babel']
-  ]
+    ['nativewind/babel'],
+    ['react-native-paper/babel'],
+  ],
 };

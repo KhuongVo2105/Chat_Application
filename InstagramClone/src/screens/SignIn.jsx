@@ -1,31 +1,56 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator, Pressable, Keyboard } from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Alert,
+  ActivityIndicator,
+  Pressable,
+  Keyboard,
+} from 'react-native';
 import axios from 'axios';
 import images from './../config/images';
-import ENDPOINTS from "./../config/endpoints";
-import { AuthContext } from '../context/AuthContext';
+import ENDPOINTS from './../config/endpoints';
+import {AuthContext} from '../context/AuthContext';
 
-const SignIn = ({ navigation, route }) => {
-
-  console.log(`[SCREEN NAVIGATION] ${new Date().toISOString()} - Screen: SignIn`)
+const SignIn = ({navigation, route}) => {
+  console.log(
+    `[SCREEN NAVIGATION] ${new Date().toISOString()} - Screen: SignIn`,
+  );
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const {tokenContext, setTokenContext} = useContext(AuthContext)
+  const {
+    tokenContext,
+    setTokenContext,
+    setIdContext,
+    setUsernameContext,
+    setEmailContext,
+    setCreatedAtContext,
+    setBirthdayContext,
+    setRoleContext,
+  } = useContext(AuthContext);
 
   const handleCheckFormat = () => {
-
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (email.trim() === '') {
-      Alert.alert('Error', 'Email field cannot be left blank. Please enter your email.');
+      Alert.alert(
+        'Error',
+        'Email field cannot be left blank. Please enter your email.',
+      );
       return false;
     }
     if (!emailRegex.test(email)) {
-      Alert.alert('Error', 'The email you entered is not valid. Please provide a valid email address.');
+      Alert.alert(
+        'Error',
+        'The email you entered is not valid. Please provide a valid email address.',
+      );
       return false;
     }
 
@@ -36,8 +61,8 @@ const SignIn = ({ navigation, route }) => {
     setLoading(true);
 
     if (!handleCheckFormat()) {
-      setLoading(false)
-      return
+      setLoading(false);
+      return;
     }
 
     try {
@@ -49,30 +74,28 @@ const SignIn = ({ navigation, route }) => {
         password: password,
       };
 
-      console.log(`Request: ${signInRequest}`)
+      console.log(`Request: ${signInRequest}`);
 
       const response = await axios.post(endpoint, signInRequest);
 
-      const { code, message, result } = response.data;
+      const {code, message, result} = response.data;
       const statusCode = response.status; // HTTP Status Code từ server
 
       switch (statusCode) {
         case 200: {
           // Trường hợp đăng nhập thành công
-          const { authenticated, token } = result;
+          const {authenticated, token} = result;
           if (authenticated) {
-            setTokenContext(token)
-
-            console.log("Token:", token);
-            navigation.replace("(tabs)");
+            setTokenContext(token);
+            console.log('Token:', token);
           } else {
-            Alert.alert("Error", "Authentication failed. Please try again.");
+            Alert.alert('Error', 'Authentication failed. Please try again.');
           }
           break;
         }
         default: {
           // Trường hợp lỗi không xác định
-          Alert.alert("Error", message || "An unexpected error occurred.");
+          Alert.alert('Error', message || 'An unexpected error occurred.');
           break;
         }
       }
@@ -80,50 +103,115 @@ const SignIn = ({ navigation, route }) => {
       if (error.response) {
         // Trường hợp server trả về phản hồi với mã lỗi HTTP (4xx, 5xx)
 
-        const { status, data, headers } = error.response;
-        const { code, message } = data
+        const {status, data, headers} = error.response;
+        const {code, message} = data;
 
         switch (status) {
           case 400:
-            if (code == 1040) Alert.alert('Error', message)
-            else console.log(`It's not #1040\tCode ${code}, Message: ${message}`)
+            if (code == 1040) Alert.alert('Error', message);
+            else
+              console.log(`It's not #1040\tCode ${code}, Message: ${message}`);
             break;
           case 401:
-            if (code == 1040) Alert.alert(message)
-            else console.log(`It's not #1040\tCode ${code}, Message: ${message}`)
+            if (code == 1040) Alert.alert(message);
+            else
+              console.log(`It's not #1040\tCode ${code}, Message: ${message}`);
             break;
           default:
             break;
         }
 
-        console.error("SignIn Error: Server responded with an error", {
+        console.error('SignIn Error: Server responded with an error', {
           status: status,
           data: data,
           headers: headers,
         });
       } else if (error.request) {
         // Trường hợp không nhận được phản hồi từ server (timeout, server không khả dụng, v.v.)
-        console.error("SignIn Error: No response received from server", {
+        console.error('SignIn Error: No response received from server', {
           request: error.request,
         });
 
         Alert.alert(
-          "Network Error",
-          "No response received from the server. Please check your connection and try again."
+          'Network Error',
+          'No response received from the server. Please check your connection and try again.',
         );
       } else {
         // Các lỗi khác xảy ra trước khi gửi request (cấu hình sai, lỗi mã, v.v.)
-        console.error("SignIn Error: An error occurred while setting up the request", {
-          message: error.message,
-        });
+        console.error(
+          'SignIn Error: An error occurred while setting up the request',
+          {
+            message: error.message,
+          },
+        );
 
         Alert.alert(
-          "Unexpected Error",
-          `An unexpected error occurred:\n${error.message}`
+          'Unexpected Error',
+          `An unexpected error occurred:\n${error.message}`,
         );
       }
     } finally {
       setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (!tokenContext) {
+      console.log('Token is not available.');
+      return;
+    } else {
+      fetchUserInfo();
+    }
+  }, [tokenContext]);
+  // Ham lay thong tin nguoi dung
+  const fetchUserInfo = async () => {
+    try {
+      const endpoint = ENDPOINTS.USER.MY_INFORMATION;
+      const response = await axios.post(
+        endpoint, // URL
+        {}, // Request body (ở đây là rỗng vì không truyền dữ liệu)
+        {
+          headers: {
+            Authorization: `Bearer ${tokenContext}`,
+          },
+        },
+      );
+      console.log('\tLoad user profile is successfully');
+
+      // Kiểm tra phản hồi từ server
+      if (response.data.code === 200 && response.data.result) {
+        const userInfo = response.data.result;
+        console.log(`User information: ${JSON.stringify(userInfo, null, 2)}`);
+
+        // Lưu thông tin vào Context
+        setIdContext(userInfo.id);
+        setUsernameContext(userInfo.username);
+        setEmailContext(userInfo.email);
+        setCreatedAtContext(userInfo.createdAt);
+        setBirthdayContext(userInfo.birthday);
+        setRoleContext({roles: userInfo.roles});
+
+        console.log('User information loaded successfully.');
+        navigation.replace('(tabs)');
+      } else {
+        console.log('Unexpected response format:', response.data);
+      }
+    } catch (error) {
+      // Xử lý lỗi
+      if (error.response) {
+        // Lỗi từ server (status code không phải 2xx)
+        console.log(
+          'Error from server:',
+          error.message,
+          '\n\t',
+          error.response.data,
+        );
+      } else if (error.request) {
+        // Không nhận được phản hồi từ server
+        console.log('No response received:', error.request);
+      } else {
+        // Lỗi khác khi thực hiện yêu cầu
+        console.log('Error during request:', error.message);
+      }
     }
   };
 
@@ -138,20 +226,23 @@ const SignIn = ({ navigation, route }) => {
   const handleTogglePassword = () => {
     setIsPasswordVisible(prevState => !prevState);
   };
-  
+
   return (
     <View className="w-full h-full flex justify-center items-center bg-white">
-
       {/* Image */}
       <View className="w-80 h-auto mb-10">
-        <Image className="w-full h-20" source={images.logo_text} resizeMode='contain' />
+        <Image
+          className="w-full h-20"
+          source={images.logo_text}
+          resizeMode="contain"
+        />
       </View>
 
       {/* Email field */}
       <TextInput
         className="enabled:hover:border-gray-40 border py-2 px-4 w-96 hover:shadow mb-3 rounded-2xl drop-shadow-2xl"
         onChangeText={setEmail}
-        placeholder='Phone number, username or email address'
+        placeholder="Phone number, username or email address"
         value={email}
       />
       {/* Password field */}
@@ -159,30 +250,41 @@ const SignIn = ({ navigation, route }) => {
         <TextInput
           className="enabled:hover:border-gray-40 border py-2 px-4 w-full hover:shadow mb-3 rounded-2xl"
           onChangeText={setPassword}
-          placeholder='Password'
+          placeholder="Password"
           value={password}
           secureTextEntry={!isPasswordVisible}
         />
-        <Pressable className="absolute right-0 top-1/2 -translate-y-4" onPress={handleTogglePassword}>
-          <Image className="h-5" source={isPasswordVisible ? images.icon_show : images.icon_hide} resizeMode='contain' />
+        <Pressable
+          className="absolute right-0 top-1/2 -translate-y-4"
+          onPress={handleTogglePassword}>
+          <Image
+            className="h-5"
+            source={isPasswordVisible ? images.icon_show : images.icon_hide}
+            resizeMode="contain"
+          />
         </Pressable>
       </View>
 
       {/* Forgot password redirect */}
-      <TouchableOpacity className="w-96 mb-3" onPress={() => Alert.alert("Feature not implemented")}>
-        <Text className="text-blue-600 text-right drop-shadow-md font-medium">Forgotten password?</Text>
+      <TouchableOpacity
+        className="w-96 mb-3"
+        onPress={() => Alert.alert('Feature not implemented')}>
+        <Text className="text-blue-600 text-right drop-shadow-md font-medium">
+          Forgotten password?
+        </Text>
       </TouchableOpacity>
 
       {/* Log in button */}
       <Pressable
         className="w-96 bg-blue-600 py-3 rounded-2xl"
         onPress={handleSignIn}
-        disabled={loading}
-      >
+        disabled={loading}>
         {loading ? (
           <ActivityIndicator size="small" color="#ffffff" />
         ) : (
-          <Text className="text-center text-xl font-medium text-white">Log in</Text>
+          <Text className="text-center text-xl font-medium text-white">
+            Log in
+          </Text>
         )}
       </Pressable>
 
@@ -192,9 +294,13 @@ const SignIn = ({ navigation, route }) => {
       </View>
 
       {/* Log in with Facebook account */}
-      <TouchableOpacity className="flex flex-row justify-items-center items-center" onPress={handleFacebookLogin}>
-        <Image className="h-6" source={images.icon_fb} resizeMode='contain' />
-        <Text className="text-base text-blue-600 font-medium">Log in with Facebook</Text>
+      <TouchableOpacity
+        className="flex flex-row justify-items-center items-center"
+        onPress={handleFacebookLogin}>
+        <Image className="h-6" source={images.icon_fb} resizeMode="contain" />
+        <Text className="text-base text-blue-600 font-medium">
+          Log in with Facebook
+        </Text>
       </TouchableOpacity>
 
       {/* Sign up redirect */}

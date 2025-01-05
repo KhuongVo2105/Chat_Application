@@ -67,21 +67,21 @@ const Dashboard = () => {
         console.error("Error: ", error);
       });
     axios
-        .post("http://localhost:8080/chat-application/v1/post/allPostInDay")
-        .then((response) => {
-          setBlogInDate(response.data);
-        })
-        .catch((error) => {
-          console.error("Error: ", error);
-        });
+      .post("http://localhost:8080/chat-application/v1/post/allPostInDay")
+      .then((response) => {
+        setBlogInDate(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
     axios
-        .post("http://localhost:8080/chat-application/v1/users/alluserInDay")
-        .then((response) => {
-          setUserInDate(response.data);
-        })
-        .catch((error) => {
-          console.error("Error: ", error);
-        });
+      .post("http://localhost:8080/chat-application/v1/users/alluserInDay")
+      .then((response) => {
+        setUserInDate(response.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
   }, []);
 
   return (

@@ -6,6 +6,8 @@ import TabsLayout from './(tabs)/_layout';
 import AuthsLayout from './(auths)/_layout';
 import ConversationLayout from './(conversations)/_layout';
 import {AuthProvider} from '../context/AuthContext';
+import {config} from './Link';
+import ProfileLayout from './(profile)/_layout';
 import Message from './(message)/Message';
 import Chat from './(message)/Chat';
 import Test from './(message)/Test';
@@ -19,7 +21,7 @@ const RootLayout = () => {
 
   return (
     <AuthProvider>
-      <NavigationContainer>
+      <NavigationContainer linking={config}>
         <Stack.Navigator initialRouteName="SignIn">
           {/*  Giao diện hien ds bạn bè đã nhắn*/}
           <Stack.Screen
@@ -52,6 +54,11 @@ const RootLayout = () => {
             name="(conversations)"
             options={{headerShown: false}}
             component={ConversationLayout}
+          />
+          <Stack.Screen
+            name="ProfileLayout"
+            options={{headerShown: false}}
+            component={ProfileLayout}
           />
         </Stack.Navigator>
       </NavigationContainer>
