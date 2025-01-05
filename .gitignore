@@ -21,9 +21,11 @@ output/
 *.java.orig
 
 # Package Files
+*.jar
 **/build/libs/*.jar
 *.war
 *.ear
+target
 
 #Gradle
 .gradle
