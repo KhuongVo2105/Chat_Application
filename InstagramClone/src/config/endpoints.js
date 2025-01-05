@@ -2,7 +2,8 @@
 const SERVER_ADDRESS = `172.16.0.142`
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`
 
-const API_BASE_URL = REACT_APP_API_BASE_URL;
+const API_BASE_URL  = REACT_APP_API_BASE_URL;
+const API_WEBSOCKET = `http:${SERVER_ADDRESS}:8800`
 
 const ENDPOINTS = {
     AUTH: {
@@ -22,25 +23,16 @@ const ENDPOINTS = {
         GET_POST_BY_USERNAME: `${API_BASE_URL}/post/postOfUsername`
     },
 
-  // User management endpoints
-  USER: {
-    SIGN_IN: `${API_BASE_URL}/users`,
-    SIGN_UP: '',
-    MY_INFORMATION: `${API_BASE_URL}/users/my-info`,
-    GET_USER_PROFILE: `${API_BASE_URL}/users`,
-    UPDATE_USER_PROFILE: `${API_BASE_URL}/user/update-profile`,
-    DELETE_USER_ACCOUNT: `${API_BASE_URL}/user/delete`,
-  },
+    OTP:{
+        SEND_OTP:`${API_BASE_URL}/verification/send-code`,
+        VERIFY_OTP:`${API_BASE_URL}/verification/verify`
+    },
 
-  OTP: {
-    SEND_OTP: `${API_BASE_URL}/verification/send-code`,
-    VERIFY_OTP: `${API_BASE_URL}/verification/verify`,
-  },
+    GROUP:{
+        GET_GROUPS: `${API_BASE_URL}/groups`,   //get method
+        CREATE_GROUP: `${API_BASE_URL}/groups`, //post method
+    },
 
-  GROUP: {
-    GET_GROUPS: `${API_BASE_URL}/groups`, //get method
-    CREATE_GROUP: `${API_BASE_URL}/groups`, //post method
-  },
     WEBSOCKET: {
         SOCKET_URL :`ws://${SERVER_ADDRESS}:8080/chat-application/socket`
     },
@@ -72,12 +64,12 @@ const ENDPOINTS = {
         GET_FOLLOWING: `${API_BASE_URL}/follow/findAllByUserId`,
     },
 
-
+    CHAT: {
+        SOCKJS:`${API_WEBSOCKET}/ws`,
+        MESSAGE: `${API_WEBSOCKET}/messages`,
+        MESSAGE_LIST : `${API_WEBSOCKET}/messages/messageList`,
+        FOLLOWING: `${API_WEBSOCKET}/messages/following`
+    }
 }
-
-  WEBSOCKET: {
-    SOCKET_URL: `ws://${SERVER_ADDRESS}:8080/chat-application/socket`,
-  },
-};
 
 export default ENDPOINTS;

@@ -20,7 +20,7 @@ const RootLayout = () => {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Message">
+        <Stack.Navigator initialRouteName="SignIn">
           {/*  Giao diện hien ds bạn bè đã nhắn*/}
           <Stack.Screen
             name="Message"

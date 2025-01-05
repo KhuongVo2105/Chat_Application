@@ -41,7 +41,7 @@
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
     "text-encoding": "^0.7.0",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
     "react-native-video": "^6.3.0"
   },
   "devDependencies": {
