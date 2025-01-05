@@ -7,8 +7,7 @@ import NewPostScreen from './NewPostScreen';
 import Search from './search/Search';
 import Notification from './Notification';
 import Header from './Header';
-import Profile from './profile_detail/Profile';
-import {AuthContext} from '../../context/AuthContext';
+import Profile from '../(profile)/Profile';
 
 const Tab = createBottomTabNavigator();
 const TabsLayout = () => {

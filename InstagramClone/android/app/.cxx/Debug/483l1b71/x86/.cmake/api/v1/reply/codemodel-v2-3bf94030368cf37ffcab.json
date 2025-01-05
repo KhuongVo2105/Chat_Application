@@ -1,0 +1,153 @@
+{
+  "configurations": [
+    {
+      "directories": [
+        {
+          "build": ".",
+          "childIndexes": [1, 2, 3, 4, 5, 6],
+          "jsonFile": "directory-.-Debug-f5ebdc15457944623624.json",
+          "minimumCMakeVersion": {
+            "string": "3.13"
+          },
+          "projectIndex": 0,
+          "source": ".",
+          "targetIndexes": [0]
+        },
+        {
+          "build": "RNDateTimePickerCGen_autolinked_build",
+          "jsonFile": "directory-RNDateTimePickerCGen_autolinked_build-Debug-bf2acd05a8d90622dddc.json",
+          "minimumCMakeVersion": {
+            "string": "3.13"
+          },
+          "parentIndex": 0,
+          "projectIndex": 0,
+          "source": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni",
+          "targetIndexes": [1]
+        },
+        {
+          "build": "RNImagePickerSpec_autolinked_build",
+          "jsonFile": "directory-RNImagePickerSpec_autolinked_build-Debug-e39a3981454b32f3e4fb.json",
+          "minimumCMakeVersion": {
+            "string": "3.13"
+          },
+          "parentIndex": 0,
+          "projectIndex": 0,
+          "source": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni",
+          "targetIndexes": [2]
+        },
+        {
+          "build": "safeareacontext_autolinked_build",
+          "jsonFile": "directory-safeareacontext_autolinked_build-Debug-cada4c10b79a1ab03835.json",
+          "minimumCMakeVersion": {
+            "string": "3.13"
+          },
+          "parentIndex": 0,
+          "projectIndex": 0,
+          "source": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-safe-area-context/android/src/main/jni",
+          "targetIndexes": [6]
+        },
+        {
+          "build": "rnscreens_autolinked_build",
+          "jsonFile": "directory-rnscreens_autolinked_build-Debug-99073cd45cd0fad87242.json",
+          "minimumCMakeVersion": {
+            "string": "3.13"
+          },
+          "parentIndex": 0,
+          "projectIndex": 0,
+          "source": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-screens/android/src/main/jni",
+          "targetIndexes": [4]
+        },
+        {
+          "build": "rnsvg_autolinked_build",
+          "jsonFile": "directory-rnsvg_autolinked_build-Debug-a8e6060b6bfdd1425a80.json",
+          "minimumCMakeVersion": {
+            "string": "3.13"
+          },
+          "parentIndex": 0,
+          "projectIndex": 0,
+          "source": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-svg/android/src/main/jni",
+          "targetIndexes": [5]
+        },
+        {
+          "build": "RNVectorIconsSpec_autolinked_build",
+          "jsonFile": "directory-RNVectorIconsSpec_autolinked_build-Debug-4d70964cf46010ce83b7.json",
+          "minimumCMakeVersion": {
+            "string": "3.13"
+          },
+          "parentIndex": 0,
+          "projectIndex": 0,
+          "source": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-vector-icons/android/build/generated/source/codegen/jni",
+          "targetIndexes": [3]
+        }
+      ],
+      "name": "Debug",
+      "projects": [
+        {
+          "directoryIndexes": [0, 1, 2, 3, 4, 5, 6],
+          "name": "appmodules",
+          "targetIndexes": [0, 1, 2, 3, 4, 5, 6]
+        }
+      ],
+      "targets": [
+        {
+          "directoryIndex": 0,
+          "id": "appmodules::@6890427a1f51a3e7e1df",
+          "jsonFile": "target-appmodules-Debug-8eb26889312a62e760fb.json",
+          "name": "appmodules",
+          "projectIndex": 0
+        },
+        {
+          "directoryIndex": 1,
+          "id": "react_codegen_RNDateTimePickerCGen::@59b70ddc31ba2f8ef1d2",
+          "jsonFile": "target-react_codegen_RNDateTimePickerCGen-Debug-ebd4c0abf92c2b66b352.json",
+          "name": "react_codegen_RNDateTimePickerCGen",
+          "projectIndex": 0
+        },
+        {
+          "directoryIndex": 2,
+          "id": "react_codegen_RNImagePickerSpec::@f66ee9a2efecfb28bee4",
+          "jsonFile": "target-react_codegen_RNImagePickerSpec-Debug-e1233317b04e244a9cd4.json",
+          "name": "react_codegen_RNImagePickerSpec",
+          "projectIndex": 0
+        },
+        {
+          "directoryIndex": 6,
+          "id": "react_codegen_RNVectorIconsSpec::@479809fae146501fd34d",
+          "jsonFile": "target-react_codegen_RNVectorIconsSpec-Debug-f956c01a191dd02e4364.json",
+          "name": "react_codegen_RNVectorIconsSpec",
+          "projectIndex": 0
+        },
+        {
+          "directoryIndex": 4,
+          "id": "react_codegen_rnscreens::@25bcbd507e98d3a854ad",
+          "jsonFile": "target-react_codegen_rnscreens-Debug-ccc75ebfe3e17f9cff1f.json",
+          "name": "react_codegen_rnscreens",
+          "projectIndex": 0
+        },
+        {
+          "directoryIndex": 5,
+          "id": "react_codegen_rnsvg::@4f40eb209d0c0b4a3b65",
+          "jsonFile": "target-react_codegen_rnsvg-Debug-8baede61da93a199d713.json",
+          "name": "react_codegen_rnsvg",
+          "projectIndex": 0
+        },
+        {
+          "directoryIndex": 3,
+          "id": "react_codegen_safeareacontext::@7984cd80db47aa7b952a",
+          "jsonFile": "target-react_codegen_safeareacontext-Debug-8e098a250ac98cd82649.json",
+          "name": "react_codegen_safeareacontext",
+          "projectIndex": 0
+        }
+      ]
+    }
+  ],
+  "kind": "codemodel",
+  "paths": {
+    "build": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/.cxx/Debug/483l1b71/x86",
+    "source": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup"
+  },
+  "version": {
+    "major": 2,
+    "minor": 3
+  }
+}

@@ -7,7 +7,7 @@ import AuthsLayout from './(auths)/_layout';
 import ConversationLayout from './(conversations)/_layout';
 import {AuthProvider} from '../context/AuthContext';
 import {config} from './Link';
-import Profile from './(tabs)/profile_detail/Profile';
+import Profile from './(profile)/Profile';
 
 const RootLayout = () => {
   console.log(
