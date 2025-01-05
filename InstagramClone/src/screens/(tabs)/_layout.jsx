@@ -1,13 +1,14 @@
-import * as React from 'react';
+import React, {useContext, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {IconUserProfile} from '../../components/IconComponents';
+import {IconUserProfileStatic} from '../../components/IconComponents';
 import Home from './Home';
 import NewPostScreen from './NewPostScreen';
 import Search from './search/Search';
 import Notification from './Notification';
 import Header from './Header';
-import Profile from '../(profile)/Profile';
+import ProfileLayout from '../(profile)/_layout';
+import {Avatar} from 'react-native-paper';
 
 const Tab = createBottomTabNavigator();
 const TabsLayout = () => {
@@ -62,17 +63,18 @@ const TabsLayout = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="ProfileLayout"
+        component={ProfileLayout}
         options={{
           tabBarIcon: () => (
-            <IconUserProfile
-              width={32}
-              height={32}
+            <Avatar.Image
+              size={30}
               source={require('./../../assets/portaits/portait_1.jpg')}
             />
           ),
+          headerShown: false,
         }}
+        listeners={({navigation}) => ({blur: () => navigation.setParams({username: undefined})})}
       />
     </Tab.Navigator>
   );

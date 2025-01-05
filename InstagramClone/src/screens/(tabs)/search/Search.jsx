@@ -85,7 +85,7 @@ const Search = () => {
 
   const renderItem = ({item}) => {
     const handlePressUser = () => {
-      navigation.navigate('Profile', {userId: item.id});
+      navigation.navigate('ProfileLayout', {username: item.username});
     };
     const handlePressPost = () => {};
     return (

@@ -7,7 +7,7 @@ import AuthsLayout from './(auths)/_layout';
 import ConversationLayout from './(conversations)/_layout';
 import {AuthProvider} from '../context/AuthContext';
 import {config} from './Link';
-import Profile from './(profile)/Profile';
+import ProfileLayout from './(profile)/_layout';
 
 const RootLayout = () => {
   console.log(
@@ -41,9 +41,9 @@ const RootLayout = () => {
             component={ConversationLayout}
           />
           <Stack.Screen
-            name="Profile"
+            name="ProfileLayout"
             options={{headerShown: false}}
-            component={Profile}
+            component={ProfileLayout}
           />
         </Stack.Navigator>
       </NavigationContainer>

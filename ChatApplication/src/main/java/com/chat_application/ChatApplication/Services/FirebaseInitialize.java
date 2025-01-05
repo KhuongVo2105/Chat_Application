@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Service
@@ -14,16 +15,23 @@ public class FirebaseInitialize {
 
     @PostConstruct
     public void initialize() {
-        //            FileInputStream serviceAccount =
-//                new FileInputStream("/path/firebase/webblog-6eee4-firebase-adminsdk-3ja5x-89dda28363.json");
-//
-//            FirebaseOptions options = new FirebaseOptions.Builder()
-//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//                .setStorageBucket("webblog-6eee4.appspot.com")
-//                .build();
-//
-//            if (FirebaseApp.getApps().isEmpty()) {
-//                FirebaseApp.initializeApp(options);
-//            }
+        try {
+            FileInputStream serviceAccount =
+                    new FileInputStream("src/main/resources/firebase/webblog-6eee4-firebase-adminsdk-3ja5x-89dda28363.json");
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setStorageBucket("webblog-6eee4.appspot.com")
+                    .build();
+
+            if (FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

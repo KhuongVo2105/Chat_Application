@@ -8,6 +8,7 @@ import { RootState } from "../../reduxStore/Store";
 import { FaBookOpen, FaComment, FaUserCog } from "react-icons/fa";
 import { logoutCurrentUser } from "../../reduxStore/UserSlice";
 import { FaUserPlus } from "react-icons/fa6";
+import axios from "axios";
 
 const AdminHome = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
@@ -87,7 +88,10 @@ const AdminHome = () => {
             </Link>
           </li>
           <li onClick={() => createAdmin()}>
-            <Link to="/admin/adminCreate" className={clickCreateAdmin ? "Click" : ""}>
+            <Link
+              to="/admin/adminCreate"
+              className={clickCreateAdmin ? "Click" : ""}
+            >
               <FaUserPlus /> Thêm quản trị viên
             </Link>
           </li>
@@ -96,7 +100,7 @@ const AdminHome = () => {
       <div className="main-content">
         <div className="navbar">
           <h1>
-            Welcome to Admin  {currentUser ? currentUser.fullName : ""}
+            Welcome to Admin {currentUser ? currentUser.fullName : ""}
             <Link to="/login" onClick={handleLogout}>
               Đăng xuất
             </Link>

@@ -34,11 +34,14 @@ const Blog: React.FC = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/chat-application/v1/post/findAll",{
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        const response = await axios.get(
+          "http://localhost:8080/chat-application/v1/post/findAll",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
           },
-        });
+        );
         setBlogs(response.data.result);
         setSearchData(response.data.result);
         setLoading(false);
@@ -55,7 +58,7 @@ const Blog: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.post(
-          "https://localhost:7125/CategoryCotroller/category"
+          "https://localhost:7125/CategoryCotroller/category",
         );
         setListCategory(response.data);
       } catch (error) {
@@ -66,8 +69,10 @@ const Blog: React.FC = () => {
   }, []);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newData = blogs.filter(row => {
-      return row.caption.toLowerCase().includes(event.target.value.toLowerCase());
+    const newData = blogs.filter((row) => {
+      return row.caption
+        .toLowerCase()
+        .includes(event.target.value.toLowerCase());
     });
     setSearchData(newData);
   };
@@ -92,7 +97,9 @@ const Blog: React.FC = () => {
 
         // Cập nhật lại danh sách bài viết sau khi xóa thành công
         setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
-        setSearchData((prevBlogs) => prevBlogs?.filter((blog) => blog.id !== id));
+        setSearchData((prevBlogs) =>
+          prevBlogs?.filter((blog) => blog.id !== id),
+        );
 
         // Hiển thị thông báo thành công
         Swal.fire({
@@ -186,13 +193,21 @@ const Blog: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <input 
-        type="text" 
+      <input
+        type="text"
         title="Keyword trong tiêu đề và mô tả ngắn"
-        onChange={handleSearch} 
-        placeholder="Tìm kiếm..." 
+        onChange={handleSearch}
+        placeholder="Tìm kiếm..."
         className="search-input"
-        style={{position:'absolute',top:'5px', left:'10px',width: '20%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc'}}
+        style={{
+          position: "absolute",
+          top: "5px",
+          left: "10px",
+          width: "20%",
+          padding: "10px",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+        }}
       />
       <h2 className={styles.heading}>Danh sách bài viết</h2>
       {loading && <p style={{ textAlign: "center" }}>Đang tải...</p>}

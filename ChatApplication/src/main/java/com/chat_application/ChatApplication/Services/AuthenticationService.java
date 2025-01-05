@@ -42,7 +42,6 @@ public class AuthenticationService {
     @NonFinal
     @Value("${jwt.signerKey}")
     String SIGNER_KEY;
-
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
@@ -53,7 +52,6 @@ public class AuthenticationService {
     public AuthenticationRes authenticate(AuthenticationReq request) {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
-
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!authenticated) throw new AppException(ErrorCode.UNAUTHENTICATED);

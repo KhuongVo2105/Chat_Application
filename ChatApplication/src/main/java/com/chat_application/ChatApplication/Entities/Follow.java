@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "Follows")
@@ -27,4 +28,12 @@ public class Follow {
     User followingUser;
 
     Timestamp createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        Date date = new Date();
+        Timestamp timestamp = new Timestamp(date.getTime());
+
+        this.createdAt = timestamp;
+    }
 }

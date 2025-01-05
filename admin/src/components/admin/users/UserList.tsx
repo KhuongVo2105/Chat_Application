@@ -37,7 +37,7 @@ function UserList() {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
-        }
+        },
       );
       console.log("call api succcess");
       setUsers(response.data);
@@ -80,7 +80,7 @@ function UserList() {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
-        }
+        },
       );
       if (isLock)
         Swal.fire({

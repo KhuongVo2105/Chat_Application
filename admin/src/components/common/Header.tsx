@@ -21,17 +21,17 @@ function Header() {
   const [content, setContent] = useState<string>();
   const [BlogInDate, setBlogInDate] = useState(0);
   const [isNotify, setIsNotify] = useState(false);
-  
+
   const handleNotifyNewBlogInDay = () => {
     if (currentUser?.role == 1 && BlogInDate > 0 && !isNotify) {
-      console.log('show!')
+      console.log("show!");
       Swal.fire({
         icon: "info",
         title: `Có ${BlogInDate} bài viết mới vừa được thêm hôm nay!`,
         position: "bottom-end",
         showConfirmButton: false,
         timer: 2000,
-        timerProgressBar:true,
+        timerProgressBar: true,
         toast: true,
       });
       setIsNotify(true);
@@ -53,7 +53,7 @@ function Header() {
   const handleLogout = () => {
     dispatch(logoutCurrentUser());
     localStorage.removeItem("authToken");
-    setIsNotify(false)
+    setIsNotify(false);
   };
   const navigate = useNavigate();
   const handleChange = (event: any) => {
