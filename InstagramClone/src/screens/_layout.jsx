@@ -40,6 +40,11 @@ const RootLayout = () => {
             options={{headerShown: false}}
             component={ConversationLayout}
           />
+          <Stack.Screen
+            name="Profile"
+            options={{headerShown: false}}
+            component={Profile}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
