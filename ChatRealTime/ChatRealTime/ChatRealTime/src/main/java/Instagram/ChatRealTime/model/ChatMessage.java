@@ -11,6 +11,15 @@ public class ChatMessage {
     private String userIdSend;
     private String userIdTo;
     private String content;
+    private boolean type;
+
+    public boolean isType() {
+        return type;
+    }
+
+    public void setType(boolean type) {
+        this.type = type;
+    }
 
     public String getUserIdSend() {
         return userIdSend;

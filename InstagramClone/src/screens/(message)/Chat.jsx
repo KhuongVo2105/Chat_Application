@@ -22,7 +22,7 @@ import {useNavigation} from '@react-navigation/native';
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 const Chat = ({route}) => {
-  const {userIdSend, userIdTo, avatarTo, nameTo} = route.params; // Nhận userId và receiverId từ màn hình trước ( route.params)
+  const {userIdSend, userIdTo, avatarTo, nameTo, status} = route.params; // Nhận userId và receiverId từ màn hình trước ( route.params)
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [stompClient, setStompClient] = useState(null);
@@ -53,15 +53,22 @@ const Chat = ({route}) => {
     return () => {
       client.deactivate();
     };
-  }, [avatarTo, userIdSend, userIdTo]);
+  }, [userIdSend, userIdTo]);
 
   // Lấy tin nhắn trước đó từ API
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch(
-          `http://172.16.0.122:8080/messages/${userIdSend}/${userIdTo}`,
-        );
+        let response;
+        if (status == false) {
+          response = await fetch(
+            `http://172.16.0.122:8080/messages/${userIdSend}/${userIdTo}`,
+          );
+        } else {
+          response = await fetch(
+            `http://172.16.0.122:8080/messages/group/${userIdSend}/${userIdTo}`,
+          );
+        }
         const data = await response.json();
         setMessages(data); // Lưu tin nhắn vào state
       } catch (error) {
@@ -69,18 +76,16 @@ const Chat = ({route}) => {
       }
     };
     fetchMessages();
-  }, [userIdSend, userIdTo]);
+  }, [status, userIdSend, userIdTo]);
 
   // Gửi tin nhắn qua WebSocket
   const sendMessage = () => {
     if (newMessage.trim()) {
-      console.log(userIdSend);
-      console.log(userIdTo);
-      console.log(newMessage);
       const message = {
         userIdSend: userIdSend,
         userIdTo: userIdTo,
         content: newMessage,
+        type: status,
       };
       setMessages(prevMessages => [...prevMessages, message]);
       stompClient.publish({
@@ -100,9 +105,12 @@ const Chat = ({route}) => {
           ? styles.sentMessage
           : styles.receivedMessage,
       ]}>
-      {item.userIdSend !== userIdSend && (
-        <Image source={{uri: avatarTo}} style={styles.avatar} />
-      )}
+      {item.userIdSend !== userIdSend &&
+        (status === false ? (
+          <Image source={{uri: avatarTo}} style={styles.avatar} />
+        ) : (
+          <Image source={{uri: item.avatar}} style={styles.avatar} />
+        ))}
       <View
         style={[
           styles.messageBox,
@@ -135,7 +143,14 @@ const Chat = ({route}) => {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Image source={{uri: avatarTo}} style={styles.avatarHeader} />
+        {status === false ? (
+          <Image source={{uri: avatarTo}} style={styles.avatarHeader} />
+        ) : (
+          <Image
+            source={require('../../assets/chatGroup.png')}
+            style={styles.avatarHeader}
+          />
+        )}
         <Text style={styles.nameTo}>{nameTo}</Text>
       </View>
       <View style={styles.horizontalLine} />

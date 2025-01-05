@@ -1,34 +1,39 @@
-package Instagram.ChatRealTime.model;
+package Instagram.ChatRealTime.Dto.Request;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Entity
-@Table(name = "Messages")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class Message {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+public class MessageReponse {
     private boolean visible; // true là trạng thái bị block con false là trang thái bình thường
     private String content;
     private Timestamp createdAt;
     @NonNull
     private UUID userIdSend;
-
-    @Column(nullable = true)
-    private UUID userIdTo; // chứa id người nhận để nhắn riêng
-
     private Long groupChatId; // chứa id nhóm chat
+    private String avatar;
+
+    public MessageReponse(boolean visible, String content, Timestamp createdAt, @NonNull UUID userIdSend, Long groupChatId, String avatar) {
+        this.visible = visible;
+        this.content = content;
+        this.createdAt = createdAt;
+        this.userIdSend = userIdSend;
+        this.groupChatId = groupChatId;
+        this.avatar = avatar;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public Long getGroupChatId() {
         return groupChatId;
@@ -58,14 +63,6 @@ public class Message {
         return createdAt;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public UUID getUserIdSend() {
         return userIdSend;
     }
@@ -78,11 +75,5 @@ public class Message {
         this.userIdSend = userIdSend;
     }
 
-    public UUID getUserIdTo() {
-        return userIdTo;
-    }
-
-    public void setUserIdTo(UUID userIdTo) {
-        this.userIdTo = userIdTo;
-    }
 }
+
