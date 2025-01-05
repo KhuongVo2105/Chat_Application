@@ -17,5 +17,6 @@ public class UserResponse {
     String id, username, email;
     Timestamp createdAt, updatedAt;
     LocalDate birthday;
+    byte status;
     Set<Role> roles;
 }

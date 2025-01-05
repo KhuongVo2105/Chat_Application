@@ -18,6 +18,5 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-
     Timestamp createdAt;
 }

@@ -1,5 +1,4 @@
 package com.chat_application.ChatApplication.Exceptions;
-
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

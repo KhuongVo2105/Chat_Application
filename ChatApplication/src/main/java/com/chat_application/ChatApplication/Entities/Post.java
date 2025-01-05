@@ -26,7 +26,6 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     User user;
-
     @PrePersist
     public void prePersist() {
         Date date = new Date();

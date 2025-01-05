@@ -1,0 +1,85 @@
+{
+  "buildFiles": [
+    "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/CMakeLists.txt",
+    "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
+    "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
+    "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
+    "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt",
+    "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native-vector-icons/android/build/generated/source/codegen/jni/CMakeLists.txt",
+    "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/khuongvo/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/.cxx/Debug/483l1b71/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/khuongvo/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/.cxx/Debug/483l1b71/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "react_codegen_RNVectorIconsSpec::@479809fae146501fd34d": {
+      "artifactName": "react_codegen_RNVectorIconsSpec",
+      "abi": "x86",
+      "runtimeFiles": []
+    },
+    "react_codegen_safeareacontext::@7984cd80db47aa7b952a": {
+      "artifactName": "react_codegen_safeareacontext",
+      "abi": "x86",
+      "output": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/build/intermediates/cxx/Debug/483l1b71/obj/x86/libreact_codegen_safeareacontext.so",
+      "runtimeFiles": [
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/8b60b4f75564ac53567672df7a1c9a73/transformed/fbjni-0.6.0/prefab/modules/fbjni/libs/android.x86/libfbjni.so",
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/jsi/libs/android.x86/libjsi.so",
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/reactnative/libs/android.x86/libreactnative.so"
+      ]
+    },
+    "react_codegen_RNImagePickerSpec::@f66ee9a2efecfb28bee4": {
+      "artifactName": "react_codegen_RNImagePickerSpec",
+      "abi": "x86",
+      "runtimeFiles": []
+    },
+    "react_codegen_rnscreens::@25bcbd507e98d3a854ad": {
+      "artifactName": "react_codegen_rnscreens",
+      "abi": "x86",
+      "output": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/build/intermediates/cxx/Debug/483l1b71/obj/x86/libreact_codegen_rnscreens.so",
+      "runtimeFiles": [
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/reactnative/libs/android.x86/libreactnative.so",
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/jsi/libs/android.x86/libjsi.so",
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/8b60b4f75564ac53567672df7a1c9a73/transformed/fbjni-0.6.0/prefab/modules/fbjni/libs/android.x86/libfbjni.so"
+      ]
+    },
+    "react_codegen_RNDateTimePickerCGen::@59b70ddc31ba2f8ef1d2": {
+      "artifactName": "react_codegen_RNDateTimePickerCGen",
+      "abi": "x86",
+      "runtimeFiles": []
+    },
+    "appmodules::@6890427a1f51a3e7e1df": {
+      "artifactName": "appmodules",
+      "abi": "x86",
+      "output": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/build/intermediates/cxx/Debug/483l1b71/obj/x86/libappmodules.so",
+      "runtimeFiles": [
+        "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/build/intermediates/cxx/Debug/483l1b71/obj/x86/libreact_codegen_safeareacontext.so",
+        "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/build/intermediates/cxx/Debug/483l1b71/obj/x86/libreact_codegen_rnscreens.so",
+        "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/build/intermediates/cxx/Debug/483l1b71/obj/x86/libreact_codegen_rnsvg.so",
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/8b60b4f75564ac53567672df7a1c9a73/transformed/fbjni-0.6.0/prefab/modules/fbjni/libs/android.x86/libfbjni.so",
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/jsi/libs/android.x86/libjsi.so",
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/reactnative/libs/android.x86/libreactnative.so"
+      ]
+    },
+    "react_codegen_rnsvg::@4f40eb209d0c0b4a3b65": {
+      "artifactName": "react_codegen_rnsvg",
+      "abi": "x86",
+      "output": "/home/khuongvo/Documents/Gits/ChatApplication/InstagramClone/android/app/build/intermediates/cxx/Debug/483l1b71/obj/x86/libreact_codegen_rnsvg.so",
+      "runtimeFiles": [
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/reactnative/libs/android.x86/libreactnative.so",
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/jsi/libs/android.x86/libjsi.so",
+        "/home/khuongvo/.gradle/caches/8.10.2/transforms/8b60b4f75564ac53567672df7a1c9a73/transformed/fbjni-0.6.0/prefab/modules/fbjni/libs/android.x86/libfbjni.so"
+      ]
+    }
+  }
+}
