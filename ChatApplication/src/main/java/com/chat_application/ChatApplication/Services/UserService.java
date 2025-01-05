@@ -158,6 +158,11 @@ public class UserService {
     }
 
     public int alluserInMonth() {
+//        List<User> users = userRepository.findAll();
+//        users.forEach(user -> {
+//            System.out.println(user.getCreatedAt().toLocalDateTime().getMonth());
+//        });
+//        System.out.println(Timestamp.from(Instant.now()).toLocalDateTime().getMonthValue());
         return userRepository.findAll().stream()
                 .filter(user -> !user.getUsername().equals("admin") && user.getCreatedAt().toLocalDateTime().getMonthValue() == Timestamp.from(Instant.now()).toLocalDateTime().getMonthValue())
                 .toList().size();

@@ -152,4 +152,5 @@ public class UserController {
     void allUser(@RequestBody UsernameRequest request) {
         userService.lockAccount(request);
     }
+
 }

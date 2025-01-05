@@ -3,7 +3,6 @@ package com.chat_application.ChatApplication.Controllers.v1;
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
 import com.chat_application.ChatApplication.Entities.Media;
 import com.chat_application.ChatApplication.Entities.Post;
-import com.chat_application.ChatApplication.Services.cloudinary.CloudinaryService;
 import com.chat_application.ChatApplication.Services.media.IMediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

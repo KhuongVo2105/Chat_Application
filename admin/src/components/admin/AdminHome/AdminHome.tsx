@@ -16,6 +16,7 @@ const AdminHome = () => {
   const [clickBlog, setClickBlog] = useState(false);
   const [clickContact, setClickContact] = useState(false);
   const [clickUsers, setClickUsers] = useState(false);
+  const [clickReportBlog, setClickReportBlog] = useState(false);
   const [clickCategory, setClickCategory] = useState(false);
   const [clickComment, setClickComment] = useState(false);
   const [clickCreateAdmin, setClickCreateAdmin] = useState(false);
@@ -55,6 +56,15 @@ const AdminHome = () => {
     setClickComment(false);
     setClickCreateAdmin(false);
   };
+  const handlerReportBlog = () => {
+    setClickDashBoard(false);
+    setClickContact(false);
+    setClickBlog(false);
+    setClickUsers(false);
+    setClickReportBlog(true);
+    setClickComment(false);
+    setClickCreateAdmin(false);
+  };
   const createAdmin = () => {
     setClickDashBoard(false);
     setClickContact(false);
@@ -85,6 +95,11 @@ const AdminHome = () => {
           <li onClick={() => handlerUsers()}>
             <Link to="/admin/users" className={clickUsers ? "Click" : ""}>
               <FaUserCog /> Quản Lý Tài Khoản
+            </Link>
+          </li>
+          <li onClick={() => handlerReportBlog()}>
+            <Link to="/admin/reportBlog" className={clickReportBlog ? "Click" : ""}>
+              <FaUserCog /> Báo cáo bài viết
             </Link>
           </li>
           <li onClick={() => createAdmin()}>

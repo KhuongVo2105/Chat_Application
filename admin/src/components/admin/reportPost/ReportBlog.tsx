@@ -22,7 +22,7 @@ interface Category {
   name: string;
 }
 
-const Blog: React.FC = () => {
+const ReportBlog: React.FC = () => {
   const navigate = useNavigate();
   const [listCategory, setListCategory] = useState<Category[]>([]);
   const [searchData, setSearchData] = useState<Blog[]>();
@@ -31,6 +31,7 @@ const Blog: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
+  console.log('doo')
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -233,4 +234,4 @@ const Blog: React.FC = () => {
   );
 };
 
-export default Blog;
+export default ReportBlog;
