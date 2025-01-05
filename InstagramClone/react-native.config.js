@@ -1,3 +1,3 @@
 module.exports = {
-    asserts: ['./asserts/fonts']
-}
+  asserts: ['./asserts/fonts'],
+};

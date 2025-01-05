@@ -9,10 +9,7 @@ import React from 'react';
 import RootLayout from './src/screens/_layout';
 
 const App = () => {
-
-  return (
-      <RootLayout />
-  );
-}
+  return <RootLayout />;
+};
 
 export default App;

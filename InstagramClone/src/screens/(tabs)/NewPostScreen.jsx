@@ -9,7 +9,7 @@
 // } from "react-native";
 // import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 
-import { Text, View } from "react-native";
+import {Text, View} from 'react-native';
 
 // const NewPostScreen = () => {
 //   return (
@@ -21,10 +21,12 @@ import { Text, View } from "react-native";
 
 // export default NewPostScreen;
 
-const NewPostScreen = () =>{
+const NewPostScreen = () => {
   return (
-    <View><Text>New Post</Text></View>
-  )
-}
+    <View>
+      <Text>New Post</Text>
+    </View>
+  );
+};
 
 export default NewPostScreen;

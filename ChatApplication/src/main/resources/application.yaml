@@ -7,7 +7,7 @@ spring:
   datasource:
     url: "jdbc:mysql://localhost:3306/Chat_Application"
     username: "root"
-    password: "root"
+    password: ""
   jpa:
     hibernate:
       ddl-auto: update
@@ -23,3 +23,4 @@ spring:
 
 jwt:
   signerKey: "CQi5Od7TCiOp6gLgEaj6niGw6ZRxqbS3V06hTRX5V5wwbGkQGPv2fMMTEOGe2COg\n"
+
