@@ -14,6 +14,7 @@ export const AuthProvider = ({children}) => {
   const [birthdayContext, setBirthdayContext] = useState();
   const [privacyContext, setPrivacyContext] = useState();
   const [statusContext, setStatusContext] = useState();
+  const [avatarContext, setAvatarContext] = useState();
   const [roleContext, setRoleContext] = useState({roles: []});
 
   // Provider cung cấp emailContext và setEmailContext
@@ -34,6 +35,8 @@ export const AuthProvider = ({children}) => {
         setBirthdayContext,
         privacyContext,
         setPrivacyContext,
+        avatarContext,
+        setAvatarContext,
         statusContext,
         setStatusContext,
         roleContext,

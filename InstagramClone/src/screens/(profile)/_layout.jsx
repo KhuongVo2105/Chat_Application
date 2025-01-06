@@ -6,7 +6,7 @@ import EditProfile from './EditProfile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AuthContext} from '../../context/AuthContext';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const ProfileLayout = () => {
   const sizeProfile = 32,
@@ -14,17 +14,17 @@ const ProfileLayout = () => {
   const {usernameContext} = useContext(AuthContext);
   const Stack = createNativeStackNavigator();
   const router = useRoute();
-  const [username, setUsername] = useState(usernameContext);
+  const [user, setUser] = useState();
   const [isUser, setIsUser] = useState(true);
+  
   useEffect(() => {
-    if(router.params?.username) {
-      setUsername(router.params?.username);
+    if(router.params?.user) {
+      setUser(router.params?.user);
       setIsUser(false);
     } else {
-      setUsername(usernameContext);
       setIsUser(true);
     }
-  }, [usernameContext, router.params?.username])
+  }, [usernameContext, router.params?.user])
   
   const ProfileHeader = ({navigation, route}) => {
     return (
@@ -36,7 +36,7 @@ const ProfileLayout = () => {
               size={sizeProfile / 2}
             />
             <Text className="text-lg px-2">
-              {username}
+              {isUser ? usernameContext : user?.username}
             </Text>
             <Ionicons name="chevron-down" size={sizeProfile / 2} />
           </Pressable>
@@ -52,7 +52,7 @@ const ProfileLayout = () => {
     <Stack.Navigator initialRouteName="Profile">
       <Stack.Screen
         name="Profile"
-        component={() => <Profile username={username} isUser={isUser} />}
+        component={() => <Profile user={user} isUser={isUser} />}
         options={{
           headerShown: true,
           header: ({navigation, route}) => (

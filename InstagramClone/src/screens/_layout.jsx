@@ -10,7 +10,6 @@ import {config} from './Link';
 import ProfileLayout from './(profile)/_layout';
 import Message from './(message)/Message';
 import Chat from './(message)/Chat';
-import Test from './(message)/Test';
 
 const RootLayout = () => {
   console.log(
