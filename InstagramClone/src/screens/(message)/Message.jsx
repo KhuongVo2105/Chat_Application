@@ -1,5 +1,5 @@
-import {useCallback, useState, useContext, useRef} from 'react';
-import {useFocusEffect} from '@react-navigation/native';
+import { useCallback, useState, useContext, useRef } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -12,13 +12,15 @@ import {
   Modal,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import DividerWithText from './DividerWithText';
 import { AuthContext } from '../../context/AuthContext';
 import ENDPOINTS from '../../config/endpoints';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
+import ConnectedUsersList from '../../components/ConnectedUsersList';
+import { Searchbar } from 'react-native-paper';
 
 const Message = () => {
+  const [searchQuery, setSearchQuery] = useState()
 
   const { tokenContext, usernameContext } = useContext(AuthContext)
   const [userId, setUserId] = useState('92ffa9f0-dcfb-493a-aba7-bd4a2783295e'); //92ffa9f0-dcfb-493a-aba7-bd4a2783295e
@@ -39,7 +41,7 @@ const Message = () => {
   // Hàm để xử lý thay đổi nút "Thêm" thành "Dấu tick"
   const toggleAddUser = userId => {
     setAddedUsers(prevState => {
-      const newState = {...prevState};
+      const newState = { ...prevState };
       // Nếu người dùng đã được thêm, hủy bỏ
       if (newState[userId]) {
         delete newState[userId];
@@ -62,19 +64,19 @@ const Message = () => {
           // Gọi hai API song song
           const [response1, response2] = await Promise.all([
             axios.get(`${ENDPOINTS.CHAT.MESSAGE_LIST}?userIdSend=${userId}`), // Gọi API danh sách tin nhắn
-            axios.post(ENDPOINTS.CHAT.FOLLOWING, 
+            axios.post(ENDPOINTS.CHAT.FOLLOWING,
               { username: usernameContext }, // Gửi payload JSON
               {
                 headers: { 'Authorization': `Bearer ${tokenContext}` }, // Thêm Bearer token vào header
               }
             ),
           ]);
-  
+
           // Lưu dữ liệu vào state
           setListMessage(response1.data); // Lấy dữ liệu từ response1
           console.log(`Danh sach tin nhan\n${response1.data}`)
+
           setListFollowing(response2.data); // Lấy dữ liệu từ response2
-          console.log(`Danh sach following\n${response2.data}`)
         } catch (error) {
           console.error('Error fetching APIs:', error);
         }
@@ -123,10 +125,10 @@ const Message = () => {
 
   //phần tạo gr
 
-  const renderFollowingAddGroud = ({item}) => (
+  const renderFollowingAddGroud = ({ item }) => (
     <View style={styles.addGroupContainer}>
 
-      <Image source={{uri: item.avatar}} style={styles.avatarAddG} />
+      <Image source={{ uri: item.avatar }} style={styles.avatarAddG} />
       <Text style={styles.nameAddGr}>{item.username}</Text>
       <View style={styles.containerButtonG}>
         <TouchableOpacity
@@ -151,7 +153,7 @@ const Message = () => {
     setGroupName(null);
     setAddedUsers('');
   };
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <View>
       <TouchableOpacity
         style={styles.userContainer}
@@ -168,7 +170,7 @@ const Message = () => {
           })
         }>
         {item.status === false ? (
-          <Image source={{uri: item.avatar}} style={styles.avatar} />
+          <Image source={{ uri: item.avatar }} style={styles.avatar} />
         ) : (
           <Image
             source={require('../../assets/chatGroup.png')}
@@ -189,62 +191,21 @@ const Message = () => {
       </TouchableOpacity>
     </View>
   );
-  const renderFollowing = ({ item }) => (
-    <View>
-      <TouchableOpacity
-        style={styles.userContainerF}
-        onPress={() =>
-          navigation.navigate('Chat', {
-            userIdSend: userId, //Thay đổi user
-            userIdTo: item.id,
-            avatarTo: item.avatar,
-            nameTo: item.username,
-          })
-        }>
-        <Image source={{ uri: item.avatar }} style={styles.avatarF} />
-      </TouchableOpacity>
-    </View>
-  );
 
   const navigation = useNavigation();
-  const handleBackPress = () => {
-    navigation.goBack();
-  };
+
   return (
     <View style={styles.container}>
-      {/**/}
-      <View>
-        <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
-          <Image
-            source={require('../../assets/icon_back.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-        {/* đổi tên thành usernameContext*/}
-        <Text style={styles.username}>NTN</Text>
-      </View>
-      <View style={styles.containerLine}>
-        <DividerWithText text="Người Theo Dõi" />
-      </View>
-      <View style={styles.containerFollow}>
-        <Image
-          source={require('../../assets/icons--instagram.png')}
-          style={styles.iconF}
-        />
-        <FlatList
-          data={listFollowing}
-          renderItem={renderFollowing}
-          keyExtractor={item => item.id}
-          horizontal={true}
-          showsHorizontalScrollIndicator={true}
-          contentContainerStyle={{paddingBottom: 20}}
-          style={styles.flatList}
-        />
-      </View>
-      {/**/}
-      <View style={styles.containerLine}>
-        <DividerWithText text="Tin Nhắn" />
-      </View>
+
+      <Searchbar
+        className="w-96 mx-auto mt-2"
+        placeholder="Search"
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+      />
+
+      <ConnectedUsersList styleGroup={`mx-2 mb-3`} list={listFollowing} />
+
       {/*Add Group*/}
       <TouchableOpacity
         style={styles.buttonAdd}
@@ -292,7 +253,7 @@ const Message = () => {
                   <Text style={styles.submitButtonText}>Tạo nhóm</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.submitButton, {backgroundColor: 'red'}]}
+                  style={[styles.submitButton, { backgroundColor: 'red' }]}
                   onPress={() => closeCreateGroup()}>
                   <Text style={styles.submitButtonText}>Quay lại</Text>
                 </TouchableOpacity>
@@ -438,7 +399,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,

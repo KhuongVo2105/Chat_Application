@@ -20,6 +20,7 @@ import Modal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import Video from 'react-native-video';
+import ConnectedUsersList from '../../components/ConnectedUsersList';
 
 const Home = ({navigation, route}) => {
 //   const [loading, setLoading] = useState(false);
@@ -92,7 +93,8 @@ const Home = ({navigation, route}) => {
         console.log('User information loaded successfully.');
 
         // Gọi API lấy danh sách following
-        const getFollowingEndpoint = ENDPOINTS.FOLLOW.GET_FOLLOWING;
+        // const getFollowingEndpoint = ENDPOINTS.FOLLOW.GET_FOLLOWING;
+        const getFollowingEndpoint = ENDPOINTS.CHAT.FOLLOWING;
         try {
           const followingResponse = await axios.post(
             getFollowingEndpoint,
@@ -101,7 +103,8 @@ const Home = ({navigation, route}) => {
               headers: { Authorization: `Bearer ${tokenContext}` },
             },
           );
-          var followingList = followingResponse.data.result;
+          // var followingList = followingResponse.data.result;
+          var followingList = followingResponse.data;
           setFollow(followingList);
           console.log('followingList');
           console.log(followingList);
@@ -261,74 +264,7 @@ const Home = ({navigation, route}) => {
     <View className="w-full h-full flex justify-center items-center bg-white">
       <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
         {/* new feeds */}
-        <ScrollView
-          className=""
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}>
-          <IconUserProfile
-            containerStyles="m-3"
-            width={80}
-            height={80}
-            seen={false}
-            source={require('./../../assets/portaits/portait_1.jpg')}
-          />
-
-          <IconUserProfile
-            containerStyles="m-3"
-            width={80}
-            height={80}
-            seen={false}
-            source={require('./../../assets/portaits/portait_2.jpg')}
-          />
-
-          <IconUserProfile
-            containerStyles="m-3"
-            width={80}
-            height={80}
-            source={require('./../../assets/portaits/portait_3.jpg')}
-            seen={false}
-          />
-
-          <IconUserProfile
-            containerStyles="m-3"
-            width={80}
-            height={80}
-            source={require('./../../assets/portaits/portait_4.jpg')}
-            seen={false}
-          />
-
-          <IconUserProfile
-            containerStyles="m-3"
-            width={80}
-            height={80}
-            source={require('./../../assets/portaits/portait_1.jpg')}
-            seen={true}
-          />
-
-          <IconUserProfile
-            containerStyles="m-3"
-            width={80}
-            height={80}
-            source={require('./../../assets/portaits/portait_2.jpg')}
-            seen={true}
-          />
-
-          <IconUserProfile
-            containerStyles="m-3"
-            width={80}
-            height={80}
-            source={require('./../../assets/portaits/portait_3.jpg')}
-            seen={true}
-          />
-
-          <IconUserProfile
-            containerStyles="m-3"
-            width={80}
-            height={80}
-            source={require('./../../assets/portaits/portait_4.jpg')}
-            seen={true}
-          />
-        </ScrollView>
+        <ConnectedUsersList styleGroup={`my-2`} list={follow}/>
 
         {/* Post */}
         <View>
