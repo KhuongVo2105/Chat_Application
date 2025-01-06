@@ -50,7 +50,7 @@ public class FollowController {
         return service.isFollowing(req);
     }
 
-    @PostMapping("/following")
+    @PostMapping("/followingList")
     List<FollowingResponse> followeing(@RequestBody UsernameRequest request) {
         return service.getFollowingList(request);
     }
