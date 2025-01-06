@@ -29,8 +29,8 @@ public class MessageService {
         return messageRepository.findMessagesBetweenUsers(userIdSend,userIdTo);
     }
     //Lưu tin nhắn
-    public void saveMessage(Message message){
-        messageRepository.save(message);
+    public Message saveMessage(Message message){
+        return messageRepository.save(message);
     }
     //Lấy ra danh sách bạn bè và tin nhắn cuối cùng
     public List<MessegeRequest> ListFriendMessage(UUID userIdSend){

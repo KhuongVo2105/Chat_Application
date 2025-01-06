@@ -24,39 +24,37 @@ public class ChatController {
         this.messagingTemplate = messagingTemplate;
     }
 
-//    @MessageMapping("/chat")
-//    @SendTo("/topic/messages")
-//    public ChatMessage sendMessage(@Payload ChatMessage message){
-//        message.setTimestamp(new Date());
-//        return message;
-//    }
-
     // Nhan tin nhan va luu vao database
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public void sendMessage1(@Payload ChatMessage message){     //status true: nhóm false: 1vs1
+    public void sendMessage1(@Payload ChatMessage message) {
         System.out.println(message.toString());
         Message message1 = new Message();
         message1.setUserIdSend(UUID.fromString(message.getUserIdSend()));
-        if(message.isType()) {
-            System.out.println("có zô group");
+
+        // Determine if the message is for a group or a one-on-one chat
+        if (message.isType()) {
+            System.out.println("Group chat detected");
             message1.setGroupChatId(Long.valueOf(message.getUserIdTo()));
             message1.setUserIdTo(null);
-        }else {
+        } else {
             message1.setUserIdTo(UUID.fromString(message.getUserIdTo()));
         }
+
         message1.setContent(message.getContent());
         message1.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         message1.setVisible(true);
-        System.out.println("có lưu gr");
-        messageService.saveMessage(message1);
-//        //Giúp gưửi tin nhắn riêng
-//        String destination = "/user/" + message.getReceiverId() + "/queue/messages";
-//        messagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverId()), "/queue/messages", message);//Gửi tin nhắn cho người nhận
+
+        // Save the message and handle success/failure
+        Message messResponse = messageService.saveMessage(message1);
+//        boolean isSaved = messageService.saveMessage(message1);
+        if (messResponse != null) {
+            // Notify clients about the new message
+            messagingTemplate.convertAndSend("/topic/messages", message1);
+        } else {
+            // Handle failure case (optional)
+            System.out.println("Failed to save message");
+        }
     }
-//add user
-//    public Message addUser(@Payload Message message, SimpMessageHeaderAccessor headerAccessor) {
-//        headerAccessor.getSessionAttributes().put("username", message.getSender());
-//        return message;
-//    }
+
 }
