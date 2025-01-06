@@ -20,13 +20,11 @@ import Modal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
 import Video from 'react-native-video';
+import { OneSignal } from 'react-native-onesignal';
 
 const Home = ({navigation, route}) => {
-<<<<<<< HEAD
-=======
 //   const [loading, setLoading] = useState(false);
 //   const [yourComment, setYourComment] = useState();
->>>>>>> 43794d2e9cf7abe8c8c16226b246f2f20d988365
   const {
     tokenContext,
     setIdContext,
@@ -38,6 +36,7 @@ const Home = ({navigation, route}) => {
     setPrivacyContext,
     setStatusContext,
     setRoleContext,
+    setAvatarContext
   } = useContext(AuthContext);
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -85,15 +84,16 @@ const Home = ({navigation, route}) => {
         setCreatedAtContext(userInfo.createdAt);
         setBirthdayContext(userInfo.birthday);
 //         setRoleContext({roles: userInfo.roles});
-
 //         console.log('User information loaded successfully.');
-
+        setAvatarContext(userInfo.avatar);
         setPrivacyContext(userInfo.privacy);
         setStatusContext(userInfo.status);
         setRoleContext({roles: userInfo.roles});
 
         console.log('User information loaded successfully.');
-
+        OneSignal.initialize('672c61cb-8e38-40a0-9d50-d0cc76dc03fe');
+        OneSignal.login(userInfo.id);
+        OneSignal.User.pushSubscription.optIn();
         // Gọi API lấy danh sách following
         const getFollowingEndpoint = ENDPOINTS.FOLLOW.GET_FOLLOWING;
         try {

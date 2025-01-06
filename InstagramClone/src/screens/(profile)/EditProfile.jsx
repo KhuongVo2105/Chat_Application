@@ -22,29 +22,33 @@ import {handleError} from '../../utils/handleError';
 
 function EditProfile({navigation}) {
   const theme = useTheme();
-
   // Context
   const {
     tokenContext,
     idContext,
     usernameContext,
     setUsernameContext,
+    avatarContext,
+    setAvatarContext,
     privacyContext,
     setPrivacyContext,
   } = useContext(AuthContext);
 
   // Field user information
   const [name, setName] = useState();
-  const [username, setUsername] = useState('aaa');
+  const [username, setUsername] = useState();
   const [bio, setBio] = useState();
-  const [userData, setUserData] = useState(null);
+  
   const [privacy, setPrivacy] = useState(true);
-
+  const [avatar, setAvatar] = useState('');
   // Other
   const [loading, setLoading] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [visibleDialog, setVisibleDialog] = useState(false);
-
+  useEffect(() => {
+   if (avatarContext) {
+    setAvatar(avatarContext);
+   } 
+  }, [avatarContext])
   const selectImage = () => {
     const options = {
       mediaType: 'photo',
@@ -55,28 +59,27 @@ function EditProfile({navigation}) {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.assets && response.assets.length > 0) {
-        setSelectedImage(response.assets[0]); // Lưu hình ảnh đã chọn
-        console.log('Selected Image:', response.assets[0]);
+        uploadImage(response.assets[0]);
       } else {
         console.error('ImagePicker Error: ', response.errorMessage);
       }
     });
+    
   };
 
-  const uploadImage = async () => {
-    if (!selectedImage) {
-      Alert.alert('Please select an image first!');
-      return;
-    }
-
+  const uploadImage = async (image) => {
+    // if (!selectedImage) {
+    //   Alert.alert('Please select an image first!');
+    //   return;
+    // }
     const formData = new FormData();
-    formData.append('username', userData.username); // Thay thế bằng username thực tế
+    formData.append('username', usernameContext); // Thay thế bằng username thực tế
     formData.append('file', {
-      uri: selectedImage.uri,
-      type: selectedImage.type || 'image/jpeg', // Đặt loại tệp tin mặc định
-      name: selectedImage.fileName || 'photo.jpg', // Tên tệp tin mặc định
+      uri: image.uri,
+      type: image.type || 'image/jpeg', // Đặt loại tệp tin mặc định
+      name: image.fileName || 'photo.jpg', // Tên tệp tin mặc định
     });
-
+    
     try {
       const endpoint = ENDPOINTS.USER.UPDATE_AVATAR;
       console.log(`updateAvatar: ${endpoint}`);
@@ -89,15 +92,15 @@ function EditProfile({navigation}) {
         'Success',
         response.data.message || 'Image uploaded successfully!',
       );
+      setAvatar(response.data);
+      setAvatarContext(response.data);
     } catch (error) {
       console.error('Upload error:', error);
       Alert.alert('Error', 'Failed to upload image');
     }
   };
   const handleChangeUsername = (text) => {
-    console.log(text);
     setUsername(text);
-    console.log('Username: ', username);
   }
   const handleUpdate = async () => {
     const endpoint = ENDPOINTS.USER.UPDATE_USER_PROFILE;
@@ -190,14 +193,14 @@ function EditProfile({navigation}) {
       showsVerticalScrollIndicator={false}>
       <View className="w-96 mx-auto">
         <View style={styles.editAvatar}>
-          {userData?.avatar == null ? (
+          {avatar.length === 0 ? (
             <Image
               source={require('../../assets/avatarDefine.jpg')}
               style={styles.avatar}
             />
           ) : (
             <Image
-              source={require('../../assets/avatarDefine.jpg')}
+              source={{uri: avatar}}
               style={styles.avatar}
             />
           )}

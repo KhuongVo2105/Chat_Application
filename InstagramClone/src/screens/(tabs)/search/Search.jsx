@@ -85,7 +85,7 @@ const Search = () => {
 
   const renderItem = ({item}) => {
     const handlePressUser = () => {
-      navigation.navigate('ProfileLayout', {username: item.username});
+      navigation.navigate('ProfileLayout', {user: item});
     };
     const handlePressPost = () => {};
     return (
@@ -96,7 +96,7 @@ const Search = () => {
             source={
               item.avatar
                 ? {uri: item.avatar}
-                : require('../../..//assets/images/default_avatar.png')
+                : require('../../../assets/avatarDefine.jpg')
             }
             style={styles.profileImage}
           />

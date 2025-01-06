@@ -38,13 +38,9 @@ export const useLoadGroup = async token => {
   }, [token]);
 
   useEffect(() => {
-<<<<<<< HEAD
-    if (token) loadGroup(); // Chỉ tự động tải khi có token
-=======
     if (token) {
       loadGroup();
     } // Chỉ tự động tải khi có token
->>>>>>> 43794d2e9cf7abe8c8c16226b246f2f20d988365
   }, [token, loadGroup]);
 
   return {conversations, loading, error, reload: loadGroup};
@@ -102,11 +98,8 @@ export const loadUserDetails = async ({token, userId}) => {
       : 'Network Error: Unable to connect to server.';
     console.error(errorMessage);
     console.error(
-<<<<<<< HEAD
       `\tError fetching details for group :`,
-=======
-      `\tError fetching details for group ${groupId}:`,
->>>>>>> 43794d2e9cf7abe8c8c16226b246f2f20d988365
+
       err.response?.data || err.message,
     );
     return {data: null, error: errorMessage};

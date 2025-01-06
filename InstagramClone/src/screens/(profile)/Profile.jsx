@@ -20,13 +20,9 @@ import ImageGrid from '../../components/ImageGrid';
 import ENDPOINTS from '../../config/endpoints';
 import {handleError} from '../../utils/handleError';
 import QRCode from 'react-native-qrcode-svg';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-export const User = {
-  username: '',
-  avatar: '',
-};
-
-const Profile = ({navigation, username, isUser}) => {
+const Profile = ({ user, isUser}) => {
   const images = [
     {
       id: '1',
@@ -280,25 +276,59 @@ const Profile = ({navigation, username, isUser}) => {
     },
   ];
 
-  const {tokenContext} = useContext(AuthContext);
+  const {tokenContext,idContext, avatarContext, usernameContext} = useContext(AuthContext);
 
   const [selectedItem, setSelectedItem] = useState('table');
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState(null);
+  const [username, setUsername] = useState('');
   const [numPost, setNumPost] = useState(0);
+  const [avatar, setAvatar] = useState();
+  const [userState, setUserState] = useState(user);
   const [numFollowing, setNumFollowing] = useState(0);
   const [numFollower, setNumFollower] = useState(0);
   const [isOpenQR, setIsOpenQR] = useState(false);
-
+  const navigation = useNavigation();
+  const route = useRoute();
   const handleSelectItem = item => {
     setSelectedItem(item);
   };
+  useEffect(() => {
+    console.log(route.params?.userId);
+    if(route.params?.userId) {
+      const userId = route.params?.userId;
+      const fetchUserById = async () => {
+        const endpoint = `${ENDPOINTS.USER.GET_USER_PROFILE}/${userId}`;
+        try {
+          const response = await axios.get(endpoint, {
+            headers: {Authorization: `Bearer ${tokenContext}`},
+          });
+          if (response.status === 200) {
+            setUserState(response.data.result);
+            setUsername(userState.username);
+            setAvatar(userState.avatar);
+          }
+        } catch (err) {
+          console.log(`Error Profile: ${err}`);
+        }
+      };
+      fetchUserById();
+    } else {
+      if (isUser) {
+        setUsername(usernameContext);
+        setAvatar(avatarContext);
+      } else {
+        setUsername(userState?.username);
+        setAvatar(userState?.avatar);
+      }
+    }
+  }, [usernameContext, isUser, userState?.username, avatarContext, userState?.avatar, route.params?.userId, tokenContext])
 
   async function fetchSuggestion() {}
 
   async function fetchPost() {
     const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME;
     console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
+    console.log("Username ", username)
     try {
       const response = await axios.post(
         endpoint,
@@ -366,14 +396,14 @@ const Profile = ({navigation, username, isUser}) => {
         showsVerticalScrollIndicator={false}>
         <View className="w-96 mx-auto">
           <View className="mb-3" style={styles.header}>
-            {userData?.avatar == null ? (
+            {!avatar ? (
               <Image
                 source={require('../../assets/avatarDefine.jpg')}
                 style={styles.avatar}
               />
             ) : (
               <Image
-                source={require('../../assets/avatarDefine.jpg')}
+                source={{uri: avatar}}
                 style={styles.avatar}
               />
             )}
@@ -481,7 +511,7 @@ const Profile = ({navigation, username, isUser}) => {
         <View style={styles.modalContainer}>
           <View style={styles.qrContainer}>
             <QRCode
-              value={`https://myapp_instagram.com/profile/${username}`}
+              value={`https://myapp_instagram.com/profile/${idContext}`}
               size={200}
             />
             <TouchableOpacity
