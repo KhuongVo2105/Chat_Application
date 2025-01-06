@@ -1,8 +1,8 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-const SERVER_ADDRESS = `192.168.10.234`;
+const SERVER_ADDRESS = `192.168.1.14`;
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`;
 
-const API_BASE_URL  = REACT_APP_API_BASE_URL;
+const API_BASE_URL = REACT_APP_API_BASE_URL;
 const API_WEBSOCKET = `http:${SERVER_ADDRESS}:8800`
 
 const ENDPOINTS = {
@@ -24,7 +24,7 @@ const ENDPOINTS = {
   },
   SEARCH: {
     FIND_USERNAME: `${API_BASE_URL}/search/username`,
-    FIND_POST:`${API_BASE_URL}/search/caption`
+    FIND_POST: `${API_BASE_URL}/search/caption`
   },
   OTP: {
     SEND_OTP: `${API_BASE_URL}/verification/send-code`,
@@ -73,14 +73,14 @@ const ENDPOINTS = {
     SUGGEST_USER: `${API_BASE_URL}/follow/suggestUser`
   },
 
-    CHAT: {
-        SOCKJS:`${API_WEBSOCKET}/ws`,
-        MESSAGE: `${API_WEBSOCKET}/messages`,
-        MESSAGE_LIST : `${API_WEBSOCKET}/messages/messageList`,
-        FOLLOWING: `${API_BASE_URL}/follow/followingList`,
-        CREATE_GROUP: `${API_WEBSOCKET}/GroupChat/createGroup`,
-        GROUP:`${API_WEBSOCKET}/messages/group`
-    }
+  CHAT: {
+    SOCKJS: `${API_WEBSOCKET}/ws`,
+    MESSAGE: `${API_WEBSOCKET}/messages`,
+    MESSAGE_LIST: `${API_WEBSOCKET}/messages/messageList`,
+    FOLLOWING_USERS: `${API_BASE_URL}/follow/followingList`,
+    CREATE_GROUP: `${API_WEBSOCKET}/GroupChat/createGroup`,
+    USER_CONVERSATIONS: `${API_WEBSOCKET}/messages/group`
+  }
 }
 
 export default ENDPOINTS;

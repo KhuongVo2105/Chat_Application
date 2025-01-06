@@ -97,7 +97,7 @@ const Home = ({ navigation, route }) => {
         OneSignal.User.pushSubscription.optIn();
         // Gọi API lấy danh sách following
         // const getFollowingEndpoint = ENDPOINTS.FOLLOW.GET_FOLLOWING;
-        const getFollowingEndpoint = ENDPOINTS.CHAT.FOLLOWING;
+        const getFollowingEndpoint = ENDPOINTS.CHAT.FOLLOWING_USERS;
         try {
           const followingResponse = await axios.post(
             getFollowingEndpoint,

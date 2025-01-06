@@ -73,7 +73,7 @@ const Chat = ({ route }) => {
           );
         } else {
           response = await fetch(
-            `${ENDPOINTS.CHAT.GROUP}/${userIdSend}/${userIdTo}`,
+            `${ENDPOINTS.CHAT.USER_CONVERSATIONS}/${userIdSend}/${userIdTo}`,
           );
         }
         const data = await response.json();
