@@ -280,9 +280,10 @@ const Profile = ({ user, isUser}) => {
   const {tokenContext,idContext, avatarContext, usernameContext} = useContext(AuthContext);
 
   const [selectedItem, setSelectedItem] = useState('table');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [numPost, setNumPost] = useState(10);
+  const [post, setPost] = useState(null)
   const [avatar, setAvatar] = useState();
   const [userState, setUserState] = useState(user);
   const [numFollowing, setNumFollowing] = useState(10);
@@ -296,38 +297,41 @@ const Profile = ({ user, isUser}) => {
     setSelectedItem(item);
   };
   useEffect(() => {
-    if(route.params?.userId) {
-      const userId = route.params?.userId;
-      const fetchUserById = async () => {
-        const endpoint = `${ENDPOINTS.USER.GET_USER_PROFILE}/${userId}`;
-        try {
+    const fetchData = async () => {
+      try {
+        if (route.params?.userId) {
+          const userId = route.params.userId;
+          const endpoint = `${ENDPOINTS.USER.GET_USER_PROFILE}/${userId}`;
           const response = await axios.get(endpoint, {
-            headers: {Authorization: `Bearer ${tokenContext}`},
+            headers: { Authorization: `Bearer ${tokenContext}` },
           });
           if (response.status === 200) {
-            setUserState(response.data.result);
-            setUsername(userState.username);
-            setAvatar(userState.avatar);
+            const userData = response.data.result;
+            setUserState(userData);
+            setUsername(userData.username);
+            setAvatar(userData.avatar);
           }
-        } catch (err) {
-          console.log(`Error Profile: ${err}`);
+        } else {
+          if (isUser) {
+            setUsername(usernameContext);
+            setAvatar(avatarContext);
+          } else {
+            setUsername(userState?.username);
+            setAvatar(userState?.avatar);
+          }
         }
-      };
-      fetchUserById();
-    } else {
-      if (isUser) {
-        setUsername(usernameContext);
-        setAvatar(avatarContext);
-      } else {
-        setUsername(userState?.username);
-        setAvatar(userState?.avatar);
+        if (username.length !== 0) {
+          await Promise.all([fetchPost(), fetchFollower(), !isUser && fetchIsFollow(), fetchFollowing(), fetchSuggestUser(), fetchMedia()]);
+          setLoading(false);
+        }
+
+      } catch (error) {
+        console.error("Error fetching data: ", error);
       }
-    }
-    setLoading(true);
-  }, [usernameContext, isUser, userState?.username, avatarContext, userState?.avatar, route.params?.userId, tokenContext])
-
-  async function fetchSuggestion() {}
-
+    };
+  
+    fetchData();
+  }, [route.params?.userId, tokenContext, isUser, username, loading]);
   async function fetchPost() {
     const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME;
     try {
@@ -340,9 +344,23 @@ const Profile = ({ user, isUser}) => {
     } catch (error) {
       handleError(error);
     }
+  } 
+ 
+  async function fetchMedia() {
+    var userId;
+    if (isUser) {
+      userId = idContext;
+    } else {
+      userId = userState.id;
+    }
+    const endpoint = ENDPOINTS.MEDIA.GET_MEDIA_URL_BY_USERID;
+    try {
+      const response = await axios.post(endpoint + `?userId=${userId}`);
+      setPost(response.data);
+    } catch (error) {
+      console.log("Media error", error);
+    }
   }
-
-  async function fetchMedia({postId}) {}
 
   async function renderPost() {}
 
@@ -395,36 +413,22 @@ const Profile = ({ user, isUser}) => {
     const endpoint = ENDPOINTS.FOLLOW.SUGGEST_USER;
     try {
         const response = await axios.post(endpoint,
-          {usernameContext}
+          {username: usernameContext}
         );
 
         setUserSuggestion(response.data);
-        console.log("User r",userSuggestion)
     } catch (error) {
       console.log("Suggest error", error)
     }
   }
 
-  useEffect(() => {
-    if (loading) {
-      fetchPost();
-      fetchFollower();
-      fetchFollowing();
-      fetchSuggestUser();
-      if (!isUser) fetchIsFollow();
-      setLoading(false);
-    }
-    
-  }, [loading])
-
-  const handleFollow = async () => {
-    console.log("Follow");
+  const handleFollow = async (followingId) => {
     const endpoint = ENDPOINTS.FOLLOW.FOLLOW;
     try {
       const response = await axios.post(endpoint,
         {
           followerId: idContext,
-          followingId:userState.id
+          followingId:followingId
         }
       );
       setLoading(true);
@@ -438,7 +442,7 @@ const Profile = ({ user, isUser}) => {
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
-    )
+    );
   } else {
     return (
       <View>
@@ -501,13 +505,13 @@ const Profile = ({ user, isUser}) => {
                 {isFollow ? 
                   (<Pressable className="flex-1 bg-gray-200 rounded-md py-1 mx-1">
                 <Text className="text-base font-medium text-center"
-                onPress={handleFollow}>
+                onPress={() => handleFollow(userState.id)}>
                     UnFollow
                 </Text>
                 </Pressable>) :
                 (<Pressable className="flex-1 bg-blue-500 rounded-md py-1 mx-1">
                 <Text className="text-base font-medium text-center"
-                onPress={handleFollow}>
+                onPress={() => handleFollow(userState.id)}>
                     Follow
                 </Text>
                 </Pressable>)
@@ -527,7 +531,7 @@ const Profile = ({ user, isUser}) => {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}>
                   {userSuggestion ? (userSuggestion.map((user, index) => (
-                    <UserSuggestion key={index} username= {user.username} caption = "Suggested for you" image = {user.avatar} />
+                    <UserSuggestion key={index} follow={() => handleFollow(user.id)} username= {user.username} caption = "Suggested for you" image = {user.avatar} id={user.id} />
                    ))): (<></>)}
                 </ScrollView>
               </View>
@@ -556,10 +560,12 @@ const Profile = ({ user, isUser}) => {
               </View>
             </View>
           </View>
-        </ScrollView>
-  
+          <View className="pb-20"></View>
         {/* Grid */}
-        <ImageGrid images={images} />
+
+        </ScrollView>
+          <ImageGrid post={post} />
+  
         {/* QR Code Modal */}
         <Modal visible={isOpenQR} transparent={true} animationType="slide">
           <View style={styles.modalContainer}>

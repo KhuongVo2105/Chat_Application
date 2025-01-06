@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import avatarDefine from '../assets/avatarDefine.jpg';
 
@@ -31,7 +31,8 @@ const UserSuggestion = props => {
           {props.caption ? props.caption : 'Suggested for you'}
         </Text>
       </View>
-      <TouchableOpacity className="bg-blue-500 p-1 px-2 items-center rounded-md">
+      <TouchableOpacity className="bg-blue-500 p-1 px-2 items-center rounded-md"
+      onPress={props.follow}>
         <Text className="text-white font-semibold">Follow</Text>
       </TouchableOpacity>
     </View>
