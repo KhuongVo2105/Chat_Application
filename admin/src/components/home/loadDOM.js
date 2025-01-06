@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 async function fetchHTML(url) {
   try {
     const response = await axios.get(url);
@@ -18,4 +18,4 @@ export async function fetchRss(url) {
     return null;
   }
 }
-export default fetchHTML ;
+export default fetchHTML;

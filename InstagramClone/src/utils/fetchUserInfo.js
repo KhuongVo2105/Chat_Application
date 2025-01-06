@@ -1,13 +1,14 @@
-import { useContext } from 'react'
+import {useContext} from 'react';
 import ENDPOINTS from '../config/endpoints';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
-import { handleError } from './handleError';
+import {AuthContext} from '../context/AuthContext';
+import {handleError} from './handleError';
 
 const fetchUserInfo = async () => {
   const {
     tokenContext,
-    idContext, setIdContext,
+    idContext,
+    setIdContext,
     setUsernameContext,
     setEmailContext,
     setCreatedAtContext,
@@ -45,18 +46,17 @@ const fetchUserInfo = async () => {
       setUsernameContext(userInfo.username);
       setEmailContext(userInfo.email);
       setCreatedAtContext(userInfo.createdAt);
-      setPrivacyContext(userInfo.privacy)
-      setStatusContext(userInfo.status)
+      setPrivacyContext(userInfo.privacy);
+      setStatusContext(userInfo.status);
       setBirthdayContext(userInfo.birthday);
 
-      setRoleContext({ roles: userInfo.roles });
+      setRoleContext({roles: userInfo.roles});
 
       console.log('User information loaded successfully.');
     }
   } catch (error) {
-    handleError(error)
+    handleError(error);
   }
-
-}
+};
 
 export default fetchUserInfo;

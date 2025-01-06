@@ -107,7 +107,10 @@ const AdminHome = () => {
             </Link>
           </li>
           <li onClick={() => createAdmin()}>
-            <Link to="/admin/adminCreate" className={clickCreateAdmin ? "Click" : ""}>
+            <Link
+              to="/admin/adminCreate"
+              className={clickCreateAdmin ? "Click" : ""}
+            >
               <FaUserPlus /> Thêm quản trị viên
             </Link>
           </li>
@@ -116,7 +119,7 @@ const AdminHome = () => {
       <div className="main-content">
         <div className="navbar">
           <h1>
-            Welcome to Admin  {currentUser ? currentUser.fullName : ""}
+            Welcome to Admin {currentUser ? currentUser.fullName : ""}
             <Link to="/login" onClick={handleLogout}>
               Đăng xuất
             </Link>

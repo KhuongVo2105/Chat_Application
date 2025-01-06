@@ -1,114 +1,114 @@
 .header {
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
 }
 
 .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .logo a {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
 }
-.nav{
-    margin-right: -280px;
-    position: relative;
+.nav {
+  margin-right: -280px;
+  position: relative;
 }
 .nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
 }
 
 .nav li {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .nav a {
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
 }
 
 .nav a:hover {
-    color: #007bff;
+  color: #007bff;
 }
-.socialIcons{
-    width: 100px;
-    display: flex;
-    justify-content: space-around;
+.socialIcons {
+  width: 100px;
+  display: flex;
+  justify-content: space-around;
 }
-.search{
-    display: flex;
-    margin-right: -290px;
+.search {
+  display: flex;
+  margin-right: -290px;
 }
-.formSearch{
-    position: relative;
+.formSearch {
+  position: relative;
 }
-.inputSearch{
-    border: 1px solid #ababab;
-    border-radius: 50px;
-    color: #555;
-    font-size: 14px;
-    height: 32px;
-    outline: none;
-    padding-left: 9px;
-    padding-right: 30px;
-    width: 100%;
+.inputSearch {
+  border: 1px solid #ababab;
+  border-radius: 50px;
+  color: #555;
+  font-size: 14px;
+  height: 32px;
+  outline: none;
+  padding-left: 9px;
+  padding-right: 30px;
+  width: 100%;
 }
-.btnSearch:hover{
-    box-shadow: none;
-    opacity: 0.8;
+.btnSearch:hover {
+  box-shadow: none;
+  opacity: 0.8;
 }
-.btnSearch{
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    height: 20px;
-    position: absolute;
-    right: 20px;
-    top: -15px;
-    width: 20px;
+.btnSearch {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  height: 20px;
+  position: absolute;
+  right: 20px;
+  top: -15px;
+  width: 20px;
 }
-.btnSearch img{
-    width: 20px;
+.btnSearch img {
+  width: 20px;
 }
-.account:hover .logout{
-    display: block !important;
-}
-
-.logout a:hover{
-    opacity: 0.8;
-}
-.logout a{
-    color: white !important;
-}
-.logout{
-    text-align: center;
-    width: 180px;
-    position: absolute;
-    background-color: rgba(5, 63, 150, 0.56);
-    border-top: 10px solid white;
-    border-radius: 10px;
-    z-index: 10000;
-    font-weight: 700;
-    display: none;
-}
-.logout ul{
-    display: block;
+.account:hover .logout {
+  display: block !important;
 }
 
-.logout ul li{
-    margin: 0;
-    padding: 7px 10px;
+.logout a:hover {
+  opacity: 0.8;
+}
+.logout a {
+  color: white !important;
+}
+.logout {
+  text-align: center;
+  width: 180px;
+  position: absolute;
+  background-color: rgba(5, 63, 150, 0.56);
+  border-top: 10px solid white;
+  border-radius: 10px;
+  z-index: 10000;
+  font-weight: 700;
+  display: none;
+}
+.logout ul {
+  display: block;
+}
+
+.logout ul li {
+  margin: 0;
+  padding: 7px 10px;
 }
