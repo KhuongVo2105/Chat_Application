@@ -2,6 +2,7 @@ package com.chat_application.ChatApplication.Mapper;
 
 import com.chat_application.ChatApplication.Dto.Request.UserCreateReq;
 import com.chat_application.ChatApplication.Dto.Request.UserReq;
+import com.chat_application.ChatApplication.Dto.Response.FollowingResponse;
 import com.chat_application.ChatApplication.Dto.Response.UserResponse;
 import com.chat_application.ChatApplication.Entities.User;
 import org.mapstruct.Mapper;
@@ -16,4 +17,6 @@ public interface UserMapper {
     UserResponse toUserResponse(User user);
 
     void updateUser(@MappingTarget User user, UserReq request);
+
+    FollowingResponse toFollowingResponse(User user);
 }

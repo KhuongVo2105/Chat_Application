@@ -10,7 +10,13 @@ import {
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ImageGrid = ({images}) => {
+const ImageGrid = ({post}) => {
+  const images = post.map((uri, index) => ({
+    id: index.toString(),
+    uri,
+    quantity: index+1,
+  }));
+
   const Item = ({quantity, uri}) => {
     return (
       <View className="relative flex-1 m-1 h-32">

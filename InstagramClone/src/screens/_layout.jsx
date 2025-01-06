@@ -1,15 +1,13 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NavigationContainer} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
 import SignIn from './SignIn';
 import TabsLayout from './(tabs)/_layout';
 import AuthsLayout from './(auths)/_layout';
 import ConversationLayout from './(conversations)/_layout';
-import {AuthProvider} from '../context/AuthContext';
-import {config} from './Link';
-import ProfileLayout from './(profile)/_layout';
-import Message from './(message)/Message';
-import Chat from './(message)/Chat';
+import { AuthProvider } from '../context/AuthContext';
+import ChatLayout from './(message)/_layout';
+import { config } from './Link';
 
 const RootLayout = () => {
   console.log(
@@ -22,42 +20,30 @@ const RootLayout = () => {
     <AuthProvider>
       <NavigationContainer linking={config}>
         <Stack.Navigator initialRouteName="SignIn">
-          {/*  Giao diện hien ds bạn bè đã nhắn*/}
-          <Stack.Screen
-            name="Message"
-            component={Message}
-            options={{headerShown: false}}
-          />
-          {/*Giao diện chat*/}
-          <Stack.Screen
-            name="Chat"
-            component={Chat}
-            options={{headerShown: false}}
-          />
           <Stack.Screen
             name="SignIn"
             component={SignIn}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="(tabs)"
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
             component={TabsLayout}
           />
           <Stack.Screen
             name="(auths)"
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
             component={AuthsLayout}
           />
           <Stack.Screen
             name="(conversations)"
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
             component={ConversationLayout}
           />
           <Stack.Screen
-            name="ProfileLayout"
-            options={{headerShown: false}}
-            component={ProfileLayout}
+            name='(message)'
+            options={{ headerShown: false }}
+            component={ChatLayout}
           />
         </Stack.Navigator>
       </NavigationContainer>

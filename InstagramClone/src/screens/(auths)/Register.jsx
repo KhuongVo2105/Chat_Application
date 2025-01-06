@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, TouchableOpacity, Alert, Pressable} from 'react-native';
 import axios from 'axios';
 import ENDPOINTS from '../../config/endpoints';
 
@@ -15,10 +15,13 @@ const Register = ({navigation, route}) => {
     setPassword(route.params.password);
     setBirthday(route.params.birthday);
     setUsername(route.params.username);
+
+    console.log(`${email}, ${password}, ${birthday}, ${username}`)
   }, [route.params]);
 
   const handleRegister = async () => {
-    if (!email || !password || !username) {
+
+    if (!email || !password || !username || !birthday) {
       Alert.alert('Please fill in all fields');
       return;
     }
@@ -27,7 +30,7 @@ const Register = ({navigation, route}) => {
       email: email,
       password: password,
       username: username,
-      birthday: birthday.toISOString().split('T')[0], // Chuyển đổi ngày sinh sang định dạng ISO
+      birthday: birthday, // Chuyển đổi ngày sinh sang định dạng ISO
     };
 
     try {

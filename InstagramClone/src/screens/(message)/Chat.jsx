@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Stomp} from '@stomp/stompjs';
-import {Client} from '@stomp/stompjs';
+import React, { useState, useEffect } from 'react';
+import { Client } from '@stomp/stompjs';
 import {
   Button,
   TextInput,
@@ -15,21 +14,29 @@ import {
   Modal,
 } from 'react-native';
 import SockJS from 'sockjs-client';
-import {createStackNavigator} from '@react-navigation/stack';
 
-import {TextEncoder, TextDecoder} from 'text-encoding';
-import {useNavigation} from '@react-navigation/native';
+import { TextEncoder, TextDecoder } from 'text-encoding';
+import { useNavigation } from '@react-navigation/native';
+import ENDPOINTS from '../../config/endpoints';
+import {
+  Avatar,
+  Caption,
+  IconButton,
+  Title,
+  useTheme,
+} from 'react-native-paper';
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
-const Chat = ({route}) => {
-  const {userIdSend, userIdTo, avatarTo, nameTo} = route.params; // Nhận userId và receiverId từ màn hình trước ( route.params)
+const Chat = ({ route }) => {
+  const { userIdSend, userIdTo, avatarTo, nameTo, status } = route.params; // Nhận userId và receiverId từ màn hình trước ( route.params)
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [stompClient, setStompClient] = useState(null);
-
+  const theme = useTheme();
+  
   // Kết nối WebSocket
   useEffect(() => {
-    const socket = new SockJS('http://172.16.0.122:8080/ws');
+    const socket = new SockJS(ENDPOINTS.CHAT.SOCKJS);
     const client = new Client({
       webSocketFactory: () => socket,
       onConnect: () => {
@@ -53,15 +60,22 @@ const Chat = ({route}) => {
     return () => {
       client.deactivate();
     };
-  }, [avatarTo, userIdSend, userIdTo]);
+  }, [userIdSend, userIdTo]);
 
   // Lấy tin nhắn trước đó từ API
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch(
-          `http://172.16.0.122:8080/messages/${userIdSend}/${userIdTo}`,
-        );
+        let response;
+        if (status == false) {
+          response = await fetch(
+            `${ENDPOINTS.CHAT.MESSAGE}/${userIdSend}/${userIdTo}`,
+          );
+        } else {
+          response = await fetch(
+            `${ENDPOINTS.CHAT.GROUP}/${userIdSend}/${userIdTo}`,
+          );
+        }
         const data = await response.json();
         setMessages(data); // Lưu tin nhắn vào state
       } catch (error) {
@@ -69,20 +83,25 @@ const Chat = ({route}) => {
       }
     };
     fetchMessages();
-  }, [userIdSend, userIdTo]);
+  }, [status, userIdSend, userIdTo]);
 
   // Gửi tin nhắn qua WebSocket
   const sendMessage = () => {
     if (newMessage.trim()) {
-      console.log(userIdSend);
-      console.log(userIdTo);
-      console.log(newMessage);
       const message = {
         userIdSend: userIdSend,
         userIdTo: userIdTo,
         content: newMessage,
+        type: status,
       };
-      setMessages(prevMessages => [...prevMessages, message]);
+      setMessages(prevMessages => {
+        if (Array.isArray(prevMessages)) {
+          return [...prevMessages, message];
+        } else {
+          console.error('prevMessages is not an array:', prevMessages);
+          return [message]; // Trả về một mảng mới chỉ chứa message
+        }
+      });
       stompClient.publish({
         destination: '/app/chat',
         body: JSON.stringify(message),
@@ -92,173 +111,71 @@ const Chat = ({route}) => {
   };
 
   // Render mỗi tin nhắn
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <View
       style={[
-        styles.messageContainer,
         item.userIdSend === userIdSend
-          ? styles.sentMessage
-          : styles.receivedMessage,
+          ? { justifyContent: 'flex-end', alignSelf: 'flex-end' }
+          : { justifyContent: 'flex-start', alignSelf: 'flex-start' },
       ]}>
-      {item.userIdSend !== userIdSend && (
-        <Image source={{uri: avatarTo}} style={styles.avatar} />
-      )}
+      {item.userIdSend !== userIdSend &&
+        (status === false ? (
+          <Avatar.Image source={{ uri: avatarTo }} size={40} />
+        ) : (
+          <Avatar.Image source={{ uri: item.avatar }} size={40} />
+        ))}
       <View
         style={[
-          styles.messageBox,
-          item.userIdSend === userIdSend
-            ? styles.sentMessageBox
-            : styles.receivedMessageBox,
+          {
+            maxWidth: '70%',
+            padding: 10,
+            borderRadius: 10,
+            marginTop: 15,
+            marginBottom: 15,
+            backgroundColor: item.userIdSend === userIdSend ? '#3e99fd' : '#85b0c4',
+          },
         ]}>
-        <Text style={styles.messageText}>{item.content}</Text>
+        <Text style={{ color: '#111111', fontSize: 16 }}>{item.content}</Text>
       </View>
-      {/*Ảnh đại diện của người dùng*/}
-      {/*{item.userIdSend === userIdSend && (*/}
-      {/*  <Image source={{uri: avatarTo}} style={styles.avatar} />*/}
-      {/*)}*/}
     </View>
   );
-
-  const navigation = useNavigation();
-  const handleBackPress = () => {
-    navigation.goBack();
-  };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <View style={styles.headerChat}>
-        <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
-          <Image
-            source={require('../../assets/icon_back.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-        <Image source={{uri: avatarTo}} style={styles.avatarHeader} />
-        <Text style={styles.nameTo}>{nameTo}</Text>
+      style={{ flex: 1, justifyContent: 'space-between' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+        <Text style={{ fontWeight: 'bold', color: '#050505', marginLeft: 10, fontSize: 20 }}>
+          {nameTo}
+        </Text>
       </View>
-      <View style={styles.horizontalLine} />
+      <View style={{ width: '100%', height: 1, backgroundColor: '#a9a8a8' }} />
       <FlatList
         data={messages}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
-        style={styles.messagesList}
+        style={{ flex: 1, padding: 10 }}
       />
 
-      <View style={styles.inputContainer}>
+      <View style={{ flexDirection: 'row', padding: 70, borderTopWidth: 1, borderTopColor: '#ddd' }}>
         <TextInput
-          style={styles.input}
+          style={{
+            flex: 1,
+            padding: 10,
+            borderColor: '#ccc',
+            borderWidth: 1,
+            borderRadius: 20,
+          }}
           value={newMessage}
           onChangeText={setNewMessage}
           placeholder="Nhập tin nhắn ..."
         />
-        <View style={styles.buttonSend}>
+        <View style={{ borderRadius: 50, margin: 5, marginTop: 10 }}>
           <Button title="Gửi" onPress={sendMessage} />
         </View>
       </View>
     </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  messagesList: {
-    flex: 1,
-    padding: 10,
-  },
-  messageContainer: {
-    flexDirection: 'row',
-    marginBottom: 10,
-    alignItems: 'flex-end',
-  },
-  sentMessage: {
-    justifyContent: 'flex-end',
-    alignSelf: 'flex-end',
-  },
-  receivedMessage: {
-    justifyContent: 'flex-start',
-    alignSelf: 'flex-start',
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginHorizontal: 5,
-    marginBottom: 15,
-  },
-  messageBox: {
-    maxWidth: '70%',
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 15,
-    marginBottom: 15,
-  },
-  sentMessageBox: {
-    backgroundColor: '#3e99fd',
-    alignSelf: 'flex-end',
-  },
-  buttonSend: {
-    borderRadius: 50,
-    margin: 5,
-    marginTop: 10,
-  },
-  receivedMessageBox: {
-    backgroundColor: '#85b0c4',
-    alignSelf: 'flex-start',
-  },
-  messageText: {
-    color: '#111111',
-    fontSize: 16,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    padding: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
-  },
-  input: {
-    flex: 1,
-    padding: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 20,
-  },
-  headerChat: {
-    flexDirection: 'row',
-  },
-  backButton: {
-    padding: 10,
-    marginRight: 10,
-    paddingBottom: 0,
-  },
-  icon: {
-    width: 30,
-    height: 30,
-  },
-  avatarHeader: {
-    width: 40,
-    height: 40,
-    marginTop: 10,
-    borderRadius: 20,
-    marginHorizontal: 5,
-  },
-  nameTo: {
-    fontWeight: 'bold',
-    color: '#050505',
-    marginTop: 15,
-    marginLeft: 10,
-    fontSize: 20,
-  },
-  horizontalLine: {
-    width: '100%',
-    height: 1,
-    backgroundColor: '#a9a8a8',
-    marginTop: 10,
-  },
-});
 
 export default Chat;
