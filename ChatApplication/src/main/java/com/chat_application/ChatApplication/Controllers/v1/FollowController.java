@@ -40,10 +40,16 @@ public class FollowController {
         return service.followOrUnFollow(req);
     }
 
+    @PostMapping("/isFollowing")
+    public boolean isFollowing(@RequestBody FollowRequest req) {
+        return service.isFollowing(req);
+    }
+
     @PostMapping("/following")
     List<User> followeing(@RequestBody UsernameRequest request) {
         return service.getFollowing(request);
     }
+
     @PostMapping("/suggestUser")
     List<UserResponse> suggestUser(@RequestBody String username) {
         return service.suggestUser(username);

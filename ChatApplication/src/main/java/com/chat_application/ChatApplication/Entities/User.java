@@ -30,7 +30,6 @@ public class User {
     String avatar;
     LocalDate birthday;
     Timestamp createdAt, updatedAt;
-
     @ManyToMany
     Set<Role> roles;
 

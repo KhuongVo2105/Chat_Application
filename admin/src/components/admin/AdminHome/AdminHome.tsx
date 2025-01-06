@@ -37,6 +37,7 @@ const AdminHome = () => {
     setClickCategory(false);
     setClickComment(false);
     setClickCreateAdmin(false);
+    setClickReportBlog(false);
   };
   const handlerBlog = () => {
     setClickDashBoard(false);
@@ -46,6 +47,7 @@ const AdminHome = () => {
     setClickCategory(false);
     setClickComment(false);
     setClickCreateAdmin(false);
+    setClickReportBlog(false);
   };
   const handlerUsers = () => {
     setClickDashBoard(false);
@@ -55,6 +57,7 @@ const AdminHome = () => {
     setClickCategory(false);
     setClickComment(false);
     setClickCreateAdmin(false);
+    setClickReportBlog(false);
   };
   const handlerReportBlog = () => {
     setClickDashBoard(false);
@@ -73,6 +76,7 @@ const AdminHome = () => {
     setClickCategory(false);
     setClickComment(false);
     setClickCreateAdmin(true);
+    setClickReportBlog(false);
   };
   return (
     <div className="container">

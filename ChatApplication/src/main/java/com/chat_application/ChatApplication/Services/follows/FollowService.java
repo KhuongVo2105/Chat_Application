@@ -99,4 +99,16 @@ public class FollowService implements IFollowService {
         followRepository.save(follow);
         return true;
     }
+
+    @Override
+    public boolean isFollowing(FollowRequest req) {
+        User followerUser = userRepository.findById(UUID.fromString(req.getFollowerId())).orElse(null);
+        User followingUser = userRepository.findById(UUID.fromString(req.getFollowingId())).orElse(null);
+
+        if (followerUser == null || followingUser == null) {
+            return false;
+        }
+
+        return followRepository.existsByFollowerUserAndFollowingUser(followerUser, followingUser);
+    }
 }

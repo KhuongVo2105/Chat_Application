@@ -19,4 +19,6 @@ public interface IFollowService {
     List<UserResponse> suggestUser(String username);
 
     boolean followOrUnFollow(FollowRequest req);
+
+    boolean isFollowing(FollowRequest req);
 }
