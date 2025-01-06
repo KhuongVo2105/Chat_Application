@@ -18,13 +18,13 @@ public class Follow {
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false)
     User followerUser;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false)
-    User followingUser;
+    User followingUser; // Người mà follower đang theo dõi
 
     Timestamp createdAt;
 }

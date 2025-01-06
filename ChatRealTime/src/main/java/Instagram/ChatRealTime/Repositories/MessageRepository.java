@@ -40,5 +40,10 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     @Modifying
     @Query("UPDATE Message m SET m.visible = true WHERE m.id = :messageId")
     int setVisibleMessage(@Param("messageId") int messageId);
-
+    //Lấy tất cả tin nhắn từ Group từ cũ tới mới
+    @Query("SELECT m FROM Message m WHERE m.groupChatId = :idGroup ORDER BY m.createdAt ASC")
+    List<Message> findMessagesByGroupId(@Param("idGroup") String idGroup);
+    //Lấy tất cả tin nhắn từ Group từ mới tới cũ
+    @Query("SELECT m FROM Message m WHERE m.groupChatId = :idGroup ORDER BY m.createdAt DESC")
+    List<Message> findLastMessagesByGroupId(@Param("idGroup") Long idGroup);
 }
