@@ -1,5 +1,5 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-const SERVER_ADDRESS = `10.51.37.237`;
+const SERVER_ADDRESS = `192.168.10.165`;
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`;
 
 const API_BASE_URL  = REACT_APP_API_BASE_URL;
@@ -55,6 +55,7 @@ const ENDPOINTS = {
     FIND_ALL_MULTIPLE_POST: `${API_BASE_URL}/media/findAllByPost`,
     ADD: `${API_BASE_URL}/media/add`,
     DELETE: `${API_BASE_URL}/media/delete`,
+    GET_MEDIA_URL_BY_USERID: `${API_BASE_URL}/media/getAllImageOfUserId`
   },
 
   CLOUDINARY: {
