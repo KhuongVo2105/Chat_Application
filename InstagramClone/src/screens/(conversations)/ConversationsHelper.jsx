@@ -98,7 +98,8 @@ export const loadUserDetails = async ({token, userId}) => {
       : 'Network Error: Unable to connect to server.';
     console.error(errorMessage);
     console.error(
-      `\tError fetching details for group ${groupId}:`,
+      `\tError fetching details for group :`,
+
       err.response?.data || err.message,
     );
     return {data: null, error: errorMessage};

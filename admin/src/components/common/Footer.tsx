@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
   async function fetch() {
     try {
       const response = await axios.post(
-        "https://localhost:7125/CategoryCotroller/category"
+        "https://localhost:7125/CategoryCotroller/category",
       );
       setListCategory(response.data);
       const category = { id: 0, name: "Khác" };
@@ -47,11 +47,7 @@ const Footer: React.FC = () => {
                 href=""
                 onClick={(event) => {
                   event.preventDefault();
-                  handleClick(
-                    convertToSlug(item.name),
-                    item.id,
-                    item.name
-                  );
+                  handleClick(convertToSlug(item.name), item.id, item.name);
                 }}
               >
                 {item.name}

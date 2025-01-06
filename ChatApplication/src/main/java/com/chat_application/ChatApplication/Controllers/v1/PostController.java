@@ -1,7 +1,9 @@
 package com.chat_application.ChatApplication.Controllers.v1;
 
+import com.chat_application.ChatApplication.Dto.Request.UserReq;
 import com.chat_application.ChatApplication.Dto.Request.UsernameRequest;
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.PostResponse;
 import com.chat_application.ChatApplication.Dto.Response.PostResponseWithoutUser;
 import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Entities.User;
@@ -23,6 +25,11 @@ public class PostController {
         ApiResponse<List<Post>> response = service.findAll();
         return response;
     }
+    @PostMapping("/getAllForAdmin")
+    public List<PostResponse> getAllForAdmin() {
+        List<PostResponse> response = service.getAllForAdmin();
+        return response;
+    }
 
     @PostMapping("/findAllByMultipleUser")
     public ApiResponse<List<Post>> findAllByMultipleUser(@RequestBody List<User> users) {
@@ -41,6 +48,11 @@ public class PostController {
     public ApiResponse<Post> updateCaption(@RequestBody Post post) {
         ApiResponse<Post> response = service.updateCaption(post.getId(), post.getCaption());
         return response;
+    }
+
+    @PostMapping("/changeVisible")
+    public boolean changeVisible(@RequestParam int id) {
+        return service.changeVisible(id);
     }
 
     @PostMapping("/updateVisible")

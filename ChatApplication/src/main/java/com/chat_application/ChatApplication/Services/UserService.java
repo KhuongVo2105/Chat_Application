@@ -34,6 +34,7 @@ import java.util.UUID;
 public class UserService {
     RoleRepository roleRepository;
     UserRepository userRepository;
+    PushNotificationService pushNotificationService;
     UserMapper userMapper;
     PermissionService permissionService;
     RoleService roleService;
@@ -63,6 +64,7 @@ public class UserService {
         user.setRoles(roles);
 
         user = userRepository.save(user);
+        pushNotificationService.createUser(user.getId().toString());
         return userMapper.toUserResponse(user);
     }
 
@@ -101,6 +103,10 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+    public List<UserResponse> findAllByUsername(String username, UUID uuid) {
+        return userRepository.searchByUsername(username, uuid)
+                .stream().map(userMapper::toUserResponse).toList();
+    }
     public InfoUserResp updateInfoUser(InfoUserReq req) {
         try {
             User user = userRepository.findById(req.getId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));

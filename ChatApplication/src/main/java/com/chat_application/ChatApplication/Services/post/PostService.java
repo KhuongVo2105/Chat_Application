@@ -1,6 +1,7 @@
 package com.chat_application.ChatApplication.Services.post;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.PostResponse;
 import com.chat_application.ChatApplication.Dto.Response.PostResponseWithoutUser;
 import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Entities.User;
@@ -110,7 +111,20 @@ public class PostService implements IPostService {
                 .message("Post not found")
                 .build();
     }
+    @Override
+    public ApiResponse<List<Post>> findAllByCaption(String caption) {
+        List<Post> postList = repository.searchByCaption(caption).stream().toList();
+        if (postList.isEmpty()) {
+            return ApiResponse.<List<Post>>builder().code(404).message("Post not found").
+                    result(postList).
+                    build();
+        }
 
+        return ApiResponse.<List<Post>>builder().code(200)
+                .message("List Post")
+                .result(postList)
+                .build();
+    }
     @Override
     public ApiResponse<Post> updateVisible(int postId, boolean visible) {
         if (repository.existsById(postId)) {
@@ -164,6 +178,35 @@ public class PostService implements IPostService {
         return repository.findAll().stream()
                 .filter(post -> post.getCreatedAt().toLocalDateTime().getDayOfMonth() == Timestamp.from(Instant.now()).toLocalDateTime().getDayOfMonth())
                 .toList().size();
+    }
+
+    @Override
+    public List<PostResponse> getAllForAdmin() {
+        List<Post> posts = repository.findAll();
+        List<PostResponse> postResponses = new ArrayList<>();
+        for (Post post : posts) {
+            PostResponse p = PostResponse.builder()
+                    .id(post.getId())
+                    .caption(post.getCaption())
+                    .createdAt(post.getCreatedAt())
+                    .visible(post.isVisible())
+                    .userId(String.valueOf(post.getUser().getId()))
+                    .username(post.getUser().getUsername())
+                    .build();
+            postResponses.add(p);
+        }
+        return postResponses;
+    }
+
+    @Override
+    public boolean changeVisible(int id) {
+        if (repository.existsById(id)) {
+            Post post = repository.findById(id).orElseThrow();
+            post.setVisible(!post.isVisible());
+            repository.save(post);
+            return true;
+        }
+        return true;
     }
 
     @Override

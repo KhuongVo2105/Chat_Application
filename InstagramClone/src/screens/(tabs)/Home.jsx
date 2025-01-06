@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, {useCallback, useContext} from 'react';
 import {
   View,
   Text,
@@ -18,9 +18,10 @@ import ENDPOINTS from '../../config/endpoints';
 import axios from 'axios';
 import Modal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import Video from 'react-native-video';
 import ConnectedUsersList from '../../components/ConnectedUsersList';
+import { OneSignal } from 'react-native-onesignal';
 
 const Home = ({navigation, route}) => {
 //   const [loading, setLoading] = useState(false);
@@ -36,6 +37,7 @@ const Home = ({navigation, route}) => {
     setPrivacyContext,
     setStatusContext,
     setRoleContext,
+    setAvatarContext
   } = useContext(AuthContext);
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -83,15 +85,16 @@ const Home = ({navigation, route}) => {
         setCreatedAtContext(userInfo.createdAt);
         setBirthdayContext(userInfo.birthday);
 //         setRoleContext({roles: userInfo.roles});
-
 //         console.log('User information loaded successfully.');
-
+        setAvatarContext(userInfo.avatar);
         setPrivacyContext(userInfo.privacy);
         setStatusContext(userInfo.status);
-        setRoleContext({ roles: userInfo.roles });
+        setRoleContext({roles: userInfo.roles});
 
         console.log('User information loaded successfully.');
-
+        OneSignal.initialize('672c61cb-8e38-40a0-9d50-d0cc76dc03fe');
+        OneSignal.login(userInfo.id);
+        OneSignal.User.pushSubscription.optIn();
         // Gọi API lấy danh sách following
         // const getFollowingEndpoint = ENDPOINTS.FOLLOW.GET_FOLLOWING;
         const getFollowingEndpoint = ENDPOINTS.CHAT.FOLLOWING;
@@ -100,7 +103,7 @@ const Home = ({navigation, route}) => {
             getFollowingEndpoint,
             userInfo,
             {
-              headers: { Authorization: `Bearer ${tokenContext}` },
+              headers: {Authorization: `Bearer ${tokenContext}`},
             },
           );
           // var followingList = followingResponse.data.result;
@@ -117,14 +120,15 @@ const Home = ({navigation, route}) => {
           const followingUserIds = followingList.map(value => ({
             id: value.followingUser.id,
           }));
-          followingUserIds.push({ id: userInfo.id }); // Thêm chính người dùng hiện tại
+          followingUserIds.push({id: userInfo.id}); // Thêm chính người dùng hiện tại
 
-          const findAllMultipleUserEndpoint = ENDPOINTS.POST.FIND_ALL_MULTIPLE_USER;
+          const findAllMultipleUserEndpoint =
+            ENDPOINTS.POST.FIND_ALL_MULTIPLE_USER;
           const postResponse = await axios.post(
             findAllMultipleUserEndpoint,
             followingUserIds,
             {
-              headers: { Authorization: `Bearer ${tokenContext}` },
+              headers: {Authorization: `Bearer ${tokenContext}`},
             },
           );
 
@@ -146,7 +150,7 @@ const Home = ({navigation, route}) => {
             multipleMediaEndpoint,
             folders,
             {
-              headers: { Authorization: `Bearer ${tokenContext}` },
+              headers: {Authorization: `Bearer ${tokenContext}`},
             },
           );
 
@@ -187,12 +191,12 @@ const Home = ({navigation, route}) => {
     }
   }, [isFocused]);
 
-  const renderItem = ({ item: url, index: idxChild }) => {
+  const renderItem = ({item: url, index: idxChild}) => {
     if (url.endsWith('.jpg') || url.endsWith('.png')) {
       return (
         <Image
           key={idxChild}
-          source={{ uri: url }}
+          source={{uri: url}}
           style={styles.selectedImage}
           resizeMode="cover"
         />
@@ -202,7 +206,7 @@ const Home = ({navigation, route}) => {
         <Video
           key={idxChild}
           style={[styles.selectedVideo]}
-          source={{ uri: url }}
+          source={{uri: url}}
           controls={true}
           resizeMode="contain"
           onBuffer={this.onBuffer}
@@ -292,7 +296,7 @@ const Home = ({navigation, route}) => {
                         <Image
                           className="ml-1"
                           source={images.icon_verify}
-                          style={{ width: 25, height: 25 }}
+                          style={{width: 25, height: 25}}
                           resizeMode="contain"
                         />
                       </View>
@@ -333,7 +337,7 @@ const Home = ({navigation, route}) => {
                       onPress={() => handleDelete()}
                       style={styles.option}>
                       <Ionicons name="trash-outline" size={20} color="red" />
-                      <Text style={[styles.optionText, { color: 'red' }]}>
+                      <Text style={[styles.optionText, {color: 'red'}]}>
                         Delete
                       </Text>
                     </TouchableOpacity>
@@ -366,7 +370,7 @@ const Home = ({navigation, route}) => {
                             name="arrow-back-outline"
                             size={25}></Ionicons>
                         </TouchableOpacity>
-                        <Text style={{ fontSize: 20, marginLeft: 10 }}>
+                        <Text style={{fontSize: 20, marginLeft: 10}}>
                           Sửa đổi
                         </Text>
                       </View>
@@ -418,7 +422,7 @@ const Home = ({navigation, route}) => {
                           style={{
                             width: 25,
                             height: 25,
-                            transform: [{ scaleX: -1 }],
+                            transform: [{scaleX: -1}],
                           }}
                         />
                       </TouchableOpacity>
@@ -440,7 +444,7 @@ const Home = ({navigation, route}) => {
                         {/* Hình ảnh chính (phía dưới) */}
                         <Image
                           className="absolute z-0 rounded-full" // Đặt dưới cùng với z-0
-                          style={{ width: '85%', height: '85%' }}
+                          style={{width: '85%', height: '85%'}}
                           resizeMode="cover"
                           source={require('./../../assets/portaits/portait_1.jpg')}
                         />
@@ -484,7 +488,7 @@ const styles = StyleSheet.create({
     height: 600,
     borderRadius: 5,
     shadowColor: 'black',
-    shadowOffset: { width: 0, height: 5 },
+    shadowOffset: {width: 0, height: 5},
     shadowOpacity: 0.8,
     shadowRadius: 10,
   },
@@ -493,7 +497,7 @@ const styles = StyleSheet.create({
     height: 600,
     borderRadius: 5,
     shadowColor: 'black',
-    shadowOffset: { width: 0, height: 5 },
+    shadowOffset: {width: 0, height: 5},
     shadowOpacity: 0.8,
     shadowRadius: 10,
   },

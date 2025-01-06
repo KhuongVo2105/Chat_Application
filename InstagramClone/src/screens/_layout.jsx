@@ -17,7 +17,7 @@ const RootLayout = () => {
 
   return (
     <AuthProvider>
-      <NavigationContainer>
+      <NavigationContainer linking={config}>
         <Stack.Navigator initialRouteName="SignIn">
           <Stack.Screen
             name="SignIn"

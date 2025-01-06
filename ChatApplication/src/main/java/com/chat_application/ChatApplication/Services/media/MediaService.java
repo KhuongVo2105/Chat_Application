@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class MediaService implements IMediaService {
@@ -55,6 +56,12 @@ public class MediaService implements IMediaService {
                 .message("Add image successfully")
                 .result(mediaAdded)
                 .build();
+    }
+
+    @Override
+    public List<String> getAllImageOfUserId(String userId) {
+        List<String> res = repository.getAllImageOfUserId(UUID.fromString(userId));
+        return res;
     }
 
     @Override

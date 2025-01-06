@@ -28,16 +28,21 @@ public class FollowService implements IFollowService {
     UserRepository userRepository;
     UserMapper userMapper;
 
-    public List<User> getFollowers(UsernameRequest request) {
+    public int getFollowers(UsernameRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
         return followRepository.findFollowers(user);
     }
 
-    public List<FollowingResponse> getFollowing(UsernameRequest request) {
+    public List<FollowingResponse> getFollowingList(UsernameRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
-        return followRepository.findFollowingUsers(user).stream()
+        return followRepository.findFollowingUsersList(user).stream()
                 .map(userMapper::toFollowingResponse) // Sử dụng userMapper để chuyển đổi
                 .collect(Collectors.toList()); // Thu thập kết quả vào danh sách;
+    }
+
+    public int getFollowing(UsernameRequest request) {
+        User user = userRepository.findByUsername(request.getUsername()).orElse(null);
+        return followRepository.findFollowingUsers(user);
     }
 
     @Override
@@ -109,5 +114,17 @@ public class FollowService implements IFollowService {
         }
         followRepository.save(follow);
         return true;
+    }
+
+    @Override
+    public boolean isFollowing(FollowRequest req) {
+        User followerUser = userRepository.findById(UUID.fromString(req.getFollowerId())).orElse(null);
+        User followingUser = userRepository.findById(UUID.fromString(req.getFollowingId())).orElse(null);
+
+        if (followerUser == null || followingUser == null) {
+            return false;
+        }
+
+        return followRepository.existsByFollowerUserAndFollowingUser(followerUser, followingUser);
     }
 }

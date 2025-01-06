@@ -20,10 +20,10 @@ function Home() {
   async function fetch() {
     try {
       const getDataBlogs = await axios.post(
-        "https://localhost:7125/Blog/getAllBlogs"
+        "https://localhost:7125/Blog/getAllBlogs",
       );
       const getDataCategories = await axios.post(
-        "https://localhost:7125/CategoryCotroller/category"
+        "https://localhost:7125/CategoryCotroller/category",
       );
       const blogs = getDataBlogs.data;
       setLeftBlogs(blogs.slice(0, 6));
@@ -33,12 +33,12 @@ function Home() {
       const requests = dataCategories.slice(0, 5).map((item) =>
         axios
           .get(
-            `https://localhost:7125/CategoryCotroller/category?id=${item.id}&page=1&limit=5`
+            `https://localhost:7125/CategoryCotroller/category?id=${item.id}&page=1&limit=5`,
           )
           .then((response) => ({
             name: item.name,
             blogs: response.data,
-          }))
+          })),
       );
 
       const responses = await Promise.all(requests);
@@ -56,16 +56,16 @@ function Home() {
     str = str.replace(/-+/g, "-"); // Thay thế các dấu gạch ngang liên tiếp bằng một dấu gạch ngang
     return str;
   }
-  
+
   useEffect(() => {
     fetch();
   }, []);
 
   const checkBlogNew = (blog) => {
     var createDate = new Date(blog.createdAt);
-    var now = new Date()
+    var now = new Date();
     return createDate.toDateString() === now.toDateString() ? true : false;
-  }
+  };
   return (
     <>
       <div className={styles.sectionTopstory}>
@@ -76,7 +76,11 @@ function Home() {
                 <Link to={"/detail/" + item.id} title={item.title}>
                   <picture>
                     <img src={item.image} alt={item.title} />
-                    {checkBlogNew(item) ? <p className={`${styles.newBlog}`}>Mới</p> : ""}
+                    {checkBlogNew(item) ? (
+                      <p className={`${styles.newBlog}`}>Mới</p>
+                    ) : (
+                      ""
+                    )}
                   </picture>
                 </Link>
               </div>
@@ -178,7 +182,7 @@ function Home() {
                           {subItem.title}
                         </Link>
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               </div>
@@ -205,7 +209,7 @@ function Home() {
                           {subItem.title}
                         </Link>
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               </div>
