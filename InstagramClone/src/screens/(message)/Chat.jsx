@@ -12,6 +12,7 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  Pressable,
 } from 'react-native';
 import SockJS from 'sockjs-client';
 
@@ -25,6 +26,8 @@ import {
   Title,
   useTheme,
 } from 'react-native-paper';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 const Chat = ({ route }) => {
@@ -33,7 +36,7 @@ const Chat = ({ route }) => {
   const [newMessage, setNewMessage] = useState('');
   const [stompClient, setStompClient] = useState(null);
   const theme = useTheme();
-  
+
   // Kết nối WebSocket
   useEffect(() => {
     const socket = new SockJS(ENDPOINTS.CHAT.SOCKJS);
@@ -143,13 +146,8 @@ const Chat = ({ route }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1, justifyContent: 'space-between' }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
-        <Text style={{ fontWeight: 'bold', color: '#050505', marginLeft: 10, fontSize: 20 }}>
-          {nameTo}
-        </Text>
-      </View>
-      <View style={{ width: '100%', height: 1, backgroundColor: '#a9a8a8' }} />
+      style={{ backgroundColor: theme.colors.background, flex: 1, justifyContent: 'space-between' }}>
+      {/* messages */}
       <FlatList
         data={messages}
         renderItem={renderItem}
@@ -157,22 +155,20 @@ const Chat = ({ route }) => {
         style={{ flex: 1, padding: 10 }}
       />
 
-      <View style={{ flexDirection: 'row', padding: 70, borderTopWidth: 1, borderTopColor: '#ddd' }}>
+      <View
+        className="flex flex-row items-center"
+      >
+        <Pressable>
+
+        </Pressable>
         <TextInput
-          style={{
-            flex: 1,
-            padding: 10,
-            borderColor: '#ccc',
-            borderWidth: 1,
-            borderRadius: 20,
-          }}
           value={newMessage}
           onChangeText={setNewMessage}
           placeholder="Nhập tin nhắn ..."
         />
-        <View style={{ borderRadius: 50, margin: 5, marginTop: 10 }}>
-          <Button title="Gửi" onPress={sendMessage} />
-        </View>
+        <Pressable onPress={sendMessage}>
+          <Ionicons name="send" size={30} />
+        </Pressable>
       </View>
     </KeyboardAvoidingView>
   );
