@@ -53,7 +53,7 @@ public class FollowController {
     }
 
     @PostMapping("/suggestUser")
-    List<UserResponse> suggestUser(@RequestBody String username) {
-        return service.suggestUser(username);
+    List<UserResponse> suggestUser(@RequestBody UsernameRequest request) {
+        return service.suggestUser(request.getUsername());
     }
 }

@@ -11,5 +11,8 @@ public interface IMediaService {
     ApiResponse<List<Media>> findAll();
     ApiResponse<List<List<Media>>> findAllByPost(List<Post> posts);
     ApiResponse<List<Media>> add(List<Media> mediaList);
+
+    List<String> getAllImageOfUserId(String userId);
+
     ApiResponse<String> delete(int id);
 }
