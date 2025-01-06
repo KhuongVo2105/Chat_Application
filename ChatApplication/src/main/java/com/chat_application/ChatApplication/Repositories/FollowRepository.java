@@ -38,4 +38,5 @@ public interface FollowRepository extends JpaRepository<Follow, String> {
     @Query("SELECT CAST(f.followingUser.id AS uuid) FROM Follow f WHERE f.followerUser.username = :username")
     List<UUID> findFollowingUserIds(@Param("username") String username);
     Follow findByFollowerUserAndFollowingUser(User followerUser, User followingUser);
+    boolean existsByFollowerUserAndFollowingUser(User followerUser, User followingUser);
 }

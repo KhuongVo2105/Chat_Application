@@ -1,6 +1,7 @@
 package com.chat_application.ChatApplication.Services.post;
 
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.PostResponse;
 import com.chat_application.ChatApplication.Dto.Response.PostResponseWithoutUser;
 import com.chat_application.ChatApplication.Entities.Post;
 import com.chat_application.ChatApplication.Entities.User;
@@ -23,4 +24,8 @@ public interface IPostService {
     int allPost();
     int allPostInMonth();
     int allPostInDay();
+
+    List<PostResponse> getAllForAdmin();
+
+    boolean changeVisible(int id);
 }
