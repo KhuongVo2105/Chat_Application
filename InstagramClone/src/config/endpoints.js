@@ -78,7 +78,10 @@ const ENDPOINTS = {
         MESSAGE: `${API_WEBSOCKET}/messages`,
         MESSAGE_LIST : `${API_WEBSOCKET}/messages/messageList`,
         FOLLOWING: `${API_WEBSOCKET}/messages/following`
-    }
+    },
+  NOTIFY: {
+    GET:`${API_BASE_URL}/notification`
+  }
 }
 
 export default ENDPOINTS;

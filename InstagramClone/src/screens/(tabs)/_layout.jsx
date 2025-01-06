@@ -42,7 +42,7 @@ const TabsLayout = () => {
         )
       }} />
       <Tab.Screen name="Notification" component={Notification} options={{
-        tabBarBadge: 3,
+        tabBarBadge: "",
         tabBarIcon: ({ color, size }) => (
           <Ionicons name="heart-outline" color={color} size={size} />
         )
