@@ -43,55 +43,57 @@ public class GroupChatService {
         List<MessegeRequest> result = new ArrayList<>();
         for (MemberGroup memberGroup : listGr) {
             GroupChat gr = groupChatRepository.findGroupChatById(memberGroup.getGroupChatId());
-            List<Message> lastMessageGroup = messageRepository.findLastMessagesByGroupId(memberGroup.getGroupChatId());
-            if (!lastMessageGroup.isEmpty()) {
-                Message lastMessage = lastMessageGroup.get(0);
+            if (gr != null) {
+                List<Message> lastMessageGroup = messageRepository.findLastMessagesByGroupId(memberGroup.getGroupChatId());
+                if (!lastMessageGroup.isEmpty()) {
+                    Message lastMessage = lastMessageGroup.get(0);
 
-                boolean visible = false;
-                boolean status = true;
+                    boolean visible = false;
+                    boolean status = true;
 
-                LocalDateTime currentTime = LocalDateTime.now();
-                LocalDateTime createdAt = lastMessage.getCreatedAt().toLocalDateTime();
+                    LocalDateTime currentTime = LocalDateTime.now();
+                    LocalDateTime createdAt = lastMessage.getCreatedAt().toLocalDateTime();
 
 //            // Tính khoảng thời gian giữa hai thời điểm
-                Duration duration = Duration.between(createdAt, currentTime);
+                    Duration duration = Duration.between(createdAt, currentTime);
 //
 //            // Lấy số ngày, giờ, phút, và giây
-                long days = duration.toDays();
-                long hours = duration.toHoursPart();
-                long minutes = duration.toMinutesPart();
-                String time = "";
-                if (days > 0) {
-                    time = days + " day";
-                } else if (days == 0 && hours > 0) {
-                    time = hours + " hours";
-                } else if (days == 0 && hours == 0 && minutes > 0) {
-                    time = minutes + " minutes";
-                } else {
-                    time = "now";
-                }
-                if (lastMessage.getUserIdSend().equals(userId)) visible = true;
-                Timestamp timeCreateAt = lastMessage.getCreatedAt();
+                    long days = duration.toDays();
+                    long hours = duration.toHoursPart();
+                    long minutes = duration.toMinutesPart();
+                    String time = "";
+                    if (days > 0) {
+                        time = days + " day";
+                    } else if (days == 0 && hours > 0) {
+                        time = hours + " hours";
+                    } else if (days == 0 && hours == 0 && minutes > 0) {
+                        time = minutes + " minutes";
+                    } else {
+                        time = "now";
+                    }
+                    if (lastMessage.getUserIdSend().equals(userId)) visible = true;
+                    Timestamp timeCreateAt = lastMessage.getCreatedAt();
+                    result.add(new MessegeRequest(
+                            String.valueOf(gr.getId()),
+                            lastMessage.getContent(),
+                            gr.getNameGroup(),
+                            "https://cdn-icons-png.flaticon.com/512/2352/2352167.png",
+                            time,
+                            visible,
+                            status,
+                            lastMessage.getCreatedAt()));
 
-                result.add(new MessegeRequest(
-                        String.valueOf(gr.getId()),
-                        lastMessage.getContent(),
-                        gr.getNameGroup(),
-                        "https://cdn-icons-png.flaticon.com/512/2352/2352167.png",
-                        time,
-                        visible,
-                        status,
-                        lastMessage.getCreatedAt()));
-            } else {
-                result.add(new MessegeRequest(
-                        String.valueOf(gr.getId()),
-                        "",
-                        gr.getNameGroup(),
-                        "",
-                        "",
-                        false,
-                        true,
-                        gr.getCreateAt()));
+                } else {
+                    result.add(new MessegeRequest(
+                            String.valueOf(gr.getId()),
+                            "",
+                            gr.getNameGroup(),
+                            "",
+                            "",
+                            false,
+                            true,
+                            gr.getCreateAt()));
+                }
             }
         }
         return result;

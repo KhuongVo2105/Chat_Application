@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext, useRef } from 'react';
+import { useCallback, useState, useContext, useRef, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
@@ -10,6 +10,7 @@ import {
   Button,
   TextInput,
   Modal,
+  Pressable,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../context/AuthContext';
@@ -18,12 +19,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import ConnectedUsersList from '../../components/ConnectedUsersList';
 import { Searchbar } from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import ModalCreateGroup from '../../components/ModalCreateGroup';
 
 const Message = () => {
   const [searchQuery, setSearchQuery] = useState()
+  const [visibleCreateGroup, setVisibleCreateGroup] = useState(false)
 
-  const { tokenContext, usernameContext } = useContext(AuthContext)
-  const [userId, setUserId] = useState('92ffa9f0-dcfb-493a-aba7-bd4a2783295e'); //92ffa9f0-dcfb-493a-aba7-bd4a2783295e
+  const { idContext, tokenContext, usernameContext } = useContext(AuthContext)
+  // const [userId, setUserId] = useState('92ffa9f0-dcfb-493a-aba7-bd4a2783295e'); //92ffa9f0-dcfb-493a-aba7-bd4a2783295e
+  const [userId, setUserId] = useState(idContext); //92ffa9f0-dcfb-493a-aba7-bd4a2783295e
 
   const [listMessage, setListMessage] = useState('');
   const [listFollowing, setListFollowing] = useState('');
@@ -38,6 +43,24 @@ const Message = () => {
   // State để lưu danh sách ID người dùng đã được thêm
   const [selectedUserIds, setSelectedUserIds] = useState([userId]); //đổi sang idContext
 
+  // useEffect để lấy id, username, token khi component mount
+  useEffect(() => {
+    // Kiểm tra và cập nhật userId nếu idContext thay đổi
+    if (idContext) {
+      setUserId(idContext);
+    }
+
+    // Nếu cần, bạn có thể thực hiện các hành động khác với tokenContext và usernameContext
+    console.log('UserID:', idContext);
+    console.log('Token:', tokenContext);
+    console.log('Username:', usernameContext);
+
+    // Cleanup function nếu cần
+    return () => {
+      // Thực hiện các hành động dọn dẹp nếu cần
+    };
+  }, [idContext, tokenContext, usernameContext]); // Chạy lại khi các giá trị này thay đổi  
+  
   // Hàm để xử lý thay đổi nút "Thêm" thành "Dấu tick"
   const toggleAddUser = userId => {
     setAddedUsers(prevState => {
@@ -61,6 +84,8 @@ const Message = () => {
     useCallback(() => {
       const fetchData = async () => {
         try {
+
+          console.log(`userid: ${userId}`)
           // Gọi hai API song song
           const [response1, response2] = await Promise.all([
             axios.get(`${ENDPOINTS.CHAT.MESSAGE_LIST}?userIdSend=${userId}`), // Gọi API danh sách tin nhắn
@@ -74,7 +99,7 @@ const Message = () => {
 
           // Lưu dữ liệu vào state
           setListMessage(response1.data); // Lấy dữ liệu từ response1
-          console.log(`Danh sach tin nhan\n${response1.data}`)
+          console.log(`Danh sach tin nhan\n${JSON.stringify(response1.data, null, 2)}`);
 
           setListFollowing(response2.data); // Lấy dữ liệu từ response2
         } catch (error) {
@@ -95,7 +120,7 @@ const Message = () => {
 
     try {
       const response = await fetch(
-        'http://172.16.0.122:8080/GroupChat/createGroup',
+        ENDPOINTS.CHAT.CREATE_GROUP,
         {
           method: 'POST',
           headers: {
@@ -195,10 +220,10 @@ const Message = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <View className="h-full bg-white">
 
       <Searchbar
-        className="w-96 mx-auto mt-2"
+        className="w-96 mx-auto mt-2 bg-slate-100"
         placeholder="Search"
         onChangeText={setSearchQuery}
         value={searchQuery}
@@ -242,6 +267,7 @@ const Message = () => {
                   keyExtractor={item => item.userIdTo}
                   horizontal={false}
                   showsHorizontalScrollIndicator={false}
+                  removeClippedSubviews={false}
                 />
               </View>
 
@@ -275,10 +301,19 @@ const Message = () => {
         </Modal>
         {/*  */}
       </TouchableOpacity>
+
+      <Pressable className="p-2 rounded-full bg-cyan-500"
+        onPress={() => {setVisibleCreateGroup(true) }}>
+        <MaterialCommunityIcons name="account-multiple-plus" size={30} />
+      </Pressable>
+
+      <ModalCreateGroup visible={visibleCreateGroup} hideModal={() => setVisibleCreateGroup(false)}/>
+
       <FlatList
         data={listMessage}
         renderItem={renderItem}
         keyExtractor={item => item.userIdTo}
+        removeClippedSubviews={false}
       />
     </View>
   );

@@ -30,6 +30,8 @@ public class ChatController {
 //        message.setTimestamp(new Date());
 //        return message;
 //    }
+
+    // Nhan tin nhan va luu vao database
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
     public void sendMessage1(@Payload ChatMessage message){     //status true: nhóm false: 1vs1
@@ -45,6 +47,7 @@ public class ChatController {
         }
         message1.setContent(message.getContent());
         message1.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        message1.setVisible(true);
         System.out.println("có lưu gr");
         messageService.saveMessage(message1);
 //        //Giúp gưửi tin nhắn riêng
