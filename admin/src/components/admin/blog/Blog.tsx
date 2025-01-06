@@ -8,12 +8,15 @@ import styles from "../blog/Blog.module.css";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reduxStore/Store";
+import { FaLock, FaUnlock } from "react-icons/fa";
 
 interface Blog {
   id: number;
-  user: string;
+  userId: string;
+  username: string;
   caption: string;
   createdAt: string;
+  visible: string;
   // Thêm các trường khác nếu cần thiết
 }
 
@@ -34,13 +37,16 @@ const Blog: React.FC = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.post("http://localhost:8080/chat-application/v1/post/findAll",{
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
+        const response = await axios.post(
+          "http://localhost:8080/chat-application/v1/post/getAllForAdmin",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          }
         );
-        setBlogs(response.data.result);
-        setSearchData(response.data.result);
+        setBlogs(response.data);
+        setSearchData(response.data);
         setLoading(false);
       } catch (error) {
         setError("Lỗi khi tải danh sách bài viết.");
@@ -90,7 +96,7 @@ const Blog: React.FC = () => {
 
       if (result.isConfirmed) {
         // Gọi API để xóa bài viết
-        await axios.delete(`https://localhost:7125/AdminBlog/${id}`);
+        await axios.delete(`https://localhost:8080/chat-application/v1/post/changeVisible?${id}`);
 
         // Cập nhật lại danh sách bài viết sau khi xóa thành công
         setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
@@ -115,10 +121,26 @@ const Blog: React.FC = () => {
 
   const columns = [
     {
+      name: "#",
+      selector: (row: Blog) => row.id,
+      sortable: true,
+      width: "70px",
+    },
+    {
       name: "Tiêu đề",
       selector: (row: Blog) => row.caption,
       sortable: true,
       width: "150px",
+    },
+    {
+      name: "Mã người tạo",
+      selector: (row: Blog) => row.userId,
+      sortable: true,
+    },
+    {
+      name: "Tên người tạo",
+      selector: (row: Blog) => row.username,
+      sortable: true,
     },
     {
       name: "Ngày tạo",
@@ -127,58 +149,36 @@ const Blog: React.FC = () => {
       sortable: true,
     },
     {
+      name: "Trạng thái",
+      selector: (row: Blog) => (
+          row?.visible ? "Hiển thị" : "Ẩn"
+      ),
+    },
+    {
       name: "Tác vụ",
       cell: (row: Blog) => (
         <div>
-          {row.user == currentUser.id ? (
-            <>
-              <Link
+          <>
+            {/* <Link
                 to={`/admin/blogDetail/${row.id}`}
                 style={{ marginRight: "10px", fontSize: "22px" }}
                 title="Sửa bài viết"
               >
                 <FaEdit style={{ color: "blue", marginLeft: "10px" }} />
-              </Link>
-              <button
-                onClick={() => handleDelete(row.id)}
-                style={{
-                  border: "none",
-                  background: "none",
-                  cursor: "pointer",
-                  fontSize: "22px",
-                }}
-                title="Xóa bài viết"
-              >
-                <FaTrash style={{ color: "red" }} />
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                style={{
-                  marginRight: "10px",
-                  fontSize: "22px",
-                  opacity: "0.5",
-                  border: "none",
-                  background: "none",
-                }}
-                title="Không có quyền chỉnh sửa"
-              >
-                <FaEdit style={{ color: "blue", marginLeft: "10px" }} />
-              </button>
-              <button
-                style={{
-                  border: "none",
-                  background: "none",
-                  fontSize: "22px",
-                  opacity: "0.5",
-                }}
-                title="Không có quyền xóa"
-              >
-                <FaTrash style={{ color: "red" }} />
-              </button>
-            </>
-          )}
+              </Link> */}
+            <button
+              onClick={() => handleDelete(row.id)}
+              style={{
+                border: "none",
+                background: "none",
+                cursor: "pointer",
+                fontSize: "22px",
+              }}
+              title="Xóa bài viết"
+            >
+              <FaTrash style={{ color: "red" }} />
+            </button>
+          </>
         </div>
       ),
       ignoreRowClick: true,

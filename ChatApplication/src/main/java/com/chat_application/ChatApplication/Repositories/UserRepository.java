@@ -26,6 +26,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("select u from User u where u.username like %?1% and u.username not like 'admin' and u.status = 1 and u.privacy = true and u.id != ?2")
     List<User> searchByUsername(String username, UUID UUID);
-    @Query("SELECT u FROM User u WHERE u.username != :username AND u.id NOT IN :followingIds")
+    @Query("SELECT u FROM User u WHERE u.username != :username AND u.username not like 'admin' AND u.id NOT IN :followingIds")
     List<User> findUsersNotFollowedBy(@Param("username") String username, @Param("followingIds") List<UUID> followingIds);
 }

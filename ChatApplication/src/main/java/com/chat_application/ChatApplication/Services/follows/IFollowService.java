@@ -12,11 +12,13 @@ import java.util.List;
 public interface IFollowService {
     ApiResponse<List<Follow>> getFollowByUserId(User followerUser);
     ApiResponse<Follow> add(Follow follow);
-    public List<User> getFollowers(UsernameRequest request);
+    public int getFollowers(UsernameRequest request);
 
-    public List<User> getFollowing(UsernameRequest request);
+    public int getFollowing(UsernameRequest request);
 
     List<UserResponse> suggestUser(String username);
 
     boolean followOrUnFollow(FollowRequest req);
+
+    boolean isFollowing(FollowRequest req);
 }
