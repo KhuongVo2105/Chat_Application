@@ -27,7 +27,7 @@ public class ChatController {
     // Nhan tin nhan va luu vao database
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public void sendMessage1(@Payload ChatMessage message) {
+    public void sendMessage(@Payload ChatMessage message) {
         System.out.println(message.toString());
         Message message1 = new Message();
         message1.setUserIdSend(UUID.fromString(message.getUserIdSend()));

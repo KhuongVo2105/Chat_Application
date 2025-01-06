@@ -33,6 +33,7 @@ const Chat = ({ route }) => {
   const [newMessage, setNewMessage] = useState('');
   const [stompClient, setStompClient] = useState(null);
   const theme = useTheme();
+  
   // Kết nối WebSocket
   useEffect(() => {
     const socket = new SockJS(ENDPOINTS.CHAT.SOCKJS);
@@ -156,7 +157,7 @@ const Chat = ({ route }) => {
         style={{ flex: 1, padding: 10 }}
       />
 
-      <View style={{ flexDirection: 'row', padding: 10, borderTopWidth: 1, borderTopColor: '#ddd' }}>
+      <View style={{ flexDirection: 'row', padding: 70, borderTopWidth: 1, borderTopColor: '#ddd' }}>
         <TextInput
           style={{
             flex: 1,
