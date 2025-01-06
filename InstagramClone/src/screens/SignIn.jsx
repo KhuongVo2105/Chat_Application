@@ -88,6 +88,7 @@ const SignIn = ({navigation, route}) => {
           if (authenticated) {
             setTokenContext(token);
             console.log('Token:', token);
+            navigation.replace('(tabs)');
           } else {
             Alert.alert('Error', 'Authentication failed. Please try again.');
           }
@@ -152,66 +153,6 @@ const SignIn = ({navigation, route}) => {
       }
     } finally {
       setLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (!tokenContext) {
-      console.log('Token is not available.');
-      return;
-    } else {
-      fetchUserInfo();
-    }
-  }, [tokenContext]);
-  // Ham lay thong tin nguoi dung
-  const fetchUserInfo = async () => {
-    try {
-      const endpoint = ENDPOINTS.USER.MY_INFORMATION;
-      const response = await axios.post(
-        endpoint, // URL
-        {}, // Request body (ở đây là rỗng vì không truyền dữ liệu)
-        {
-          headers: {
-            Authorization: `Bearer ${tokenContext}`,
-          },
-        },
-      );
-      console.log('\tLoad user profile is successfully');
-
-      // Kiểm tra phản hồi từ server
-      if (response.data.code === 200 && response.data.result) {
-        const userInfo = response.data.result;
-        console.log(`User information: ${JSON.stringify(userInfo, null, 2)}`);
-
-        // Lưu thông tin vào Context
-        setIdContext(userInfo.id);
-        setUsernameContext(userInfo.username);
-        setEmailContext(userInfo.email);
-        setCreatedAtContext(userInfo.createdAt);
-        setBirthdayContext(userInfo.birthday);
-        setRoleContext({roles: userInfo.roles});
-
-        console.log('User information loaded successfully.');
-        navigation.replace('(tabs)');
-      } else {
-        console.log('Unexpected response format:', response.data);
-      }
-    } catch (error) {
-      // Xử lý lỗi
-      if (error.response) {
-        // Lỗi từ server (status code không phải 2xx)
-        console.log(
-          'Error from server:',
-          error.message,
-          '\n\t',
-          error.response.data,
-        );
-      } else if (error.request) {
-        // Không nhận được phản hồi từ server
-        console.log('No response received:', error.request);
-      } else {
-        // Lỗi khác khi thực hiện yêu cầu
-        console.log('Error during request:', error.message);
-      }
     }
   };
 

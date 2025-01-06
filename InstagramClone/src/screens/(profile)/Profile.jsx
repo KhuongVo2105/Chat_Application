@@ -20,293 +20,322 @@ import ImageGrid from '../../components/ImageGrid';
 import ENDPOINTS from '../../config/endpoints';
 import {handleError} from '../../utils/handleError';
 import QRCode from 'react-native-qrcode-svg';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native-paper';
 
-export const User = {
-  username: '',
-  avatar: '',
-};
+const Profile = ({ user, isUser}) => {
+  // const images = [
+  //   {
+  //     id: '1',
+  //     quantity: 1,
+  //     uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
+  //   },
+  //   {
+  //     id: '2',
+  //     quantity: 2,
+  //     uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
+  //   },
+  //   {
+  //     id: '3',
+  //     quantity: 1,
+  //     uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
+  //   },
+  //   {
+  //     id: '4',
+  //     quantity: 10,
+  //     uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
+  //   },
+  //   {
+  //     id: '5',
+  //     quantity: 5,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '6',
+  //     quantity: 1,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '7',
+  //     quantity: 1,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '8',
+  //     quantity: 2,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '9',
+  //     quantity: 1,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '10',
+  //     quantity: 10,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '11',
+  //     quantity: 5,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '12',
+  //     quantity: 1,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '13',
+  //     quantity: 3,
+  //     uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
+  //   },
+  //   {
+  //     id: '14',
+  //     quantity: 4,
+  //     uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
+  //   },
+  //   {
+  //     id: '15',
+  //     quantity: 6,
+  //     uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
+  //   },
+  //   {
+  //     id: '16',
+  //     quantity: 7,
+  //     uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
+  //   },
+  //   {
+  //     id: '17',
+  //     quantity: 8,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '18',
+  //     quantity: 9,
+  //     uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
+  //   },
+  //   {
+  //     id: '19',
+  //     quantity: 2,
+  //     uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
+  //   },
+  //   {
+  //     id: '20',
+  //     quantity: 3,
+  //     uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
+  //   },
+  //   {
+  //     id: '21',
+  //     quantity: 4,
+  //     uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
+  //   },
+  //   {
+  //     id: '22',
+  //     quantity: 5,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '23',
+  //     quantity: 6,
+  //     uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
+  //   },
+  //   {
+  //     id: '24',
+  //     quantity: 7,
+  //     uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
+  //   },
+  //   {
+  //     id: '25',
+  //     quantity: 8,
+  //     uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
+  //   },
+  //   {
+  //     id: '26',
+  //     quantity: 9,
+  //     uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
+  //   },
+  //   {
+  //     id: '27',
+  //     quantity: 10,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '28',
+  //     quantity: 1,
+  //     uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
+  //   },
+  //   {
+  //     id: '29',
+  //     quantity: 2,
+  //     uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
+  //   },
+  //   {
+  //     id: '30',
+  //     quantity: 3,
+  //     uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
+  //   },
+  //   {
+  //     id: '31',
+  //     quantity: 4,
+  //     uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
+  //   },
+  //   {
+  //     id: '32',
+  //     quantity: 5,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '33',
+  //     quantity: 6,
+  //     uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
+  //   },
+  //   {
+  //     id: '34',
+  //     quantity: 7,
+  //     uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
+  //   },
+  //   {
+  //     id: '35',
+  //     quantity: 8,
+  //     uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
+  //   },
+  //   {
+  //     id: '36',
+  //     quantity: 9,
+  //     uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
+  //   },
+  //   {
+  //     id: '37',
+  //     quantity: 10,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '38',
+  //     quantity: 1,
+  //     uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
+  //   },
+  //   {
+  //     id: '39',
+  //     quantity: 2,
+  //     uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
+  //   },
+  //   {
+  //     id: '40',
+  //     quantity: 3,
+  //     uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
+  //   },
+  //   {
+  //     id: '41',
+  //     quantity: 4,
+  //     uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
+  //   },
+  //   {
+  //     id: '42',
+  //     quantity: 5,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '43',
+  //     quantity: 6,
+  //     uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
+  //   },
+  //   {
+  //     id: '44',
+  //     quantity: 7,
+  //     uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
+  //   },
+  //   {
+  //     id: '45',
+  //     quantity: 8,
+  //     uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
+  //   },
+  //   {
+  //     id: '46',
+  //     quantity: 9,
+  //     uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
+  //   },
+  //   {
+  //     id: '47',
+  //     quantity: 10,
+  //     uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
+  //   },
+  //   {
+  //     id: '48',
+  //     quantity: 1,
+  //     uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
+  //   },
+  //   {
+  //     id: '49',
+  //     quantity: 2,
+  //     uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
+  //   },
+  //   {
+  //     id: '50',
+  //     quantity: 3,
+  //     uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
+  //   },
+  // ];
 
-const Profile = ({navigation, username, isUser}) => {
-  const images = [
-    {
-      id: '1',
-      quantity: 1,
-      uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
-    },
-    {
-      id: '2',
-      quantity: 2,
-      uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
-    },
-    {
-      id: '3',
-      quantity: 1,
-      uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
-    },
-    {
-      id: '4',
-      quantity: 10,
-      uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
-    },
-    {
-      id: '5',
-      quantity: 5,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '6',
-      quantity: 1,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '7',
-      quantity: 1,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '8',
-      quantity: 2,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '9',
-      quantity: 1,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '10',
-      quantity: 10,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '11',
-      quantity: 5,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '12',
-      quantity: 1,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '13',
-      quantity: 3,
-      uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
-    },
-    {
-      id: '14',
-      quantity: 4,
-      uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
-    },
-    {
-      id: '15',
-      quantity: 6,
-      uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
-    },
-    {
-      id: '16',
-      quantity: 7,
-      uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
-    },
-    {
-      id: '17',
-      quantity: 8,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '18',
-      quantity: 9,
-      uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
-    },
-    {
-      id: '19',
-      quantity: 2,
-      uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
-    },
-    {
-      id: '20',
-      quantity: 3,
-      uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
-    },
-    {
-      id: '21',
-      quantity: 4,
-      uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
-    },
-    {
-      id: '22',
-      quantity: 5,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '23',
-      quantity: 6,
-      uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
-    },
-    {
-      id: '24',
-      quantity: 7,
-      uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
-    },
-    {
-      id: '25',
-      quantity: 8,
-      uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
-    },
-    {
-      id: '26',
-      quantity: 9,
-      uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
-    },
-    {
-      id: '27',
-      quantity: 10,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '28',
-      quantity: 1,
-      uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
-    },
-    {
-      id: '29',
-      quantity: 2,
-      uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
-    },
-    {
-      id: '30',
-      quantity: 3,
-      uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
-    },
-    {
-      id: '31',
-      quantity: 4,
-      uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
-    },
-    {
-      id: '32',
-      quantity: 5,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '33',
-      quantity: 6,
-      uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
-    },
-    {
-      id: '34',
-      quantity: 7,
-      uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
-    },
-    {
-      id: '35',
-      quantity: 8,
-      uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
-    },
-    {
-      id: '36',
-      quantity: 9,
-      uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
-    },
-    {
-      id: '37',
-      quantity: 10,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '38',
-      quantity: 1,
-      uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
-    },
-    {
-      id: '39',
-      quantity: 2,
-      uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
-    },
-    {
-      id: '40',
-      quantity: 3,
-      uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
-    },
-    {
-      id: '41',
-      quantity: 4,
-      uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
-    },
-    {
-      id: '42',
-      quantity: 5,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '43',
-      quantity: 6,
-      uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
-    },
-    {
-      id: '44',
-      quantity: 7,
-      uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
-    },
-    {
-      id: '45',
-      quantity: 8,
-      uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
-    },
-    {
-      id: '46',
-      quantity: 9,
-      uri: 'https://i.pinimg.com/736x/b7/c2/31/b7c2314472307131946d9b255c3c06f7.jpg',
-    },
-    {
-      id: '47',
-      quantity: 10,
-      uri: 'https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg',
-    },
-    {
-      id: '48',
-      quantity: 1,
-      uri: 'https://i.pinimg.com/736x/ff/d8/10/ffd8109392e5aa39b56f341f4a388ee9.jpg',
-    },
-    {
-      id: '49',
-      quantity: 2,
-      uri: 'https://i.pinimg.com/736x/5d/7f/5f/5d7f5f33f763c18b03fc6cd9836a423d.jpg',
-    },
-    {
-      id: '50',
-      quantity: 3,
-      uri: 'https://i.pinimg.com/736x/c6/12/8a/c6128ae7a90bed67e450fa6376891273.jpg',
-    },
-  ];
-
-  const {tokenContext} = useContext(AuthContext);
+  const {tokenContext,idContext, avatarContext, usernameContext} = useContext(AuthContext);
 
   const [selectedItem, setSelectedItem] = useState('table');
-  const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState(null);
-  const [numPost, setNumPost] = useState(0);
-  const [numFollowing, setNumFollowing] = useState(0);
-  const [numFollower, setNumFollower] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [numPost, setNumPost] = useState(10);
+  const [avatar, setAvatar] = useState();
+  const [userState, setUserState] = useState(user);
+  const [numFollowing, setNumFollowing] = useState(10);
+  const [numFollower, setNumFollower] = useState(10);
+  const [userSuggestion, setUserSuggestion] = useState(null);
   const [isOpenQR, setIsOpenQR] = useState(false);
-
+  const navigation = useNavigation();
+  const [isFollow, setIsFollow] = useState(false);
+  const route = useRoute();
   const handleSelectItem = item => {
     setSelectedItem(item);
   };
+  useEffect(() => {
+    if(route.params?.userId) {
+      const userId = route.params?.userId;
+      const fetchUserById = async () => {
+        const endpoint = `${ENDPOINTS.USER.GET_USER_PROFILE}/${userId}`;
+        try {
+          const response = await axios.get(endpoint, {
+            headers: {Authorization: `Bearer ${tokenContext}`},
+          });
+          if (response.status === 200) {
+            setUserState(response.data.result);
+            setUsername(userState.username);
+            setAvatar(userState.avatar);
+          }
+        } catch (err) {
+          console.log(`Error Profile: ${err}`);
+        }
+      };
+      fetchUserById();
+    } else {
+      if (isUser) {
+        setUsername(usernameContext);
+        setAvatar(avatarContext);
+      } else {
+        setUsername(userState?.username);
+        setAvatar(userState?.avatar);
+      }
+    }
+    setLoading(true);
+  }, [usernameContext, isUser, userState?.username, avatarContext, userState?.avatar, route.params?.userId, tokenContext])
 
   async function fetchSuggestion() {}
 
   async function fetchPost() {
     const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME;
-    console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
     try {
       const response = await axios.post(
         endpoint,
         {username: username},
-        {headers: {Authorization: `Bearer ${tokenContext}`}},
       );
       const {result} = response.data;
-      console.log(result);
       setNumPost(result.length);
     } catch (error) {
       handleError(error);
@@ -317,183 +346,239 @@ const Profile = ({navigation, username, isUser}) => {
 
   async function renderPost() {}
 
-  // const fetchFollower = async () => {
-  //   const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME
-  //   console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
-  //   try {
-  //     const response = await axios.post(
-  //       endpoint,
-  //       { "username": usernameContext },
-  //       { headers: { Authorization: `Bearer ${tokenContext}` } }
-  //     )
-  //     const { result } = response.data;
-  //     console.log(result)
-  //     setNumPost(result.length)
-  //   } catch (error) {
-  //     handleError(error)
-  //   }
-  // }
+  const fetchFollower = async () => {
+    const endpoint = ENDPOINTS.FOLLOW.FOLLOWER;
+    try {
+      const response = await axios.post(
+        endpoint,
+        { username: username }
+      )
+      if (response.data.code === 200) {
+        setNumFollower(response.data.result);
+      }
+    } catch (error) {
+      console.log("Follower error: ", error);
+    }
+  }
 
-  // const fetchFollowing = async ()=>{
-  //   const endpoint = ENDPOINTS.USER.GET_POST_BY_USERNAME
-  //   console.log(`Instagram-GET_POST_BY_USERNAME-endpoint: ${endpoint}`);
-  //   try {
-  //     const response = await axios.post(
-  //       endpoint,
-  //       { "username": usernameContext },
-  //       { headers: { Authorization: `Bearer ${tokenContext}` } }
-  //     )
-  //     const { result } = response.data;
-  //     console.log(result)
-  //     setNumPost(result.length)
-  //   } catch (error) {
-  //     handleError(error)
-  //   }
-  // }
+  const fetchFollowing = async ()=>{
+    const endpoint = ENDPOINTS.FOLLOW.FOLOWERING
+    try {
+      const response = await axios.post(
+        endpoint,
+        { username: username }
+      )
+      if (response.data.code === 200) {
+        setNumFollowing(response.data.result);
+      }
+    } catch (error) {
+      console.log("Following error: ", error);
+    }
+  };
+
+  const fetchIsFollow = async () => {
+    const endpoint = ENDPOINTS.FOLLOW.IS_FOLLOW;
+    try {
+      const response = await axios.post(endpoint,
+        {
+          followerId: idContext,
+          followingId:userState.id
+        }
+      );
+      setIsFollow(response.data)
+    } catch(error) {
+      console.log("IsFollow error: ", error)
+    }
+  };
+
+  const fetchSuggestUser = async () => {
+    const endpoint = ENDPOINTS.FOLLOW.SUGGEST_USER;
+    try {
+        const response = await axios.post(endpoint,
+          {usernameContext}
+        );
+
+        setUserSuggestion(response.data);
+        console.log("User r",userSuggestion)
+    } catch (error) {
+      console.log("Suggest error", error)
+    }
+  }
 
   useEffect(() => {
-    setLoading(true);
-    fetchPost(); // Gọi hàm fetchPost khi component được mount
+    if (loading) {
+      fetchPost();
+      fetchFollower();
+      fetchFollowing();
+      fetchSuggestUser();
+      if (!isUser) fetchIsFollow();
+      setLoading(false);
+    }
+    
+  }, [loading])
 
-    setLoading(false);
-  }, []);
+  const handleFollow = async () => {
+    console.log("Follow");
+    const endpoint = ENDPOINTS.FOLLOW.FOLLOW;
+    try {
+      const response = await axios.post(endpoint,
+        {
+          followerId: idContext,
+          followingId:userState.id
+        }
+      );
+      setLoading(true);
+    } catch(error) {
+      console.log("Follow error ", error);
+    }
+  }
+
+  if (loading) {
+    return(
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    )
+  } else {
+    return (
+      <View>
+        <ScrollView
+          className="bg-white"
+          horizontal={false}
+          showsVerticalScrollIndicator={false}>
+          <View className="w-96 mx-auto">
+            <View className="mb-3" style={styles.header}>
+              {!avatar ? (
+                <Image
+                  source={require('../../assets/avatarDefine.jpg')}
+                  style={styles.avatar}
+                />
+              ) : (
+                <Image
+                  source={{uri: avatar}}
+                  style={styles.avatar}
+                />
+              )}
+              <View style={styles.statsContainer}>
+                <View style={styles.stat}>
+                  <Text style={styles.statNumber}>{numPost}</Text>
+                  <Text style={styles.statLabel}>posts</Text>
+                </View>
+                <View style={styles.stat}>
+                  <Text style={styles.statNumber}>{numFollower}</Text>
+                  <Text style={styles.statLabel}>followers</Text>
+                </View>
+                <View style={styles.stat}>
+                  <Text style={styles.statNumber}>{numFollowing}</Text>
+                  <Text style={styles.statLabel}>following</Text>
+                </View>
+              </View>
+            </View>
   
-  return (
-    <View>
-      <ScrollView
-        className="bg-white"
-        horizontal={false}
-        showsVerticalScrollIndicator={false}>
-        <View className="w-96 mx-auto">
-          <View className="mb-3" style={styles.header}>
-            {userData?.avatar == null ? (
-              <Image
-                source={require('../../assets/avatarDefine.jpg')}
-                style={styles.avatar}
-              />
-            ) : (
-              <Image
-                source={require('../../assets/avatarDefine.jpg')}
-                style={styles.avatar}
-              />
-            )}
-            <View style={styles.statsContainer}>
-              <View style={styles.stat}>
-                <Text style={styles.statNumber}>{numPost}</Text>
-                <Text style={styles.statLabel}>posts</Text>
-              </View>
-              <View style={styles.stat}>
-                <Text style={styles.statNumber}>{numFollower}</Text>
-                <Text style={styles.statLabel}>followers</Text>
-              </View>
-              <View style={styles.stat}>
-                <Text style={styles.statNumber}>{numFollowing}</Text>
-                <Text style={styles.statLabel}>following</Text>
-              </View>
-            </View>
-          </View>
-
-          <Text className="text-sm text-slate-500 mb-3">
-            Add your name and bio.
-          </Text>
-
-          {isUser  ?  (<View className="flex flex-row items-center mb-3">
-            <Pressable
-              className="flex-1 bg-gray-200 rounded-md py-1 mx-1"
-              onPress={() => navigation.navigate('EditProfile')}>
-              <Text className="text-base font-medium text-center">
-                Edit profile
-              </Text>
-            </Pressable>
-            <Pressable className="flex-1 bg-gray-200 rounded-md py-1 mx-1">
-              <Text className="text-base font-medium text-center"
-              onPress={() => {setIsOpenQR(true)}}>
-                Share profile
-              </Text>
-            </Pressable>
-            <Pressable className="flex-none size-1 p-1 mx-1">
-              <FontAwesome6 name="user-plus" size={18}></FontAwesome6>
-            </Pressable>
-          </View>) :
-            (<View>
-              <Pressable className="flex-1 bg-blue-200 rounded-md py-1 mx-1">
-              <Text className="text-base font-medium text-center"
-              onPress={() => {setIsOpenQR(true)}}>
-                follow
-              </Text>
-            </Pressable>
-            </View>)
-          }
-
-          <View className="w-full flex mb-3">
-            <View className="flex flex-row justify-between items-center mb-2">
-              <Text className="text-base">Discover people</Text>
-              <Pressable>
-                <Text className="text-base text-blue-500">See all</Text>
-              </Pressable>
-            </View>
-            <View className="w-full flex flex-row justify-between items-center">
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}>
-                <UserSuggestion
-                  username="JohnDoe"
-                  caption="Suggested for you"
-                  image="https://i.pinimg.com/736x/2d/e2/ca/2de2caefc8094a183aaa3a070e9ed420.jpg"
-                />
-                <UserSuggestion
-                  username="JaneSmith"
-                  caption="Recommended for you Recommended for you Recommended for you"
-                />
-              </ScrollView>
-            </View>
-          </View>
-
-          <View className="h-10 flex flex-row justify-between mb-2">
-            <View className="flex-1 flex flex-row justify-center p-1">
+            <Text className="text-sm text-slate-500 mb-3">
+              Add your name and bio.
+            </Text>
+  
+            {isUser  ?  (<View className="flex flex-row items-center mb-3">
               <Pressable
-                className={`flex flex-row justify-center p-1 ${selectedItem === 'table' ? 'border-b-2 border-b-slate-400' : 'border-b-0'}`}
-                onPress={() => handleSelectItem('table')}>
-                <Fontisto
-                  name="nav-icon-grid"
-                  size={selectedItem === 'table' ? 22 : 20}
-                />
+                className="flex-1 bg-gray-200 rounded-md py-1 mx-1"
+                onPress={() => navigation.navigate('EditProfile')}>
+                <Text className="text-base font-medium text-center">
+                  Edit profile
+                </Text>
               </Pressable>
+              <Pressable className="flex-1 bg-gray-200 rounded-md py-1 mx-1">
+                <Text className="text-base font-medium text-center"
+                onPress={() => {setIsOpenQR(true)}}>
+                  Share profile
+                </Text>
+              </Pressable>
+              <Pressable className="flex-none size-1 p-1 mx-1">
+                <FontAwesome6 name="user-plus" size={18}></FontAwesome6>
+              </Pressable>
+            </View>) :
+              (<View>
+                {isFollow ? 
+                  (<Pressable className="flex-1 bg-gray-200 rounded-md py-1 mx-1">
+                <Text className="text-base font-medium text-center"
+                onPress={handleFollow}>
+                    UnFollow
+                </Text>
+                </Pressable>) :
+                (<Pressable className="flex-1 bg-blue-500 rounded-md py-1 mx-1">
+                <Text className="text-base font-medium text-center"
+                onPress={handleFollow}>
+                    Follow
+                </Text>
+                </Pressable>)
+                }
+              </View>)
+            }
+  
+            <View className="w-full flex mb-3">
+              <View className="flex flex-row justify-between items-center mb-2">
+                <Text className="text-base">Discover people</Text>
+                <Pressable>
+                  <Text className="text-base text-blue-500">See all</Text>
+                </Pressable>
+              </View>
+              <View className="w-full flex flex-row justify-between items-center">
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}>
+                  {userSuggestion ? (userSuggestion.map((user, index) => (
+                    <UserSuggestion key={index} username= {user.username} caption = "Suggested for you" image = {user.avatar} />
+                   ))): (<></>)}
+                </ScrollView>
+              </View>
             </View>
-            <View className="flex-1 flex flex-row justify-center p-1">
-              <Pressable
-                className={`flex flex-row justify-center p-1 ${selectedItem === 'home' ? 'border-b-2 border-b-slate-400' : 'border-b-0'}`}
-                onPress={() => handleSelectItem('home')}>
-                <FontAwesome
-                  name="home"
-                  size={selectedItem === 'home' ? 24 : 22}
-                />
-              </Pressable>
+  
+            <View className="h-10 flex flex-row justify-between mb-2">
+              <View className="flex-1 flex flex-row justify-center p-1">
+                <Pressable
+                  className={`flex flex-row justify-center p-1 ${selectedItem === 'table' ? 'border-b-2 border-b-slate-400' : 'border-b-0'}`}
+                  onPress={() => handleSelectItem('table')}>
+                  <Fontisto
+                    name="nav-icon-grid"
+                    size={selectedItem === 'table' ? 22 : 20}
+                  />
+                </Pressable>
+              </View>
+              <View className="flex-1 flex flex-row justify-center p-1">
+                <Pressable
+                  className={`flex flex-row justify-center p-1 ${selectedItem === 'home' ? 'border-b-2 border-b-slate-400' : 'border-b-0'}`}
+                  onPress={() => handleSelectItem('home')}>
+                  <FontAwesome
+                    name="home"
+                    size={selectedItem === 'home' ? 24 : 22}
+                  />
+                </Pressable>
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
-
-      {/* Grid */}
-      <ImageGrid images={images} />
-      {/* QR Code Modal */}
-      <Modal visible={isOpenQR} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.qrContainer}>
-            <QRCode
-              value={`https://myapp_instagram.com/profile/${username}`}
-              size={200}
-            />
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setIsOpenQR(!isOpenQR)}>
-              <Text style={styles.closeButtonText}>Đóng</Text>
-            </TouchableOpacity>
+        </ScrollView>
+  
+        {/* Grid */}
+        <ImageGrid images={images} />
+        {/* QR Code Modal */}
+        <Modal visible={isOpenQR} transparent={true} animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.qrContainer}>
+              <QRCode
+                value={`https://myapp_instagram.com/profile/${idContext}`}
+                size={200}
+              />
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setIsOpenQR(!isOpenQR)}>
+                <Text style={styles.closeButtonText}>Đóng</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Modal>
-    </View>
-  );
+        </Modal>
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

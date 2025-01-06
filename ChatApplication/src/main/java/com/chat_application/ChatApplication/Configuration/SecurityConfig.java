@@ -39,6 +39,7 @@ public class SecurityConfig {
             "v1/post/allPost", "v1/users/alluserNum",
             "v1/follow/suggestUser", "v1/follow/followers", "v1/follow/following", "v1/follow/follow",
             "v1/reportPost/getReportPort", "v1/reportPost/sendReportPort"
+
     }, PUBLIC_ENDPOINTS_GET = {"/v1/verification/verify"};
 
     @Bean

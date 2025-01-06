@@ -65,7 +65,7 @@ public class UserController {
         // Lưu imageUrl vào cơ sở dữ liệu của user với userId tương ứng
         userService.updateAvatUser(avatUserReq); // Gọi hàm updateAvatUser trong UserService
 
-        return new ResponseEntity<>("Profile picture updated", HttpStatus.OK);
+        return new ResponseEntity<>(imageUrl, HttpStatus.OK);
     }
 
     public String uploadImage(MultipartFile file) {

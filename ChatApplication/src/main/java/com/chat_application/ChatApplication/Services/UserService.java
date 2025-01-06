@@ -34,6 +34,7 @@ import java.util.UUID;
 public class UserService {
     RoleRepository roleRepository;
     UserRepository userRepository;
+    PushNotificationService pushNotificationService;
     UserMapper userMapper;
     PermissionService permissionService;
     RoleService roleService;
@@ -63,6 +64,7 @@ public class UserService {
         user.setRoles(roles);
 
         user = userRepository.save(user);
+        pushNotificationService.createUser(user.getId().toString());
         return userMapper.toUserResponse(user);
     }
 

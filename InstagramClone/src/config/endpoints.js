@@ -1,5 +1,5 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-const SERVER_ADDRESS = `172.16.0.195`;
+const SERVER_ADDRESS = `10.51.37.237`;
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`;
 
 const API_BASE_URL  = REACT_APP_API_BASE_URL;
@@ -65,8 +65,12 @@ const ENDPOINTS = {
 
   FOLLOW: {
     GET_FOLLOWING: `${API_BASE_URL}/follow/findAllByUserId`,
+    IS_FOLLOW: `${API_BASE_URL}/follow/isFollowing`,
+    FOLLOW: `${API_BASE_URL}/follow`,
+    FOLLOWER: `${API_BASE_URL}/follow/followers`,
+    FOLOWERING: `${API_BASE_URL}/follow/following`,
+    SUGGEST_USER: `${API_BASE_URL}/follow/suggestUser`
   },
-};
 
     CHAT: {
         SOCKJS:`${API_WEBSOCKET}/ws`,

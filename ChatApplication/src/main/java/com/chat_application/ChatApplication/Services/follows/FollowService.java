@@ -24,12 +24,12 @@ public class FollowService implements IFollowService {
     FollowRepository followRepository;
     UserRepository userRepository;
 
-    public List<User> getFollowers(UsernameRequest request) {
+    public int getFollowers(UsernameRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
         return followRepository.findFollowers(user);
     }
 
-    public List<User> getFollowing(UsernameRequest request) {
+    public int getFollowing(UsernameRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
         return followRepository.findFollowingUsers(user);
     }

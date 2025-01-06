@@ -31,11 +31,12 @@ public class FollowController {
         return response;
     }
     @PostMapping("/followers")
-    List<User> followers(@RequestBody UsernameRequest request) {
-        return service.getFollowers(request);
+    public ApiResponse<Object> followers(@RequestBody UsernameRequest request) {
+        int numFollower = service.getFollowers(request);
+        return ApiResponse.builder().result(numFollower).build();
     }
 
-    @PostMapping("/follow")
+    @PostMapping()
     public boolean followOrUnFollow(@RequestBody FollowRequest req) {
         return service.followOrUnFollow(req);
     }
@@ -46,8 +47,9 @@ public class FollowController {
     }
 
     @PostMapping("/following")
-    List<User> followeing(@RequestBody UsernameRequest request) {
-        return service.getFollowing(request);
+    public ApiResponse<Object> following(@RequestBody UsernameRequest request) {
+        int numFollowing = service.getFollowing(request);
+        return ApiResponse.builder().result(numFollowing).build();
     }
 
     @PostMapping("/suggestUser")
