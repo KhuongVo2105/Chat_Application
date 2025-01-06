@@ -71,7 +71,10 @@ public class PostService implements IPostService {
     @Override
     public ApiResponse<Post> add(Post post) {
         Post postAdded = repository.save(post);
+        User user = userRepository.findById(postAdded.getUser().getId()).orElseThrow(null);
+        if (user != null) {
 
+        }
         return ApiResponse.<Post>builder()
                 .message("Add post successfully")
                 .result(postAdded)

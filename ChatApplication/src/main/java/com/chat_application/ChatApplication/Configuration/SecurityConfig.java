@@ -39,7 +39,8 @@ public class SecurityConfig {
             "v1/post/allPost", "v1/users/alluserNum",
             "v1/follow/suggestUser", "v1/follow/followers", "v1/follow/following", "v1/follow", "v1/follow/isFollowing",
             "v1/reportPost/getReportPort", "v1/reportPost/sendReportPort",
-            "v1/media/getAllImageOfUserId"
+            "v1/media/getAllImageOfUserId",
+            "v1/notification"
 
     }, PUBLIC_ENDPOINTS_GET = {"/v1/verification/verify"};
 
