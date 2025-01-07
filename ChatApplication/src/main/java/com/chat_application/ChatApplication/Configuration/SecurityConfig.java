@@ -36,8 +36,11 @@ public class SecurityConfig {
             "/v1/post/postOfUsername", "/v1/post/{id}", "v1/post/changeVisible",
             "v1/post/allPostInMonth", "v1/users/alluserInMonth",
             "v1/post/allPostInDay", "v1/users/alluserInDay",
-            "v1/post/allPost", "v1/users/alluserNum", "v1/follow", "v1/follow/isFollowing",
-            "v1/follow/suggestUser", "v1/follow/followers", "v1/follow/following", "v1/users/updateAvat"
+            "v1/post/allPost", "v1/users/alluserNum",
+            "v1/follow/suggestUser", "v1/follow/followers", "v1/follow/following", "v1/follow", "v1/follow/isFollowing",
+            "v1/reportPost/getReportPort", "v1/reportPost/sendReportPort",
+            "v1/media/getAllImageOfUserId"
+
     }, PUBLIC_ENDPOINTS_GET = {"/v1/verification/verify"};
 
     @Bean

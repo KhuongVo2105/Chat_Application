@@ -30,6 +30,14 @@ public class MediaController {
         return response;
     }
 
+    @PostMapping("/getAllImageOfUserId")
+    public List<String> getAllImageOfUserId(@RequestParam String userId) {
+        List<String> response = iMediaService.getAllImageOfUserId(userId);
+        return response;
+    }
+    //quy: c5165bbe-842a-42e3-9609-14a3d0ad72e0
+    //phuoc: 0bda33fe-ad7c-4704-a265-c4d7bc3d9b6d
+
     @PostMapping("/add")
     public ApiResponse<List<Media>> add(@RequestBody List<Media> mediaList) throws IOException {
         ApiResponse<List<Media>> response = iMediaService.add(mediaList);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
 import { format, parseISO } from "date-fns"; // hỗ trợ định dạng ngày tháng theo mẫu
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { FaBookOpen, FaEdit, FaOpencart, FaPlus, FaTrash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../blog/Blog.module.css";
 import Swal from "sweetalert2";
@@ -34,26 +34,26 @@ const Blog: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const response = await axios.post(
-          "http://localhost:8080/chat-application/v1/post/getAllForAdmin",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-            },
-          }
-        );
-        setBlogs(response.data);
-        setSearchData(response.data);
-        setLoading(false);
-      } catch (error) {
-        setError("Lỗi khi tải danh sách bài viết.");
-        setLoading(false);
-      }
-    };
+  const fetchBlogs = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/chat-application/v1/post/getAllForAdmin",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      setBlogs(response.data);
+      setSearchData(response.data);
+      setLoading(false);
+    } catch (error) {
+      setError("Lỗi khi tải danh sách bài viết.");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchBlogs();
   }, []);
 
@@ -84,32 +84,34 @@ const Blog: React.FC = () => {
     try {
       // Hiển thị thông báo xác nhận trước khi xóa
       const result = await Swal.fire({
-        title: "Bạn có chắc chắn muốn xóa bài viết này?",
+        title: "Bạn chắc chắn muốn thay đổi trạng thái bài viết này?",
         text: "Hành động này không thể hoàn tác!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Có, xóa đi!",
+        confirmButtonText: "Có!",
         cancelButtonText: "Hủy",
       });
 
       if (result.isConfirmed) {
         // Gọi API để xóa bài viết
-        await axios.delete(`https://localhost:8080/chat-application/v1/post/changeVisible?${id}`);
+        await axios.post(`http://localhost:8080/chat-application/v1/post/changeVisible?id=${id}`);
 
         // Cập nhật lại danh sách bài viết sau khi xóa thành công
-        setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
-        setSearchData((prevBlogs) =>
-          prevBlogs?.filter((blog) => blog.id !== id),
-        );
+        // setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
+        // setSearchData((prevBlogs) =>
+        //   prevBlogs?.filter((blog) => blog.id !== id)
+        // );
 
+        fetchBlogs();
+        
         // Hiển thị thông báo thành công
         Swal.fire({
           timer: 1000,
           icon: "success",
-          title: "Đã xóa!",
-          text: "Bài viết đã được xóa.",
+          title: "Đã đổi!",
+          text: "Bài viết đã được thay đổi trạng thái.",
           showConfirmButton: false,
         });
       }
@@ -150,8 +152,7 @@ const Blog: React.FC = () => {
     },
     {
       name: "Trạng thái",
-      selector: (row: Blog) => (
-          row?.visible ? "Hiển thị" : "Ẩn"
+      cell: (row: Blog) => (row.visible ? (<FaUnlock/>) : (<FaLock/>)
       ),
     },
     {
@@ -159,14 +160,8 @@ const Blog: React.FC = () => {
       cell: (row: Blog) => (
         <div>
           <>
-            {/* <Link
-                to={`/admin/blogDetail/${row.id}`}
-                style={{ marginRight: "10px", fontSize: "22px" }}
-                title="Sửa bài viết"
-              >
-                <FaEdit style={{ color: "blue", marginLeft: "10px" }} />
-              </Link> */}
-            <button
+            {row.visible ? 
+            (<button
               onClick={() => handleDelete(row.id)}
               style={{
                 border: "none",
@@ -174,10 +169,22 @@ const Blog: React.FC = () => {
                 cursor: "pointer",
                 fontSize: "22px",
               }}
-              title="Xóa bài viết"
+              title="Ẩn bài viết"
             >
               <FaTrash style={{ color: "red" }} />
-            </button>
+            </button>):
+            (<button
+              onClick={() => handleDelete(row.id)}
+              style={{
+                border: "none",
+                background: "none",
+                cursor: "pointer",
+                fontSize: "22px",
+              }}
+              title="Mở bài viết"
+            >
+              <FaBookOpen style={{ color: "blue" }} />
+            </button>)}
           </>
         </div>
       ),

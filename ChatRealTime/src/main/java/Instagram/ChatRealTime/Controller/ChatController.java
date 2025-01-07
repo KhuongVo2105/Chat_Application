@@ -1,5 +1,6 @@
 package Instagram.ChatRealTime.Controller;
 
+import Instagram.ChatRealTime.Dto.Request.MessageReponse;
 import Instagram.ChatRealTime.Services.MessageService;
 import Instagram.ChatRealTime.model.ChatMessage;
 import Instagram.ChatRealTime.model.Message;
@@ -24,29 +25,83 @@ public class ChatController {
         this.messagingTemplate = messagingTemplate;
     }
 
+    // Nhan tin nhan va luu vao database
 //    @MessageMapping("/chat")
 //    @SendTo("/topic/messages")
-//    public ChatMessage sendMessage(@Payload ChatMessage message){
-//        message.setTimestamp(new Date());
-//        return message;
+//    public void sendMessage(@Payload ChatMessage receivedMessage) {
+//        System.out.println(receivedMessage.toString());
+//        Message responseMessage = new Message();
+//        responseMessage.setUserIdSend(UUID.fromString(receivedMessage.getUserIdSend()));
+//
+//        // Determine if the message is for a group or a one-on-one chat
+//        if (receivedMessage.isType()) {
+//            System.out.println("Group chat detected");
+//            responseMessage.setGroupChatId(Long.valueOf(receivedMessage.getUserIdTo()));
+//            responseMessage.setUserIdTo(null);
+//        } else {
+//            responseMessage.setUserIdTo(UUID.fromString(receivedMessage.getUserIdTo()));
+//        }
+//
+//        responseMessage.setContent(receivedMessage.getContent());
+//        responseMessage.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+//        responseMessage.setVisible(true);
+//
+//        // Save the message and handle success/failure
+//        Message messResponse = messageService.saveMessage(responseMessage);
+//        if (messResponse != null) {
+//            // Notify clients about the new message
+//            messagingTemplate.convertAndSend("/topic/messages", responseMessage);
+//        } else {
+//            // Handle failure case (optional)
+//            System.out.println("Failed to save message");
+//        }
 //    }
+
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public void sendMessage1(@Payload ChatMessage message){
-        System.out.println(message.toString());
-        Message message1 = new Message();
-        message1.setUserIdSend(UUID.fromString(message.getUserIdSend()));
-        message1.setUserIdTo(UUID.fromString(message.getUserIdTo()));
-        message1.setContent(message.getContent());
-        message1.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-        messageService.saveMessage(message1);
-//        //Giúp gưửi tin nhắn riêng
-//        String destination = "/user/" + message.getReceiverId() + "/queue/messages";
-//        messagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverId()), "/queue/messages", message);//Gửi tin nhắn cho người nhận
+    public void sendMessage(@Payload ChatMessage receivedMessage) {
+        System.out.println(receivedMessage.toString());
+
+        // Tạo đối tượng Message bằng builder
+        Message responseMessage = Message.builder()
+                .userIdSend(UUID.fromString(receivedMessage.getUserIdSend()))
+                .content(receivedMessage.getContent())
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .visible(true)
+                .build();
+
+        // Determine if the message is for a group or a one-on-one chat
+        if (receivedMessage.isType()) {
+            System.out.println("Group chat detected");
+            responseMessage.setGroupChatId(Long.valueOf(receivedMessage.getUserIdTo()));
+            responseMessage.setUserIdTo(null);
+        } else {
+            responseMessage.setUserIdTo(UUID.fromString(receivedMessage.getUserIdTo()));
+        }
+
+        // Save the message and handle success/failure
+        Message messResponse = messageService.saveMessage(responseMessage);
+        if (messResponse != null) {
+            // Tạo đối tượng MessageResponse để gửi về client
+            MessageReponse messageResponse = MessageReponse.builder()
+                    .id(responseMessage.getId())
+                    .content(responseMessage.getContent())
+                    .createdAt(responseMessage.getCreatedAt())
+                    .userIdSend(responseMessage.getUserIdSend())
+                    .groupChatId(responseMessage.getGroupChatId())
+                    .visible(responseMessage.isVisible())
+                    .build();
+
+            // Notify clients about the new message
+            messagingTemplate.convertAndSend("/topic/messages", messageResponse);
+        } else {
+            // Handle failure case (optional)
+            System.out.println("Failed to save message");
+        }
     }
-//add user
-//    public Message addUser(@Payload Message message, SimpMessageHeaderAccessor headerAccessor) {
-//        headerAccessor.getSessionAttributes().put("username", message.getSender());
-//        return message;
-//    }
+
+    private String convertTime(){
+        return "";
+    }
+
 }

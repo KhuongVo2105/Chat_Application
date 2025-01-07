@@ -20,36 +20,4 @@ public class GroupChat {
     private String nameGroup;
     private Timestamp CreateAt;
     private boolean status;
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public Timestamp getCreateAt() {
-        return CreateAt;
-    }
-
-    public void setCreateAt(Timestamp createAt) {
-        CreateAt = createAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNameGroup() {
-        return nameGroup;
-    }
-
-    public void setNameGroup(String nameGroup) {
-        this.nameGroup = nameGroup;
-    }
 }

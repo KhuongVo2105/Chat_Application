@@ -24,6 +24,9 @@ public interface FollowRepository extends JpaRepository<Follow, String> {
     @Query("SELECT count(f.followingUser) FROM Follow f WHERE f.followerUser = :followerUser")
     int findFollowingUsers(User followerUser);
 
+    @Query("SELECT f.followingUser FROM Follow f WHERE f.followerUser = :followerUser")
+    List<User> findFollowingUsersList(User followerUser);
+
     /**
      * Lấy tất cả những người theo dõi một người dùng.
      *

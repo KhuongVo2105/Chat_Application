@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GroupChatRepository extends JpaRepository<GroupChat, Long> {
-
+    //Lấy group dựa vào id
+    GroupChat findGroupChatById(Long id);
 }

@@ -53,7 +53,9 @@ public class ReportPostService {
     }
 
     public List<ReportPostResponse> getReportPort() {
-        return reportPostRepository.findAll().stream().map(report -> {
+        return reportPostRepository.findAll().stream()
+                .filter(report -> report.getReportedPost() != null && report.getReportedPost().isVisible())
+                .map(report -> {
             return ReportPostResponse.builder()
                     .id(report.getId())
                     .context(report.getContext())

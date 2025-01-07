@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FollowRequest {
+    //    Me
     private String followerId;
+    //    Other
     private String followingId;
 }
