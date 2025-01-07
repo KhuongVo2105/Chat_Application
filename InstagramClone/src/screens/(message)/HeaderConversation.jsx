@@ -1,11 +1,13 @@
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
+import { AuthContext } from '../../context/AuthContext';
 
 const HeaderConverstaions = ({navigation, route}) => {
   const [online, setOnline] = useState(true);
+  const {usernameContext} = useContext(AuthContext)
 
   return (
     <View className="w-full flex flex-row bg-white py-4">
@@ -14,8 +16,8 @@ const HeaderConverstaions = ({navigation, route}) => {
           <AntDesign name="arrowleft" style={styles.arrow_left} />
         </Pressable>
         <Text className="ml-4 text-lg font-bold">
-          {route.params && route.params.conversationName
-            ? route.params.conversationName
+          {route.params && route.params.nameTo
+            ? route.params.nameTo
             : 'example@gmail.com'}
         </Text>
         <View className="grow" />

@@ -2,6 +2,7 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useEffect} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {AuthContext} from '../../context/AuthContext';
+import { useTheme } from 'react-native-paper';
 
 const HeaderConverstaions = ({navigation, route}) => {
   const {usernameContext} = useContext(AuthContext);
@@ -12,7 +13,8 @@ const HeaderConverstaions = ({navigation, route}) => {
         <Pressable className="" onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" style={styles.arrow_left} />
         </Pressable>
-        <Text className="ml-4 text-lg font-bold">
+        <Text className="ml-4 text-lg font-bold"
+        style={{color:useTheme().colors.onSurface}}>
           {usernameContext ? usernameContext : 'example@gmail.com'}
         </Text>
       </View>

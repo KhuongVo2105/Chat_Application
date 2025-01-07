@@ -1,5 +1,5 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-const SERVER_ADDRESS = `192.168.50.128`;
+const SERVER_ADDRESS = `192.168.1.21`;
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`;
 
 const API_BASE_URL = REACT_APP_API_BASE_URL;
@@ -45,7 +45,7 @@ const ENDPOINTS = {
     ADD: `${API_BASE_URL}/post/add`,
     UPDATE: `${API_BASE_URL}/post/update`,
     DELETE: `${API_BASE_URL}/post/delete`,
-    FIND_ALL_MULTIPLE_USER: `${API_BASE_URL}/post/findAllByMultipleUser`,
+    FIND_ALL_MULTIPLE_USER: `${API_BASE_URL}/post/findAllPost`,
     UPDATE_VISIBLE: `${API_BASE_URL}/post/updateVisible`,
     UPDATE_CAPTION: `${API_BASE_URL}/post/updateCaption`,
   },
@@ -77,9 +77,9 @@ const ENDPOINTS = {
     SOCKJS: `${API_WEBSOCKET}/ws`,
     MESSAGE: `${API_WEBSOCKET}/messages`,
     MESSAGE_LIST: `${API_WEBSOCKET}/messages/messageList`,
-    FOLLOWING: `${API_BASE_URL}/follow/followingList`,
+    FOLLOWING_USERS: `${API_BASE_URL}/follow/followingList`,
     CREATE_GROUP: `${API_WEBSOCKET}/GroupChat/createGroup`,
-    GROUP: `${API_WEBSOCKET}/messages/group`,
+    USER_CONVERSATION: `${API_WEBSOCKET}/messages/group`,
   },
 
   LIKE: {

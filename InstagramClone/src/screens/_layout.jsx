@@ -8,6 +8,7 @@ import ConversationLayout from './(conversations)/_layout';
 import { AuthProvider } from '../context/AuthContext';
 import ChatLayout from './(message)/_layout';
 import { config } from './Link';
+import CameraLayout from './(camera)/_layout';
 
 const RootLayout = () => {
   console.log(
@@ -45,6 +46,10 @@ const RootLayout = () => {
             options={{ headerShown: false }}
             component={ChatLayout}
           />
+          <Stack.Screen
+            name='(camera)'
+            component={CameraLayout}
+            options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
