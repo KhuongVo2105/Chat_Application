@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/notification")
+@RequestMapping("/v1/notify")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PushNotificationController {
     PushNotificationService pushNotificationService;
