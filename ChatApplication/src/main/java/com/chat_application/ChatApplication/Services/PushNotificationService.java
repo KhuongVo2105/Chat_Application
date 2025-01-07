@@ -67,5 +67,10 @@ public class PushNotificationService {
     public static void main(String[] args) {
         PushNotificationService pushNotificationService = new PushNotificationService();
         pushNotificationService.createUser("9836ce95-2337-4ce2-9f10-44ffba72eeada");
+        pushNotificationService.createUser("0bda33fe-ad7c-4704-a265-c4d7bc3d9b6d");
+        pushNotificationService.createUser("ab617869-530a-4512-b2ec-53f5b0809910");
+        pushNotificationService.createUser("c5165bbe-842a-42e3-9609-14a3d0ad72e0");
+        pushNotificationService.createUser("d88bf739-9063-4e2f-8279-ca7988ba7e66");
+        pushNotificationService.createUser("e1d7dca0-be51-4efe-835b-f0ed3533f27c");
     }
 }
