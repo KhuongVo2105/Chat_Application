@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Avatar } from 'react-native-paper'; // Đảm bảo bạn đã cài đặt react-native-paper
+import { AuthContext } from '../context/AuthContext';
 
 const GroupChat = ({ navigation, styleGroup, conversations }) => {
     const mockData = [
@@ -206,12 +207,14 @@ const GroupChat = ({ navigation, styleGroup, conversations }) => {
         }
     ];
 
+    const {idContext} = useContext(AuthContext)
+
     const renderItem = ({ item }) => (
         <TouchableOpacity
             className="flex flex-row items-center py-2"
             onPress={() =>
                 navigation.navigate('Chat', {
-                    userIdSend: "yourUser Id", // thay đổi user
+                    userIdSend: idContext, // thay đổi user
                     userIdTo: item.userIdTo,
                     avatarTo:
                         item.status === false

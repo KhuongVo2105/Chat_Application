@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {IconUserProfileStatic} from '../../components/IconComponents';
 import Home from './Home';
 import NewPostScreen from './NewPostScreen';
 import Search from './search/Search';
@@ -12,6 +11,7 @@ import ProfileLayout from '../(profile)/_layout';
 import { Avatar } from 'react-native-paper';
 
 const Tab = createBottomTabNavigator();
+
 const TabsLayout = () => {
   return (
     <Tab.Navigator

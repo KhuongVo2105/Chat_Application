@@ -1,5 +1,5 @@
 // import { REACT_APP_API_BASE_URL } from '@env';
-const SERVER_ADDRESS = `192.168.1.14`;
+const SERVER_ADDRESS = `192.168.50.128`;
 const REACT_APP_API_BASE_URL = `http://${SERVER_ADDRESS}:8080/chat-application/v1`;
 
 const API_BASE_URL = REACT_APP_API_BASE_URL;
@@ -79,7 +79,7 @@ const ENDPOINTS = {
     MESSAGE_LIST: `${API_WEBSOCKET}/messages/messageList`,
     FOLLOWING_USERS: `${API_BASE_URL}/follow/followingList`,
     CREATE_GROUP: `${API_WEBSOCKET}/GroupChat/createGroup`,
-    USER_CONVERSATIONS: `${API_WEBSOCKET}/messages/group`
+    USER_CONVERSATION: `${API_WEBSOCKET}/messages/group`
   }
 }
 

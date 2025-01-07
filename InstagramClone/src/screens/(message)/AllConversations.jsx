@@ -81,7 +81,7 @@ const Message = ({ navigation }) => {
       )
       if (response.status == 200) {
         setListMessage(response.data)
-      }
+      } else console.log('da co loi xay ra trong qua trinh lay danh sach conversation')
     } catch (error) {
       console.log('[fetchConversationList error]')
       handleError(error)

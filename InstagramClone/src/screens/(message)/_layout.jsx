@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Message from './Message';
-import Chat from './Chat'
+import Message from './AllConversations';
+import Chat from './Conversation'
 import HeaderConversation from './HeaderConversation'
 import HeaderConverstaions from './HeaderConverstaions'
 
