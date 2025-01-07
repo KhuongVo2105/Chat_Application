@@ -17,6 +17,17 @@ export const AuthProvider = ({children}) => {
   const [avatarContext, setAvatarContext] = useState();
   const [roleContext, setRoleContext] = useState({roles: []});
 
+    // Hàm dùng logout
+    const logout = () => {
+        setTokenContext(null);
+        setIdContext(null);
+        setUsernameContext(null);
+        setEmailContext(null);
+        setCreatedAtContext(null);
+        setBirthdayContext(null);
+        setRoleContext(null);
+    };
+
   // Provider cung cấp emailContext và setEmailContext
   return (
     <AuthContext.Provider
@@ -41,6 +52,7 @@ export const AuthProvider = ({children}) => {
         setStatusContext,
         roleContext,
         setRoleContext,
+          logout,
       }}>
       {children}
     </AuthContext.Provider>
