@@ -34,10 +34,10 @@ import java.util.stream.Collectors;
 public class PostService implements IPostService {
 
      PostRepository repository;
-     UserRepository userRepository;
      PostMapper postMapper;
      FollowService followService;
      NotificationService notificationService;
+     UserRepository userRepository;
 
     @Override
     public ApiResponse<List<Post>> findAll() {
@@ -123,6 +123,7 @@ public class PostService implements IPostService {
                 .message("Post not found")
                 .build();
     }
+
     @Override
     public ApiResponse<List<Post>> findAllByCaption(String caption) {
         List<Post> postList = repository.searchByCaption(caption).stream().toList();
@@ -137,6 +138,7 @@ public class PostService implements IPostService {
                 .result(postList)
                 .build();
     }
+
     @Override
     public ApiResponse<Post> updateVisible(int postId, boolean visible) {
         if (repository.existsById(postId)) {
@@ -155,7 +157,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<PostResponseWithoutUser > postOfUsername(String username) {
+    public List<PostResponseWithoutUser> postOfUsername(String username) {
         if (userRepository.findByUsername(username) == null) {
             throw new RuntimeException("User  not found");
         }
@@ -175,7 +177,7 @@ public class PostService implements IPostService {
     public Post getPostById(int id) {
         if (repository.existsById(id)) {
             return repository.findById(id).orElseThrow();
-        }else{
+        } else {
             throw new RuntimeException("Post not found");
         }
     }
@@ -219,6 +221,15 @@ public class PostService implements IPostService {
             return true;
         }
         return true;
+    }
+
+    @Override
+    public ApiResponse<List<Post>> findAllPost() {
+        List<Post> result = repository.findAll();
+        return ApiResponse.<List<Post>>builder()
+                .code(200)
+                .result(result)
+                .build();
     }
 
     @Override

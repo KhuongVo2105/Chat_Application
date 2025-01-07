@@ -1,6 +1,7 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { Avatar } from 'react-native-paper'
+import AvatarComponent from './AvatarComponent'
 
 const ConnectedUsersList = ({ list, styleGroup }) => {
 
@@ -80,12 +81,14 @@ const ConnectedUsersList = ({ list, styleGroup }) => {
         return (
             <View className="flex items-center m-2 my-3">
                 <View className="flex flex-row items-center static mb-1">
-                    <Avatar.Image
+                    {/* <Avatar.Image
                         className=""
                         size={70}
                         source={avatarSource}
                         onError={handleError} // Gán hàm xử lý lỗi
-                    />
+                    /> */}
+
+                    <AvatarComponent user={user} size={70}/>
                     <View className={`w-5 h-5 rounded-full absolute bottom-0 right-[-2] border-4 border-white ${user.privacy ? "bg-green-500" : "bg-red-500"}`} />
                 </View>
                 <Text

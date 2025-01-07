@@ -37,9 +37,10 @@ public class FollowService implements IFollowService {
     }
     public List<FollowingResponse> getFollowingList(UsernameRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
-        return followRepository.findFollowingUsersList(user).stream()
+        List<FollowingResponse> followingResponseList = followRepository.findFollowingUsersList(user).stream()
                 .map(userMapper::toFollowingResponse) // Sử dụng userMapper để chuyển đổi
                 .collect(Collectors.toList()); // Thu thập kết quả vào danh sách;
+        return followingResponseList;
     }
 
     public int getFollowing(UsernameRequest request) {
