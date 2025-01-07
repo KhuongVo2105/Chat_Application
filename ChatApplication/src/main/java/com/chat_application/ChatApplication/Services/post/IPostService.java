@@ -28,4 +28,6 @@ public interface IPostService {
     List<PostResponse> getAllForAdmin();
 
     boolean changeVisible(int id);
+
+    ApiResponse<List<Post>> findAllPost();
 }

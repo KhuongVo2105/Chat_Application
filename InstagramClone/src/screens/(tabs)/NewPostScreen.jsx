@@ -1,5 +1,4 @@
-
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -18,7 +17,7 @@ import ENDPOINTS from '../../config/endpoints';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import {VLCPlayer, VlCPlayerView} from 'react-native-vlc-media-player';
 import {AuthContext} from '../../context/AuthContext';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import Video from 'react-native-video';
 
 const NewPostScreen = () => {
@@ -26,6 +25,18 @@ const NewPostScreen = () => {
   const [text, setText] = useState('');
   const {tokenContext} = useContext(AuthContext);
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
+  const fetchData = async () => {
+    setMedia([])
+    setText('')
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchData(); // reset lại màn hình khi được chọn
+    }
+  }, [isFocused]);
 
   const pickMedia = async () => {
     const options = {
