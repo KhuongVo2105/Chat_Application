@@ -1,6 +1,8 @@
 package com.chat_application.ChatApplication.Services.post;
 
+import com.chat_application.ChatApplication.Dto.Request.UsernameRequest;
 import com.chat_application.ChatApplication.Dto.Response.ApiResponse;
+import com.chat_application.ChatApplication.Dto.Response.FollowingResponse;
 import com.chat_application.ChatApplication.Dto.Response.PostResponse;
 import com.chat_application.ChatApplication.Dto.Response.PostResponseWithoutUser;
 import com.chat_application.ChatApplication.Entities.Post;
@@ -10,6 +12,8 @@ import com.chat_application.ChatApplication.Exceptions.ErrorCode;
 import com.chat_application.ChatApplication.Mapper.PostMapper;
 import com.chat_application.ChatApplication.Repositories.PostRepository;
 import com.chat_application.ChatApplication.Repositories.UserRepository;
+import com.chat_application.ChatApplication.Services.NotificationService;
+import com.chat_application.ChatApplication.Services.follows.FollowService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,6 +36,8 @@ public class PostService implements IPostService {
      PostRepository repository;
      UserRepository userRepository;
      PostMapper postMapper;
+     FollowService followService;
+     NotificationService notificationService;
 
     @Override
     public ApiResponse<List<Post>> findAll() {
@@ -46,7 +52,7 @@ public class PostService implements IPostService {
     @Override
     public ApiResponse<List<Post>> findAllByOneUser(User user) {
         List<Post> postList = repository.findByUser_IdAndVisibleTrue(user.getId());
-
+        List<FollowingResponse> followingResponses = new ArrayList<>();
         return ApiResponse.<List<Post>>builder()
                 .message("Get list post successfully")
                 .result(postList)
@@ -73,7 +79,10 @@ public class PostService implements IPostService {
         Post postAdded = repository.save(post);
         User user = userRepository.findById(postAdded.getUser().getId()).orElseThrow(null);
         if (user != null) {
-
+            List<FollowingResponse> followingResponses = followService.getFollowingList(UsernameRequest.builder().username(user.getUsername()).build());
+            for (FollowingResponse followingResponse : followingResponses) {
+                notificationService.addNotification(followingResponse.getId(), "Bài viết mới", followingResponse.getUsername() + " đã đăng một bài viết mới");
+            }
         }
         return ApiResponse.<Post>builder()
                 .message("Add post successfully")
