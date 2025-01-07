@@ -72,7 +72,6 @@ const ENDPOINTS = {
     FOLOWERING: `${API_BASE_URL}/follow/following`,
     SUGGEST_USER: `${API_BASE_URL}/follow/suggestUser`,
   },
-
   CHAT: {
     SOCKJS: `${API_WEBSOCKET}/ws`,
     MESSAGE: `${API_WEBSOCKET}/messages`,
@@ -80,6 +79,7 @@ const ENDPOINTS = {
     FOLLOWING_USERS: `${API_BASE_URL}/follow/followingList`,
     CREATE_GROUP: `${API_WEBSOCKET}/GroupChat/createGroup`,
     USER_CONVERSATION: `${API_WEBSOCKET}/messages/group`,
+        FOLLOWING: `${API_WEBSOCKET}/messages/following`
   },
 
   LIKE: {
@@ -89,6 +89,9 @@ const ENDPOINTS = {
     IS_LIKE: `${API_BASE_URL}/like/isLike`,
     QUANTITY_LIKE_BY_ONE: `${API_BASE_URL}/like/quantityLikeByOne`,
   },
+  NOTIFY: {
+    GET:`${API_BASE_URL}/notification`
+  }
 };
 
 export default ENDPOINTS;
