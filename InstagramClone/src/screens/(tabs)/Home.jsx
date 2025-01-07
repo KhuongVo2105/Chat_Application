@@ -22,6 +22,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Video from 'react-native-video';
 import ConnectedUsersList from '../../components/ConnectedUsersList';
 import { OneSignal } from 'react-native-onesignal';
+import LikeButton from './like';
 
 const Home = ({ navigation, route }) => {
   //   const [loading, setLoading] = useState(false);
@@ -263,6 +264,7 @@ const Home = ({ navigation, route }) => {
     toggleModal(); // Close modal after action
   };
 
+
   return (
     <View className="w-full h-full flex justify-center items-center bg-white">
       <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
@@ -409,12 +411,8 @@ const Home = ({ navigation, route }) => {
                   <View className="w-full flex flex-column justify-between px-3">
                     {/* React row */}
                     <View className="w-24 flex flex-row justify-between items-center mb-2">
-                      <TouchableOpacity className="">
-                        <Image
-                          source={images.icon_notify}
-                          style={styles.icons}
-                        />
-                      </TouchableOpacity>
+                      <LikeButton
+                      postId={post.id}/>
                       <TouchableOpacity className="">
                         <Image
                           source={images.icon_message}
