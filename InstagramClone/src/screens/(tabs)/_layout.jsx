@@ -9,6 +9,7 @@ import Notification from './Notification';
 import Header from './Header';
 import ProfileLayout from '../(profile)/_layout';
 import { Avatar } from 'react-native-paper';
+import AvatarComponent from '../../components/AvatarComponent';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,6 +50,7 @@ const TabsLayout = () => {
       }} />
       <Tab.Screen name='ProfileLayout' component={ProfileLayout} options={{
         tabBarIcon: () => (
+          // <AvatarComponent size={30} user={{avatar:'../assets/avatarDefine.jpg'}}/>
           <Avatar.Image size={30} source={require('./../../assets/portaits/portait_1.jpg')}
           />
         ),

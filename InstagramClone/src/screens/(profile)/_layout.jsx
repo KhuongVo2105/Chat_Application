@@ -16,8 +16,11 @@ const ProfileLayout = () => {
   const router = useRoute();
   const [user, setUser] = useState();
   const [isUser, setIsUser] = useState(true);
-  
-  useEffect(() => {
+  const [menuVisible, setMenuVisible] = useState(false);
+  const { logout } = useContext(AuthContext);
+
+
+    useEffect(() => {
     if(router.params?.user) {
       setUser(router.params?.user);
       setIsUser(false);
@@ -25,8 +28,14 @@ const ProfileLayout = () => {
       setIsUser(true);
     }
   }, [usernameContext, router.params?.user])
-  
+
+
+
   const ProfileHeader = ({navigation, route}) => {
+      const handleLogout = () => {
+          logout();
+          navigation.replace('SignIn');
+      }
     return (
       <View className="w-full flex flex-row justify-center items-center py-3 bg-white">
         <View className="w-96 flex flex-row justify-between items-center">
@@ -40,9 +49,23 @@ const ProfileLayout = () => {
             </Text>
             <Ionicons name="chevron-down" size={sizeProfile / 2} />
           </Pressable>
-          <Pressable>
-            <Ionicons name="menu-outline" size={sizeProfile} />
-          </Pressable>
+            {!menuVisible && (
+                <Pressable
+                    onPress={() => setMenuVisible(true)}>
+                    <Ionicons name="menu-outline" size={sizeProfile} />
+                </Pressable>
+            )}
+            {/*Đăng xuât*/}
+            {menuVisible && (
+                <Pressable
+                    onPress={handleLogout}
+                    style={({ pressed }) => [
+                        styles.logoutButton,
+                        pressed && styles.logoutButtonPressed,
+                    ]}>
+                    <Text style={styles.logoutText}>Đăng xuất</Text>
+                </Pressable>
+            )}
         </View>
       </View>
     );
@@ -71,4 +94,20 @@ const ProfileLayout = () => {
 
 export default ProfileLayout;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    logoutButton: {
+        marginTop: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        backgroundColor: 'red',
+    },
+    logoutButtonPressed: {
+        backgroundColor: 'darkred',
+    },
+    logoutText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+});
