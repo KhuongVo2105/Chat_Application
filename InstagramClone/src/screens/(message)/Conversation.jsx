@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Client } from '@stomp/stompjs';
 import { Button, TextInput, FlatList, Text, View, KeyboardAvoidingView, Platform, StyleSheet, Image, TouchableOpacity, Modal, Pressable, } from 'react-native';
 import SockJS from 'sockjs-client';
@@ -11,6 +11,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MessageList from '../../components/MessageList';
 import { handleError } from '../../utils/handleError';
+import { AuthContext } from '../../context/AuthContext';
 
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
@@ -20,7 +21,9 @@ const Chat = ({ navigation, route }) => {
   const [error, setError] = useState('')
   const [newMessage, setNewMessage] = useState('');
   const [stompClient, setStompClient] = useState(null);
-  const [reload, setReload] = useState(false)
+
+  const { idContext } = useContext(AuthContext)
+
   const theme = useTheme();
 
   const fetchMessages = async () => {
@@ -62,27 +65,7 @@ const Chat = ({ navigation, route }) => {
         client.subscribe('/topic/messages', message => {
           const receivedMessage = JSON.parse(message.body);
           console.log('[WebSocket] Received message:', receivedMessage);
-
-          setMessages(prevMessages => {
-            [...prevMessages, receivedMessage]
-            setReload(()=>!reload)
-          });
-
-          // Cập nhật danh sách tin nhắn khi nhận được phản hồi từ server
-          // setMessages(prevMessages => {
-          //   // Kiểm tra xem tin nhắn đã gửi có khớp với tin nhắn nhận được không
-          //   const isMessageSent = prevMessages.some(msg => msg.content === receivedMessage.content);
-          //   if (!isMessageSent) {
-          //     setError("Message sent unsuccessfully")
-          //     // return [...prevMessages, receivedMessage];
-          //   } else {
-          //     // Nếu khớp, xóa tin nhắn cuối cùng (tin nhắn tạm thời)
-          //     const updatedMessages = prevMessages.filter(msg => msg.content !== receivedMessage.content);
-          //     // Thêm tin nhắn nhận được từ server vào danh sách
-          //     return [...updatedMessages, receivedMessage];
-          //   }
-          //   setReload(true)
-          // });
+          addMessage({ message: receivedMessage })
         });
       },
       onDisconnect: () => {
@@ -103,7 +86,7 @@ const Chat = ({ navigation, route }) => {
   // Lấy tin nhắn trước đó từ API
   useEffect(() => {
     fetchMessages();
-  }, [status, userIdSend, userIdTo, reload]);
+  }, [status, userIdSend, userIdTo]);
 
   // Gửi tin nhắn qua WebSocket
   const sendMessage = () => {
@@ -114,26 +97,6 @@ const Chat = ({ navigation, route }) => {
         content: newMessage,
         type: status,
       };
-
-      // Tạo ID tạm thời cho tin nhắn
-      // const messageWithContent = {
-      //   ...message,
-      //   userIdSend: userIdSend,
-      //   content: message.content, // Tạo ID tạm thời cho tin nhắn
-      //   sentTime: new Date().toISOString(), // Thêm thời gian tạo
-      //   visible: true, // Đặt trạng thái là visible
-      // }
-
-      // Thêm tin nhắn vào danh sách tin nhắn trước khi gửi
-      // setMessages(prevMessages => {
-      //   if (Array.isArray(prevMessages)) {
-      //     return [...prevMessages, messageWithContent];
-      //   } else {
-      //     console.error('prevMessages is not an array:', prevMessages);
-      //     return [messageWithContent]; // Trả về một mảng mới chỉ chứa message
-      //   }
-      // });
-
       stompClient.publish({
         destination: '/app/chat',
         body: JSON.stringify(message),
@@ -141,6 +104,20 @@ const Chat = ({ navigation, route }) => {
       setNewMessage('');
     }
   };
+
+  const addMessage = ({ message }) => {
+    const newMessage = {
+      id: message.id.toString(),
+      content: message.content,
+      sentTime: message.createdAt,
+      receivedTime: message.createdAt,
+      isRead: message.visible,
+      senderId: message.userIdSend,
+      fromMe: message.userIdSend === idContext
+    }
+
+    setMessages(prevMessages => [...prevMessages, newMessage]);
+  }
 
   // phương thức chuyển đổi
   const transformMessages = (data) => {
@@ -151,6 +128,7 @@ const Chat = ({ navigation, route }) => {
       receivedTime: item.createdAt, // Có thể sử dụng cùng một giá trị cho receivedTime
       isRead: item.visible, // Sử dụng visible để xác định trạng thái đã đọc
       senderId: item.userIdSend, // Sử dụng userIdSend
+      fromMe: item.userIdSend === idContext, // Thêm thuộc tính fromMe để xác định tin nhắn từ người gửi
     }));
   };
 
