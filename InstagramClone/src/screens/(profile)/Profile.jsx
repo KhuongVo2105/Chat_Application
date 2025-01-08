@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,16 +14,16 @@ import axios from 'axios';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import {AuthContext} from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import UserSuggestion from '../../components/UserSuggestion';
 import ImageGrid from '../../components/ImageGrid';
 import ENDPOINTS from '../../config/endpoints';
-import {handleError} from '../../utils/handleError';
+import { handleError } from '../../utils/handleError';
 import QRCode from 'react-native-qrcode-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native-paper';
 
-const Profile = ({ user, isUser}) => {
+const Profile = ({ user, isUser }) => {
   // const images = [
   //   {
   //     id: '1',
@@ -277,7 +277,7 @@ const Profile = ({ user, isUser}) => {
   //   },
   // ];
 
-  const {tokenContext,idContext, avatarContext, usernameContext} = useContext(AuthContext);
+  const { tokenContext, idContext, avatarContext, usernameContext } = useContext(AuthContext);
 
   const [selectedItem, setSelectedItem] = useState('table');
   const [loading, setLoading] = useState(true);
@@ -329,7 +329,7 @@ const Profile = ({ user, isUser}) => {
         console.error("Error fetching data: ", error);
       }
     };
-  
+
     fetchData();
   }, [route.params?.userId, tokenContext, isUser, username, loading]);
   async function fetchPost() {
@@ -337,15 +337,16 @@ const Profile = ({ user, isUser}) => {
     try {
       const response = await axios.post(
         endpoint,
-        {username: username},
+        { username: username },
       );
-      const {result} = response.data;
+      const { result } = response.data;
       setNumPost(result.length);
+      setPost(result);
     } catch (error) {
       handleError(error);
     }
-  } 
- 
+  }
+
   async function fetchMedia() {
     var userId;
     if (isUser) {
@@ -356,13 +357,13 @@ const Profile = ({ user, isUser}) => {
     const endpoint = ENDPOINTS.MEDIA.GET_MEDIA_URL_BY_USERID;
     try {
       const response = await axios.post(endpoint + `?userId=${userId}`);
-      setPost(response.data);
+      // setPost(response.data);
     } catch (error) {
       console.log("Media error", error);
     }
   }
 
-  async function renderPost() {}
+  async function renderPost() { }
 
   const fetchFollower = async () => {
     const endpoint = ENDPOINTS.FOLLOW.FOLLOWER;
@@ -379,7 +380,7 @@ const Profile = ({ user, isUser}) => {
     }
   }
 
-  const fetchFollowing = async ()=>{
+  const fetchFollowing = async () => {
     const endpoint = ENDPOINTS.FOLLOW.FOLOWERING
     try {
       const response = await axios.post(
@@ -400,11 +401,11 @@ const Profile = ({ user, isUser}) => {
       const response = await axios.post(endpoint,
         {
           followerId: idContext,
-          followingId:userState.id
+          followingId: userState.id
         }
       );
       setIsFollow(response.data)
-    } catch(error) {
+    } catch (error) {
       console.log("IsFollow error: ", error)
     }
   };
@@ -412,11 +413,11 @@ const Profile = ({ user, isUser}) => {
   const fetchSuggestUser = async () => {
     const endpoint = ENDPOINTS.FOLLOW.SUGGEST_USER;
     try {
-        const response = await axios.post(endpoint,
-          {username: usernameContext}
-        );
+      const response = await axios.post(endpoint,
+        { username: usernameContext }
+      );
 
-        setUserSuggestion(response.data);
+      setUserSuggestion(response.data);
     } catch (error) {
       console.log("Suggest error", error)
     }
@@ -428,18 +429,18 @@ const Profile = ({ user, isUser}) => {
       const response = await axios.post(endpoint,
         {
           followerId: idContext,
-          followingId:followingId
+          followingId: followingId
         }
       );
       setLoading(true);
-    } catch(error) {
+    } catch (error) {
       console.log("Follow error ", error);
     }
   }
 
   if (loading) {
-    return(
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
@@ -459,7 +460,7 @@ const Profile = ({ user, isUser}) => {
                 />
               ) : (
                 <Image
-                  source={{uri: avatar}}
+                  source={{ uri: avatar }}
                   style={styles.avatar}
                 />
               )}
@@ -478,12 +479,12 @@ const Profile = ({ user, isUser}) => {
                 </View>
               </View>
             </View>
-  
+
             <Text className="text-sm text-slate-500 mb-3">
               Add your name and bio.
             </Text>
-  
-            {isUser  ?  (<View className="flex flex-row items-center mb-3">
+
+            {isUser ? (<View className="flex flex-row items-center mb-3">
               <Pressable
                 className="flex-1 bg-gray-200 rounded-md py-1 mx-1"
                 onPress={() => navigation.navigate('EditProfile')}>
@@ -493,7 +494,7 @@ const Profile = ({ user, isUser}) => {
               </Pressable>
               <Pressable className="flex-1 bg-gray-200 rounded-md py-1 mx-1">
                 <Text className="text-base font-medium text-center"
-                onPress={() => {setIsOpenQR(true)}}>
+                  onPress={() => { setIsOpenQR(true) }}>
                   Share profile
                 </Text>
               </Pressable>
@@ -502,23 +503,23 @@ const Profile = ({ user, isUser}) => {
               </Pressable>
             </View>) :
               (<View>
-                {isFollow ? 
+                {isFollow ?
                   (<Pressable className="flex-1 bg-gray-200 rounded-md py-1 mx-1">
-                <Text className="text-base font-medium text-center"
-                onPress={() => handleFollow(userState.id)}>
-                    UnFollow
-                </Text>
-                </Pressable>) :
-                (<Pressable className="flex-1 bg-blue-500 rounded-md py-1 mx-1">
-                <Text className="text-base font-medium text-center"
-                onPress={() => handleFollow(userState.id)}>
-                    Follow
-                </Text>
-                </Pressable>)
+                    <Text className="text-base font-medium text-center"
+                      onPress={() => handleFollow(userState.id)}>
+                      UnFollow
+                    </Text>
+                  </Pressable>) :
+                  (<Pressable className="flex-1 bg-blue-500 rounded-md py-1 mx-1">
+                    <Text className="text-base font-medium text-center"
+                      onPress={() => handleFollow(userState.id)}>
+                      Follow
+                    </Text>
+                  </Pressable>)
                 }
               </View>)
             }
-  
+
             <View className="w-full flex mb-3">
               <View className="flex flex-row justify-between items-center mb-2">
                 <Text className="text-base">Discover people</Text>
@@ -531,12 +532,12 @@ const Profile = ({ user, isUser}) => {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}>
                   {userSuggestion ? (userSuggestion.map((user, index) => (
-                    <UserSuggestion key={index} follow={() => handleFollow(user.id)} username= {user.username} caption = "Suggested for you" image = {user.avatar} id={user.id} />
-                   ))): (<></>)}
+                    <UserSuggestion key={index} follow={() => handleFollow(user.id)} username={user.username} caption="Suggested for you" image={user.avatar} id={user.id} />
+                  ))) : (<></>)}
                 </ScrollView>
               </View>
             </View>
-  
+
             <View className="h-10 flex flex-row justify-between mb-2">
               <View className="flex-1 flex flex-row justify-center p-1">
                 <Pressable
@@ -561,11 +562,12 @@ const Profile = ({ user, isUser}) => {
             </View>
           </View>
           <View className="pb-20"></View>
-        {/* Grid */}
+          {/* Grid */}
 
         </ScrollView>
-          <ImageGrid post={post} />
-  
+        
+        <ImageGrid post={post} />
+
         {/* QR Code Modal */}
         <Modal visible={isOpenQR} transparent={true} animationType="slide">
           <View style={styles.modalContainer}>

@@ -21,6 +21,8 @@ import axios from 'axios';
 import ConnectedUsersList from '../../components/ConnectedUsersList';
 import { ActivityIndicator, Avatar, Searchbar, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import ModalCreateGroup from '../../components/ModalCreateGroup';
 import { handleError } from '../../utils/handleError';
 import GroupChat from '../../components/GroupChat';
@@ -30,8 +32,7 @@ const Message = ({ navigation }) => {
   const [visibleCreateGroup, setVisibleCreateGroup] = useState(false)
 
   const { idContext, tokenContext, usernameContext } = useContext(AuthContext)
-  // const [userId, setUserId] = useState('92ffa9f0-dcfb-493a-aba7-bd4a2783295e'); //92ffa9f0-dcfb-493a-aba7-bd4a2783295e
-  const [userId, setUserId] = useState(idContext); //92ffa9f0-dcfb-493a-aba7-bd4a2783295e
+  const [userId, setUserId] = useState(idContext);
 
   const [listMessage, setListMessage] = useState('');
   const [listFollowing, setListFollowing] = useState('');
@@ -177,32 +178,38 @@ const Message = ({ navigation }) => {
 
   //phần tạo gr
   const renderFollowingAddGroud = ({ item }) => (
-    <View style={styles.addGroupContainer}>
-
-      <Image source={{ uri: item.avatar }} style={styles.avatarAddG} />
-      <Text style={styles.nameAddGr}>{item.username}</Text>
-      <View style={styles.containerButtonG}>
-        <TouchableOpacity
-          style={styles.buttonAdd}
-          onPress={() => toggleAddUser(item.id)} // Gọi hàm toggle khi nhấn
-        >
-          <Icon
-            name={addedUsers[item.id] ? 'check' : 'plus'} // Dùng "check" khi đã thêm, "plus" khi chưa thêm
-            size={30}
-            color="#68d743"
-          />
-        </TouchableOpacity>
-      </View>
-      {/*</TouchableOpacity>*/}
+    <View className="flex flex-row items-center my-1">
+      <Avatar.Image source={
+        item.avatar? { uri: item.avatar } : require('../../assets/avatarDefine.jpg')
+      } size={50} />
+      <Text className="text-base flex-1 mx-3">{item.username}</Text>
+      <Pressable onPress={() => toggleAddUser(item.id)}>
+        <MaterialIcons name="group-add" size={35} />
+      </Pressable>
     </View>
   );
-  //
 
   const closeCreateGroup = () => {
     setOpenCreate(false);
     setSelectedUserIds('');
     setGroupName(null);
     setAddedUsers('');
+  };
+
+  const renderGroupMember = ({ item }) => {
+    // Tìm người dùng trong listFollowing có ID khớp với item (ID từ selectedUser Ids)
+    const user = listFollowing.find(user => user.id === item);
+
+    console.log(JSON.stringify(user))
+    return (
+      <View className="mx-0.5">
+        {user ? (
+          <Avatar.Image size={30} source={{ uri: user.avatar }} />
+        ) : (
+          null
+        )}
+      </View>
+    );
   };
 
   return (
@@ -222,7 +229,7 @@ const Message = ({ navigation }) => {
       )}
 
       <View className="w-full mb-3">
-        <Text className="text-lg font-semibold ml-3" style={{color:theme.colors.onSurface}}>Messages</Text>
+        <Text className="text-lg font-semibold ml-3" style={{ color: theme.colors.onSurface }}>Messages</Text>
       </View>
 
       {loadConversationList ? (
@@ -235,69 +242,66 @@ const Message = ({ navigation }) => {
       <Pressable
         className="p-1.5 rounded-full absolute bottom-8 right-5 shadow bg-white z-10"
         style={{ backgroundColor: theme.colors.onSecondaryContainer }}
-        onPress={() => setOpenCreate(true)}>
+        onPress={() => setOpenCreate(true)}
+      >
         <MaterialCommunityIcons name="account-multiple-plus-outline" size={40} color={`${theme.colors.onPrimary}`} />
-        {/* Bảng Add Group */}
+
         {/* Modal hiển thị bảng tạo nhóm */}
         <Modal
           animationType="slide"
           transparent={true}
           visible={openCreate}
-          onRequestClose={() => setOpenCreate(false)}>
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Tạo Nhóm</Text>
+          onRequestClose={closeCreateGroup}
+        >
+          {/* Lớp phủ mờ */}
+          <View className="flex-1 bg-sky-50 justify-center items-center">
+            <View className="w-5/6 h-5/6 flex bg-white rounded-lg shadow-lg p-4">
+
+              <View className="flex flex-row items-center justify-between mb-3">
+                <Text className="text-lg font-bold mb-4">Create group</Text>
+                {/* Nút hành động */}
+                <View className="flex flex-row">
+                  <TouchableOpacity className="mx-3" onPress={sendListMemberCreateGr}>
+                    <AntDesign name="checkcircle" size={30} color={'green'} />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={closeCreateGroup}>
+                    <AntDesign name="closecircle" size={30} color={'red'} />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
               {/* Tên nhóm */}
               <TextInput
-                style={styles.input}
-                placeholder="Nhập tên nhóm ..."
+                className="border border-gray-300 rounded p-2 mb-4"
+                placeholder="Enter group name..."
                 value={groupName}
                 onChangeText={setGroupName}
               />
-
-              {/* Danh sách follower */}
-              <View style={styles.flatListD}>
-                <Text style={styles.sectionTitle}>Followers:</Text>
+              <View className="flex flex-row items-center mb-3">
+                <Text className="font-semibold">Membes: </Text>
                 <FlatList
-                  data={listFollowing}
-                  renderItem={renderFollowingAddGroud}
-                  keyExtractor={item => item.userIdTo}
-                  horizontal={false}
-                  showsHorizontalScrollIndicator={false}
-                  removeClippedSubviews={false}
+                  horizontal={true}
+                  data={selectedUserIds}
+                  renderItem={renderGroupMember}
+                  keyExtractor={item => item.id}
                 />
               </View>
 
-              {/* Nút hành động */}
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.submitButton}
-                  onPress={sendListMemberCreateGr}>
-                  <Text style={styles.submitButtonText}>Tạo nhóm</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.submitButton, { backgroundColor: 'red' }]}
-                  onPress={() => closeCreateGroup()}>
-                  <Text style={styles.submitButtonText}>Quay lại</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.selectedUsers}>
-                <Text>Danh sách ID người dùng đã thêm:</Text>
-                {selectedUserIds.length > 0 ? (
-                  selectedUserIds.map(id => (
-                    <Text key={id} style={styles.userId}>
-                      {id}
-                    </Text>
-                  ))
-                ) : (
-                  <Text>Không có người dùng nào được thêm.</Text>
-                )}
-              </View>
+              <Text className="font-semibold mb-3">Followers:</Text>
+
+              <FlatList
+                className="flex-1 mb-3"
+                data={listFollowing}
+                renderItem={renderFollowingAddGroud}
+                keyExtractor={item => item.userIdTo}
+                horizontal={false}
+                showsVerticalScrollIndicator={false}
+                removeClippedSubviews={false}
+              />
+
             </View>
           </View>
         </Modal>
-        {/*  */}
       </Pressable>
 
     </View>

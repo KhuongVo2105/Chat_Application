@@ -167,10 +167,21 @@ public class PostService implements IPostService {
         // Lấy danh sách Post
         List<Post> posts = repository.findByUser_IdAndVisibleTrue(user.getId());
 
+        List<PostResponseWithoutUser> re = new ArrayList<>();
+        posts.forEach(p -> {
+            var a = PostResponseWithoutUser.builder()
+                    .id(p.getId())
+                    .userId(repository.findById(p.getId()).get().getUser().getId())
+                    .visible(p.isVisible())
+                    .caption(p.getCaption())
+                    .createdAt(p.getCreatedAt())
+                    .updatedAt(p.getUpdatedAt())
+                    .build();
+            re.add(a);
+        });
+
         // Chuyển đổi List<Post> thành List<PostResponseWithoutUser >
-        return posts.stream()
-                .map(postMapper::toUserResponse) // Sử dụng phương thức ánh xạ
-                .collect(Collectors.toList()); // Thu thập kết quả vào List
+        return re; // Thu thập kết quả vào List
     }
 
     @Override

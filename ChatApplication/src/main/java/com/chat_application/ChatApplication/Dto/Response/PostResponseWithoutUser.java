@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -44,6 +45,7 @@ public class PostResponseWithoutUser {
     boolean visible;
     String caption;
     Timestamp createdAt, updatedAt;
+    UUID userId;
 
     @PrePersist
     public void prePersist() {
