@@ -22,6 +22,7 @@ const ENDPOINTS = {
     UPDATE_AVATAR: `${API_BASE_URL}/users/updateAvat`,
     GET_POST_BY_USERNAME: `${API_BASE_URL}/post/postOfUsername`,
   },
+
   SEARCH: {
     FIND_USERNAME: `${API_BASE_URL}/search/username`,
     FIND_POST: `${API_BASE_URL}/search/caption`,
@@ -79,7 +80,7 @@ const ENDPOINTS = {
     FOLLOWING_USERS: `${API_BASE_URL}/follow/followingList`,
     CREATE_GROUP: `${API_WEBSOCKET}/GroupChat/createGroup`,
     USER_CONVERSATION: `${API_WEBSOCKET}/messages/group`,
-        FOLLOWING: `${API_WEBSOCKET}/messages/following`
+    FOLLOWING: `${API_WEBSOCKET}/messages/following`
   },
 
   LIKE: {
@@ -90,7 +91,7 @@ const ENDPOINTS = {
     QUANTITY_LIKE_BY_ONE: `${API_BASE_URL}/like/quantityLikeByOne`,
   },
   NOTIFY: {
-    GET:`${API_BASE_URL}/notification`
+    GET: `${API_BASE_URL}/notification`
   }
 };
 

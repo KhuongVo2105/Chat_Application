@@ -253,7 +253,7 @@ const MessageList = ({ messages, myId, error }) => {
 
   const renderItem = ({ item }) => (
     <View className="mx-2 my-1 ">
-      <Message message={item.content} fromMe={item.senderId === myId} receivedTime={item.sentTime} error={error} />
+      <Message message={item.content} fromMe={item.fromMe} receivedTime={item.sentTime} error={error} />
     </View>
   );
 

@@ -24,10 +24,10 @@ import ConnectedUsersList from '../../components/ConnectedUsersList';
 import { OneSignal } from 'react-native-onesignal';
 import LikeButton from './like';
 import { handleError } from '../../utils/handleError';
+import PostComponent from '../../components/PostComponent';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 
 const Home = ({ navigation, route }) => {
-  //   const [loading, setLoading] = useState(false);
-  //   const [yourComment, setYourComment] = useState();
   const {
     tokenContext,
     setIdContext,
@@ -42,10 +42,13 @@ const Home = ({ navigation, route }) => {
     setAvatarContext
   } = useContext(AuthContext);
 
+  const theme = useTheme()
+
   const [isModalVisible, setModalVisible] = useState(false);
   const [newCaption, setNewCaption] = useState();
   const [isModalEditVisible, setModalEditVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingFollowingList, setLoadingFollowingList] = useState(false);
+  const [loadingPost, setLoadingPost] = useState(false);
   const [yourComment, setYourComment] = useState();
   const [medias, setMedias] = useState([]);
   const [follow, setFollow] = useState([]);
@@ -56,29 +59,76 @@ const Home = ({ navigation, route }) => {
   const [user, setUser] = useState();
   const isFocused = useIsFocused();
 
+  // Phương thức lấy thông tin người dùng
+  const fetchUserInfo = async () => {
+    const endpoint = ENDPOINTS.USER.MY_INFORMATION;
+    try {
+      const response = await axios.post(endpoint, {}, {
+        headers: {
+          Authorization: `Bearer ${tokenContext}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(`Lỗi khi gọi API: ${endpoint}`); // Log endpoint
+      handleError(error);
+    }
+  };
+
+  // Phương thức lấy danh sách người dùng theo dõi
+  const fetchFollowingUsers = async (userInfo) => {
+    const getFollowingEndpoint = ENDPOINTS.CHAT.FOLLOWING_USERS;
+    try {
+      const followingResponse = await axios.post(getFollowingEndpoint, userInfo, {
+        headers: { Authorization: `Bearer ${tokenContext}` },
+      });
+      return followingResponse.data;
+    } catch (error) {
+      console.log(`Lỗi khi gọi API: ${getFollowingEndpoint}`); // Log endpoint
+      handleError(error);
+    }
+  };
+
+  // Phương thức lấy tất cả bài viết của nhiều người dùng
+  const fetchPostsByFollowingUsers = async () => {
+    const findAllMultipleUserEndpoint = ENDPOINTS.POST.FIND_ALL_MULTIPLE_USER;
+    try {
+      const postResponse = await axios.post(findAllMultipleUserEndpoint);
+      return postResponse.data.result;
+    } catch (error) {
+      console.log(`Lỗi khi gọi API: ${findAllMultipleUserEndpoint}`); // Log endpoint
+      handleError(error);
+    }
+  };
+
+  // Phương thức lấy media từ Cloudinary
+  const fetchMediaFromCloudinary = async (folders) => {
+    const multipleMediaEndpoint = ENDPOINTS.CLOUDINARY.FIND_ALL_MULTIPLE;
+    try {
+      const mediaResponse = await axios.post(multipleMediaEndpoint, folders, {
+        headers: { Authorization: `Bearer ${tokenContext}` },
+      });
+      return mediaResponse.data.result;
+    } catch (error) {
+      console.log(`Lỗi khi gọi API: ${multipleMediaEndpoint}`); // Log endpoint
+      handleError(error);
+    }
+  };
+
+  // Phương thức chính để fetch dữ liệu
   const fetchData = async () => {
+    setLoadingFollowingList(true)
+    setLoadingPost(true)
     if (!tokenContext) {
       console.log('Token is not available');
       return;
     } else console.log('Token is existed:', tokenContext);
 
     try {
-      const endpoint = ENDPOINTS.USER.MY_INFORMATION;
-      const response = await axios.post(
-        endpoint, // URL
-        {}, // Request body (ở đây là rỗng vì không truyền dữ liệu)
-        {
-          headers: {
-            Authorization: `Bearer ${tokenContext}`,
-          },
-        },
-      );
-      console.log('\tLoad user profile is successfully');
-
-      // Kiểm tra phản hồi từ server
-      if (response.data.code === 200 && response.data.result) {
-        const userInfo = response.data.result;
-        console.log(`User information: ${JSON.stringify(userInfo, null, 2)}`);
+      const userInfoResponse = await fetchUserInfo();
+      if (userInfoResponse && userInfoResponse.code === 200 && userInfoResponse.result) {
+        const userInfo = userInfoResponse.result;
+        console.log(`Userinformation: ${JSON.stringify(userInfo, null, 2)}`);
         setUser(userInfo);
         // Lưu thông tin vào Context
         setIdContext(userInfo.id);
@@ -86,95 +136,44 @@ const Home = ({ navigation, route }) => {
         setEmailContext(userInfo.email);
         setCreatedAtContext(userInfo.createdAt);
         setBirthdayContext(userInfo.birthday);
-        //         setRoleContext({roles: userInfo.roles});
-        //         console.log('User information loaded successfully.');
         setAvatarContext(userInfo.avatar);
         setPrivacyContext(userInfo.privacy);
         setStatusContext(userInfo.status);
         setRoleContext({ roles: userInfo.roles });
 
-        console.log('User information loaded successfully.');
+        console.log('User  information loaded successfully.');
         OneSignal.initialize('672c61cb-8e38-40a0-9d50-d0cc76dc03fe');
         OneSignal.login(userInfo.id);
         OneSignal.User.pushSubscription.optIn();
+
         // Gọi API lấy danh sách following
-        const getFollowingEndpoint = ENDPOINTS.CHAT.FOLLOWING_USERS;
-        try {
-          const followingResponse = await axios.post(
-            getFollowingEndpoint,
-            userInfo,
-            {
-              headers: { Authorization: `Bearer ${tokenContext}` },
-            },
-          );
-          var followingList = followingResponse.data;
-          setFollow(followingList);
+        const followingList = await fetchFollowingUsers(userInfo);
+        setFollow(followingList || []);
+        setLoadingFollowingList(false)
 
-          if (followingList === undefined) {
-            followingList = []
-          }
+        // Lấy danh sách post dựa trên following
+        const followingUserIds = followingList.map(value => ({ id: value.id }));
+        followingUserIds.push({ id: userInfo.id }); // Thêm chính người dùng hiện tại
 
-          // Lấy danh sách post dựa trên following
-          const followingUserIds = followingList.map(value => ({
-            id: value.id,
-          }));
+        const postsResponse = await fetchPostsByFollowingUsers();
+        const visiblePosts = postsResponse.filter(post => post.visible === true);
+        setPosts(visiblePosts);
+        console.log(`posts: ${JSON.stringify(posts)}`)
 
-          followingUserIds.push({ id: userInfo.id }); // Thêm chính người dùng hiện tại
+        // Lấy media dựa trên các post đã lấy
+        let folders = visiblePosts.map(value => `posts/${value.user.id}/${value.id}`);
+        setFoldersCloudinary(folders);
 
-          try {
-            const findAllMultipleUserEndpoint = ENDPOINTS.POST.FIND_ALL_MULTIPLE_USER;
-            const postResponse = await axios.post(
-              findAllMultipleUserEndpoint
-            );
-
-            const postsResponse = postResponse.data.result;
-            const visiblePosts = postsResponse.filter(post => post.visible == true);
-            setPosts(visiblePosts);
-          } catch (error) {
-            console.log(`endpoint: ${findAllMultipleUserEndpoint}`)
-            handleError(error)
-          }
-
-          // Lấy media dựa trên các post đã lấy
-          let folders = [];
-          posts.forEach(value => {
-            const folder = 'posts/' + value.user.id + '/' + value.id;
-            folders.push(folder);
-          });
-          console.log(`posts: ${posts.length}`)
-          console.log(`folders: ${folders.length}`)
-
-          setFoldersCloudinary(folders);
-          console.log(`folder clound: ${foldersCloudinary}`)
-
-          try {
-            const multipleMediaEndpoint = ENDPOINTS.CLOUDINARY.FIND_ALL_MULTIPLE;
-            const mediaResponse = await axios.post(
-              multipleMediaEndpoint,
-              folders,
-              {
-                headers: { Authorization: `Bearer ${tokenContext}` },
-              },
-            );
-            console.log('call multple thanh cong')
-            const mediasResponse = mediaResponse.data.result;
-
-            setMedias(mediasResponse);
-            console.log('mediaResponse',mediasResponse);
-          } catch (error) {
-            console.log(`endpoint: ${multipleMediaEndpoint}`)
-            handleError(error)
-          }
-        } catch (error) {
-          console.log('loi api');
-          handleError(error)
-        }
+        const mediasResponse = await fetchMediaFromCloudinary(folders);
+        setMedias(mediasResponse);
+        console.log('mediaResponse', mediasResponse);
       } else {
-        console.log('Unexpected response format:', response.data);
+        console.log('Unexpected response format:', userInfoResponse);
       }
     } catch (error) {
-      handleError(error)
+      handleError(error);
     }
+    setLoadingPost(false)
   };
 
   useEffect(() => {
@@ -261,246 +260,183 @@ const Home = ({ navigation, route }) => {
     <View className="w-full h-full flex justify-center items-center bg-white">
       <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
         {/* new feeds */}
-        <ConnectedUsersList styleGroup={`my-2`} list={follow} />
+        {loadingFollowingList ?
+          (<ActivityIndicator animating={true} color={theme.colors.primary} />) :
+          (<ConnectedUsersList styleGroup={`my-2`} list={follow} />)}
+        {/* <PostComponent /> */}
 
         {/* Post */}
-        <View>
-          {/* Hiển thị dữ liệu postsInUI */}
-          {posts.length > 0 ? (
-            posts.map((post, index) => (
-              <View className="flex flex-column w-full py-3" key={post.id}>
-                {/* Header post */}
-                <View className="flex flex-row w-full justify-between items-center px-3 mb-3">
-                  {/* Header left */}
-                  <TouchableOpacity className="flex flex-row items-center">
-                    <IconUserProfile
-                      containerStyles="mr-2"
-                      width={41}
-                      height={41}
-                      source={require('./../../assets/portaits/portait_3.jpg')}
-                      seen={false}
-                    />
-
-                    <View className="flex flex-column">
-                      <View className="flex flex-row items-center">
-                        <Text className="font-semibold text-lg">
-                          {post.user.username}
-                        </Text>
-                        <Image
-                          className="ml-1"
-                          source={images.icon_verify}
-                          style={{ width: 25, height: 25 }}
-                          resizeMode="contain"
+        {loadingPost ?
+          (<ActivityIndicator animating={true} color={theme.colors.primary} />) :
+          (
+            <View>
+              {/* Hiển thị dữ liệu postsInUI */}
+              {posts.length > 0 ? (
+                posts.map((post, index) => (
+                  <View className="flex flex-column w-full py-3" key={post.id}>
+                    {/* Header post */}
+                    <View className="flex flex-row w-full justify-between items-center px-3 mb-3">
+                      {/* Header left */}
+                      <TouchableOpacity className="flex flex-row items-center">
+                        <IconUserProfile
+                          containerStyles="mr-2"
+                          width={41}
+                          height={41}
+                          source={require('./../../assets/portaits/portait_3.jpg')}
+                          seen={false}
                         />
-                      </View>
 
-                      {/* Sub title */}
-                      <Text className="text-sm">This is subtitle</Text>
+                        <View className="flex flex-column">
+                          <View className="flex flex-row items-center">
+                            <Text className="font-semibold text-lg">
+                              {post.user.username}
+                            </Text>
+                            <Image
+                              className="ml-1"
+                              source={images.icon_verify}
+                              style={{ width: 25, height: 25 }}
+                              resizeMode="contain"
+                            />
+                          </View>
+
+                          {/* Sub title */}
+                          <Text className="text-sm">This is subtitle</Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      {/* Header right */}
+                      <TouchableOpacity
+                        onPress={() => toggleModal(post.id, post.caption)}
+                        style={styles.optionsButton}>
+                        <Image
+                          source={images.icon_triple_dot}
+                          style={{
+                            width: 24,
+                            height: 24,
+                          }}
+                        />
+                      </TouchableOpacity>
                     </View>
-                  </TouchableOpacity>
 
-                  {/* Header right */}
-                  <TouchableOpacity
-                    onPress={() => toggleModal(post.id, post.caption)}
-                    style={styles.optionsButton}>
-                    <Image
-                      source={images.icon_triple_dot}
-                      style={{
-                        width: 24,
-                        height: 24,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
+                    {/* Modal */}
+                    <Modal
+                      isVisible={isModalVisible}
+                      onBackdropPress={() => setModalVisible(false)}
+                      backdropOpacity={0.1}
+                      style={styles.modal}>
+                      <View style={styles.modalContent}>
+                        <TouchableOpacity
+                          onPress={() => toggleModalEditPost()}
+                          style={styles.option}>
+                          <Ionicons name="pencil-outline" size={20} />
+                          <Text style={styles.optionText}>Edit</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => handleDelete()}
+                          style={styles.option}>
+                          <Ionicons name="trash-outline" size={20} color="red" />
+                          <Text style={[styles.optionText, { color: 'red' }]}>
+                            Delete
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </Modal>
 
-                {/* Modal */}
-                <Modal
-                  isVisible={isModalVisible}
-                  onBackdropPress={() => setModalVisible(false)}
-                  backdropOpacity={0.1}
-                  style={styles.modal}>
-                  <View style={styles.modalContent}>
-                    <TouchableOpacity
-                      onPress={() => toggleModalEditPost()}
-                      style={styles.option}>
-                      <Ionicons name="pencil-outline" size={20} />
-                      <Text style={styles.optionText}>Edit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleDelete()}
-                      style={styles.option}>
-                      <Ionicons name="trash-outline" size={20} color="red" />
-                      <Text style={[styles.optionText, { color: 'red' }]}>
-                        Delete
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </Modal>
+                    {/* {Modal edit  post} */}
+                    <Modal
+                      isVisible={isModalEditVisible}
+                      onBackdropPress={() => setModalEditVisible(false)}
+                      backdropOpacity={0.1}
+                      style={styles.modal}>
+                      <View style={styles.modalEditContent}>
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                          }}>
+                          <View
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                              onPress={() => setModalEditVisible(false)}>
+                              <Ionicons
+                                name="arrow-back-outline"
+                                size={25}></Ionicons>
+                            </TouchableOpacity>
+                            <Text style={{ fontSize: 20, marginLeft: 10 }}>
+                              Sửa đổi
+                            </Text>
+                          </View>
 
-                {/* {Modal edit  post} */}
-                {/* <Modal
-                  isVisible={isModalEditVisible}
-                  onBackdropPress={() => setModalEditVisible(false)}
-                  backdropOpacity={0.1}
-                  style={styles.modal}>
-                  <View style={styles.modalEditContent}>
+                          <TouchableOpacity onPress={() => handleEdit()}>
+                            <Ionicons name="checkmark-outline" size={25}></Ionicons>
+                          </TouchableOpacity>
+                          <Text style={{ fontSize: 20, marginLeft: 10 }}>
+                            Sửa đổi
+                          </Text>
+                        </View>
+
+                        <TouchableOpacity onPress={() => handleEdit()}>
+                          <Ionicons name="checkmark-outline" size={25}></Ionicons>
+                        </TouchableOpacity>
+                      </View>
+                      <TextInput
+                        className="ml-1"
+                        placeholder="Write a caption..."
+                        onChangeText={newCaption => setNewCaption(newCaption)}
+                        value={newCaption}
+                      />
+                    </Modal>
+
                     <View
                       style={{
-                        display: 'flex',
-                        flexDirection: 'row',
+                        flexl: 1,
+                        justifyContent: 'center',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
+                        marginBottom: 5,
                       }}>
-                      <View
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}>
-                        <TouchableOpacity
-                          onPress={() => setModalEditVisible(false)}>
-                          <Ionicons
-                            name="arrow-back-outline"
-                            size={25}></Ionicons>
-                        </TouchableOpacity>
-                        <Text style={{ fontSize: 20, marginLeft: 10 }}>
-                          Sửa đổi
-                        </Text>
-                      </View>
-
-                      <TouchableOpacity onPress={() => handleEdit()}>
-                        <Ionicons name="checkmark-outline" size={25}></Ionicons>
-                      </TouchableOpacity>
-                      <Text style={{ fontSize: 20, marginLeft: 10 }}>
-                        Sửa đổi
-                      </Text>
-                    </View>
-
-                    <TouchableOpacity onPress={() => handleEdit()}>
-                      <Ionicons name="checkmark-outline" size={25}></Ionicons>
-                    </TouchableOpacity>
-                  </View>
-                  <TextInput
-                    className="ml-1"
-                    placeholder="Write a caption..."
-                    onChangeText={newCaption => setNewCaption(newCaption)}
-                    value={newCaption}
-                  />
-                </Modal> */}
-
-                <View
-                  style={{
-                    flexl: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: 5,
-                  }}>
-                  <FlatList
-                    data={medias[index]} // Chỉ render danh sách media tương ứng với index
-                    renderItem={renderItem}
-                    keyExtractor={(item, idxChild) => `${index} ${idxChild}`}
-                    horizontal
-                    pagingEnabled
-                    bounces={false}
-                  />
-                </View>
-
-                {/* Footer post */}
-                <View className="flex flew-column">
-                  <View className="w-full flex flex-column justify-between px-3">
-                    {/* React row */}
-                    <View className="w-24 flex flex-row justify-between items-center mb-2">
-                      <LikeButton
-                        postId={post.id} />
-                      <TouchableOpacity className="">
-                        <Image
-                          source={images.icon_message}
-                          style={{
-                            width: 25,
-                            height: 25,
-                            transform: [{ scaleX: -1 }],
-                          }}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity className="">
-                        <Image
-                          source={images.icon_share}
-                          style={{
-                            width: 25,
-                            height: 25,
-                          }}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-
-                  {/* Comment row */}
-                  <Text className="w-full mb-2">{post.caption}</Text>
-                  <View className="flex flex-row items-center">
-                    <View className="w-8 h-8 overflow-hidden flex flex-row justify-center items-center">
-                      {/* Hình ảnh chính (phía dưới) */}
-                      <Image
-                        className="absolute z-0 rounded-full" // Đặt dưới cùng với z-0
-                        style={{ width: '85%', height: '85%' }}
-                        resizeMode="cover"
-                        source={require('./../../assets/portaits/portait_1.jpg')}
+                      <FlatList
+                        data={medias[index]} // Chỉ render danh sách media tương ứng với index
+                        renderItem={renderItem}
+                        keyExtractor={(item, idxChild) => `${index} ${idxChild}`}
+                        horizontal
+                        pagingEnabled
+                        bounces={false}
                       />
                     </View>
-                    <TextInput
-                      className="ml-1"
-                      placeholder="Write a caption..."
-                      onChangeText={newCaption => setNewCaption(newCaption)}
-                      value={newCaption}
-                    />
-                  </View>
 
-                  <View
-                    style={{
-                      flexl: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginBottom: 5,
-                    }}>
-                    <FlatList
-                      data={medias[index]} // Chỉ render danh sách media tương ứng với index
-                      renderItem={renderItem}
-                      keyExtractor={(item, idxChild) => `${index} ${idxChild}`}
-                      horizontal
-                      pagingEnabled
-                      bounces={false}
-                    />
-                  </View>
-
-                  {/* Footer post */}
-                  <View className="flex flew-column">
-                    <View className="w-full flex flex-column justify-between px-3">
-                      {/* React row */}
-                      <View className="w-24 flex flex-row justify-between items-center mb-2">
-                        <TouchableOpacity className="">
-                          <Image
-                            source={images.icon_notify}
-                            style={styles.icons}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity className="">
-                          <Image
-                            source={images.icon_message}
-                            style={{
-                              width: 25,
-                              height: 25,
-                              transform: [{ scaleX: -1 }],
-                            }}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity className="">
-                          <Image
-                            source={images.icon_share}
-                            style={{
-                              width: 25,
-                              height: 25,
-                            }}
-                          />
-                        </TouchableOpacity>
+                    {/* Footer post */}
+                    <View className="flex flew-column">
+                      <View className="w-full flex flex-column justify-between px-3">
+                        {/* React row */}
+                        <View className="w-24 flex flex-row justify-between items-center mb-2">
+                          <LikeButton
+                            postId={post.id} />
+                          <TouchableOpacity className="">
+                            <Image
+                              source={images.icon_message}
+                              style={{
+                                width: 25,
+                                height: 25,
+                                transform: [{ scaleX: -1 }],
+                              }}
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity className="">
+                            <Image
+                              source={images.icon_share}
+                              style={{
+                                width: 25,
+                                height: 25,
+                              }}
+                            />
+                          </TouchableOpacity>
+                        </View>
                       </View>
 
                       {/* Comment row */}
@@ -517,23 +453,95 @@ const Home = ({ navigation, route }) => {
                         </View>
                         <TextInput
                           className="ml-1"
-                          placeholder="Add a comment..."
-                          onChangeText={comment => setYourComment(comment)}
-                          value={''}
+                          placeholder="Write a caption..."
+                          onChangeText={newCaption => setNewCaption(newCaption)}
+                          value={newCaption}
                         />
+                      </View>
+
+                      <View
+                        style={{
+                          flexl: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginBottom: 5,
+                        }}>
+                        <FlatList
+                          data={medias[index]} // Chỉ render danh sách media tương ứng với index
+                          renderItem={renderItem}
+                          keyExtractor={(item, idxChild) => `${index} ${idxChild}`}
+                          horizontal
+                          pagingEnabled
+                          bounces={false}
+                        />
+                      </View>
+
+                      {/* Footer post */}
+                      <View className="flex flew-column">
+                        <View className="w-full flex flex-column justify-between px-3">
+                          {/* React row */}
+                          <View className="w-24 flex flex-row justify-between items-center mb-2">
+                            <TouchableOpacity className="">
+                              <Image
+                                source={images.icon_notify}
+                                style={styles.icons}
+                              />
+                            </TouchableOpacity>
+                            <TouchableOpacity className="">
+                              <Image
+                                source={images.icon_message}
+                                style={{
+                                  width: 25,
+                                  height: 25,
+                                  transform: [{ scaleX: -1 }],
+                                }}
+                              />
+                            </TouchableOpacity>
+                            <TouchableOpacity className="">
+                              <Image
+                                source={images.icon_share}
+                                style={{
+                                  width: 25,
+                                  height: 25,
+                                }}
+                              />
+                            </TouchableOpacity>
+                          </View>
+
+                          {/* Comment row */}
+                          <Text className="w-full mb-2">{post.caption}</Text>
+                          <View className="flex flex-row items-center">
+                            <View className="w-8 h-8 overflow-hidden flex flex-row justify-center items-center">
+                              {/* Hình ảnh chính (phía dưới) */}
+                              <Image
+                                className="absolute z-0 rounded-full" // Đặt dưới cùng với z-0
+                                style={{ width: '85%', height: '85%' }}
+                                resizeMode="cover"
+                                source={require('./../../assets/portaits/portait_1.jpg')}
+                              />
+                            </View>
+                            <TextInput
+                              className="ml-1"
+                              placeholder="Add a comment..."
+                              onChangeText={comment => setYourComment(comment)}
+                              value={''}
+                            />
+                          </View>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              </View>
-            ))
-          ) : (
-            <Text style={styles.welcome}>
-              Chào mừng bạn đến với chúng tôi. Hãy chia sẻ và kết nối với mọi
-              người
-            </Text>
+
+                  // <PostComponent post={post} />
+                ))
+              ) : (
+                <Text style={styles.welcome}>
+                  Chào mừng bạn đến với chúng tôi. Hãy chia sẻ và kết nối với mọi
+                  người
+                </Text>
+              )}
+            </View>
           )}
-        </View>
         {/* navigation bottom */}
       </ScrollView >
     </View >
