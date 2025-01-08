@@ -24,12 +24,13 @@ const NewPostScreen = () => {
   const [media, setMedia] = useState([]);
   const [text, setText] = useState('');
   const {tokenContext} = useContext(AuthContext);
+  const [clicked, setClicked] = useState(false);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
   const fetchData = async () => {
-    setMedia([])
-    setText('')
+    setMedia([]);
+    setText('');
   };
 
   useEffect(() => {
@@ -67,6 +68,7 @@ const NewPostScreen = () => {
   };
 
   const handleCreatePost = async () => {
+    setClicked(true);
     const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
     const userInfoResponse = await axios.post(
       userInfoEndpoint,
@@ -158,7 +160,7 @@ const NewPostScreen = () => {
           <Button
             title="Đăng"
             onPress={() => handleCreatePost()}
-            disabled={text || media.length != 0 ? false : true}
+            disabled={clicked || !(text || media.length !== 0)}
           />
         </View>
 
