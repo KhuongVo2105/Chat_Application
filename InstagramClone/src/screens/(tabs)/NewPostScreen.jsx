@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,23 +9,25 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ENDPOINTS from '../../config/endpoints';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import {VLCPlayer, VlCPlayerView} from 'react-native-vlc-media-player';
-import {AuthContext} from '../../context/AuthContext';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { AuthContext } from '../../context/AuthContext';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Video from 'react-native-video';
 
 const NewPostScreen = () => {
   const [media, setMedia] = useState([]);
   const [text, setText] = useState('');
-  const {tokenContext} = useContext(AuthContext);
+  const { tokenContext } = useContext(AuthContext);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+  const [loading, setLoading] = useState(false)
 
   const fetchData = async () => {
     setMedia([])
@@ -72,7 +74,7 @@ const NewPostScreen = () => {
       userInfoEndpoint,
       {},
       {
-        headers: {Authorization: `Bearer ${tokenContext}`},
+        headers: { Authorization: `Bearer ${tokenContext}` },
       },
     );
     const user = userInfoResponse.data.result;
@@ -95,7 +97,7 @@ const NewPostScreen = () => {
       console.log('prepare create new post');
 
       const responseCreateNewPost = await axios.post(endpoint, newPost, {
-        headers: {Authorization: `Bearer ${tokenContext}`},
+        headers: { Authorization: `Bearer ${tokenContext}` },
       });
 
       const postId = responseCreateNewPost.data.result.id;
@@ -120,7 +122,7 @@ const NewPostScreen = () => {
 
         // thêm ảnh vào db
         await axios.post(ENDPOINTS.MEDIA.ADD, newMedia, {
-          headers: {Authorization: `Bearer ${tokenContext}`},
+          headers: { Authorization: `Bearer ${tokenContext}` },
         });
         console.log('add media successfully in db');
 
@@ -147,8 +149,13 @@ const NewPostScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
+    <KeyboardAvoidingView
+      className="flex-1 bg-white"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+
+      <ScrollView
+        horizontal={false}
+        showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="black" />
@@ -174,14 +181,14 @@ const NewPostScreen = () => {
               values.type.includes('image') ? (
                 <Image
                   key={index}
-                  source={{uri: values.uri}}
+                  source={{ uri: values.uri }}
                   style={styles.image}
                 />
               ) : values.type.includes('video') ? (
                 <Video
                   key={index}
                   style={styles.selectedVideo}
-                  source={{uri: values.uri}}
+                  source={{ uri: values.uri }}
                   controls={true}
                   resizeMode="contain"
                   onBuffer={this.onBuffer}
@@ -205,8 +212,9 @@ const NewPostScreen = () => {
           value={text}
           onChangeText={value => setText(value)}
         />
-      </View>
-    </SafeAreaView>
+      </ScrollView>
+    </KeyboardAvoidingView>
+
   );
 };
 

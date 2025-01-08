@@ -164,6 +164,7 @@ const Home = ({ navigation, route }) => {
         // Lấy media dựa trên các post đã lấy
         let folders = visiblePosts.map(value => `posts/${value.user.id}/${value.id}`);
         setFoldersCloudinary(folders);
+        console.log(`folder: ${foldersCloudinary}`)
 
         const mediasResponse = await fetchMediaFromCloudinary(folders);
         setMedias(mediasResponse);
