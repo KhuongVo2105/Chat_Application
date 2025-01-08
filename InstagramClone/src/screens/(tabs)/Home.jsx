@@ -25,7 +25,8 @@ import { OneSignal } from 'react-native-onesignal';
 import LikeButton from './like';
 import { handleError } from '../../utils/handleError';
 import PostComponent from '../../components/PostComponent';
-import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Avatar, useTheme } from 'react-native-paper';
+import AvatarComponent from '../../components/AvatarComponent';
 
 const Home = ({ navigation, route }) => {
   const {
@@ -167,6 +168,9 @@ const Home = ({ navigation, route }) => {
         const mediasResponse = await fetchMediaFromCloudinary(folders);
         setMedias(mediasResponse);
         console.log('mediaResponse', mediasResponse);
+        console.log(medias.length)
+        console.log(medias[0])
+        console.log(medias[1])
       } else {
         console.log('Unexpected response format:', userInfoResponse);
       }
@@ -183,6 +187,7 @@ const Home = ({ navigation, route }) => {
   }, [isFocused]);
 
   const renderItem = ({ item: url, index: idxChild }) => {
+    console.log('loop opp opoo')
     if (url.endsWith('.jpg') || url.endsWith('.png')) {
       return (
         <Image
@@ -278,30 +283,27 @@ const Home = ({ navigation, route }) => {
                     <View className="flex flex-row w-full justify-between items-center px-3 mb-3">
                       {/* Header left */}
                       <TouchableOpacity className="flex flex-row items-center">
-                        <IconUserProfile
-                          containerStyles="mr-2"
-                          width={41}
-                          height={41}
-                          source={require('./../../assets/portaits/portait_3.jpg')}
-                          seen={false}
-                        />
+                        {/* <Avatar.Image source={
+                                post.user.avatar? { uri: post.user.avatar } : require('../../assets/avatarDefine.jpg')
+                              } size={50} /> */}
+                        <AvatarComponent user={post.user} size={40} />
 
-                        <View className="flex flex-column">
-                          <View className="flex flex-row items-center">
-                            <Text className="font-semibold text-lg">
-                              {post.user.username}
-                            </Text>
-                            <Image
-                              className="ml-1"
-                              source={images.icon_verify}
-                              style={{ width: 25, height: 25 }}
-                              resizeMode="contain"
-                            />
+                          <View className="p-2 flex flex-column">
+                            <View className="flex flex-row items-center">
+                              <Text className="font-semibold text-lg">
+                                {post.user.username}
+                              </Text>
+                              <Image
+                                className="ml-1"
+                                source={images.icon_verify}
+                                style={{ width: 25, height: 25 }}
+                                resizeMode="contain"
+                              />
+                            </View>
+
+                            {/* Sub title */}
+                            <Text className="text-sm">This is subtitle</Text>
                           </View>
-
-                          {/* Sub title */}
-                          <Text className="text-sm">This is subtitle</Text>
-                        </View>
                       </TouchableOpacity>
 
                       {/* Header right */}
@@ -459,7 +461,7 @@ const Home = ({ navigation, route }) => {
                         />
                       </View>
 
-                      <View
+                      {/* <View
                         style={{
                           flexl: 1,
                           justifyContent: 'center',
@@ -474,61 +476,10 @@ const Home = ({ navigation, route }) => {
                           pagingEnabled
                           bounces={false}
                         />
-                      </View>
+                      </View> */}
 
                       {/* Footer post */}
-                      <View className="flex flew-column">
-                        <View className="w-full flex flex-column justify-between px-3">
-                          {/* React row */}
-                          <View className="w-24 flex flex-row justify-between items-center mb-2">
-                            <TouchableOpacity className="">
-                              <Image
-                                source={images.icon_notify}
-                                style={styles.icons}
-                              />
-                            </TouchableOpacity>
-                            <TouchableOpacity className="">
-                              <Image
-                                source={images.icon_message}
-                                style={{
-                                  width: 25,
-                                  height: 25,
-                                  transform: [{ scaleX: -1 }],
-                                }}
-                              />
-                            </TouchableOpacity>
-                            <TouchableOpacity className="">
-                              <Image
-                                source={images.icon_share}
-                                style={{
-                                  width: 25,
-                                  height: 25,
-                                }}
-                              />
-                            </TouchableOpacity>
-                          </View>
-
-                          {/* Comment row */}
-                          <Text className="w-full mb-2">{post.caption}</Text>
-                          <View className="flex flex-row items-center">
-                            <View className="w-8 h-8 overflow-hidden flex flex-row justify-center items-center">
-                              {/* Hình ảnh chính (phía dưới) */}
-                              <Image
-                                className="absolute z-0 rounded-full" // Đặt dưới cùng với z-0
-                                style={{ width: '85%', height: '85%' }}
-                                resizeMode="cover"
-                                source={require('./../../assets/portaits/portait_1.jpg')}
-                              />
-                            </View>
-                            <TextInput
-                              className="ml-1"
-                              placeholder="Add a comment..."
-                              onChangeText={comment => setYourComment(comment)}
-                              value={''}
-                            />
-                          </View>
-                        </View>
-                      </View>
+                      
                     </View>
                   </View>
 
