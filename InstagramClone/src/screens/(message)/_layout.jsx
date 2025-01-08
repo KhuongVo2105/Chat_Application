@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Message from './Message';
-import Chat from './Chat'
+import Message from './AllConversations';
+import Chat from './Conversation'
+import HeaderConversation from './HeaderConversation'
+import HeaderConverstaions from './HeaderConverstaions'
 
 const ChatLayout = () => {
     const Stack = createNativeStackNavigator();
@@ -13,9 +15,9 @@ const ChatLayout = () => {
                 component={Message}
                 options={{
                     headerShown: true,
-                    // header: ({ navigation, route }) => (
-                    //     <HeaderConversations navigation={navigation} route={route} />
-                    // ),
+                    header: ({ navigation, route }) => (
+                        <HeaderConverstaions navigation={navigation} route={route}/>
+                    ),
                 }}
             />
             <Stack.Screen
@@ -23,9 +25,9 @@ const ChatLayout = () => {
                 component={Chat}
                 options={{
                     headerShown: true,
-                    // header: ({ navigation, route }) => (
-                    //     <HeaderConversation navigation={navigation} route={route} />
-                    // ),
+                    header: ({ navigation, route }) => (
+                        <HeaderConversation navigation={navigation} route={route} />
+                    ),
                 }}
             />
         </Stack.Navigator>

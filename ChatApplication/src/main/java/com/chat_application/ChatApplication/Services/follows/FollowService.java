@@ -10,7 +10,9 @@ import com.chat_application.ChatApplication.Entities.Media;
 import com.chat_application.ChatApplication.Entities.User;
 import com.chat_application.ChatApplication.Mapper.UserMapper;
 import com.chat_application.ChatApplication.Repositories.FollowRepository;
+import com.chat_application.ChatApplication.Repositories.NotificationRepository;
 import com.chat_application.ChatApplication.Repositories.UserRepository;
+import com.chat_application.ChatApplication.Services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +28,19 @@ import java.util.stream.Collectors;
 public class FollowService implements IFollowService {
     FollowRepository followRepository;
     UserRepository userRepository;
+    NotificationService notificationService;
     UserMapper userMapper;
 
     public int getFollowers(UsernameRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
         return followRepository.findFollowers(user);
     }
-
     public List<FollowingResponse> getFollowingList(UsernameRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
-        return followRepository.findFollowingUsersList(user).stream()
+        List<FollowingResponse> followingResponseList = followRepository.findFollowingUsersList(user).stream()
                 .map(userMapper::toFollowingResponse) // Sử dụng userMapper để chuyển đổi
                 .collect(Collectors.toList()); // Thu thập kết quả vào danh sách;
+        return followingResponseList;
     }
 
     public int getFollowing(UsernameRequest request) {
@@ -113,6 +116,8 @@ public class FollowService implements IFollowService {
             return false;
         }
         followRepository.save(follow);
+        String message = followerUser.getUsername() + " đã theo dõi bạn";
+        notificationService.addNotification(followingUser.getId().toString(), followerUser.getUsername(),message);
         return true;
     }
 

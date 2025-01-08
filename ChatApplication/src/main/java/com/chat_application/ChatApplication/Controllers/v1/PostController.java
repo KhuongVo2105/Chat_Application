@@ -37,6 +37,12 @@ public class PostController {
         return response;
     }
 
+    @PostMapping("/findAllPost")
+    public ApiResponse<List<Post>> findAllPost() {
+        ApiResponse<List<Post>> response = service.findAllPost();
+        return response;
+    }
+
     @PostMapping("/add")
     public ApiResponse<Post> add(@RequestBody Post post) {
         System.out.println(post);

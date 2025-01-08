@@ -22,6 +22,7 @@ const ENDPOINTS = {
     UPDATE_AVATAR: `${API_BASE_URL}/users/updateAvat`,
     GET_POST_BY_USERNAME: `${API_BASE_URL}/post/postOfUsername`,
   },
+
   SEARCH: {
     FIND_USERNAME: `${API_BASE_URL}/search/username`,
     FIND_POST: `${API_BASE_URL}/search/caption`,
@@ -45,7 +46,7 @@ const ENDPOINTS = {
     ADD: `${API_BASE_URL}/post/add`,
     UPDATE: `${API_BASE_URL}/post/update`,
     DELETE: `${API_BASE_URL}/post/delete`,
-    FIND_ALL_MULTIPLE_USER: `${API_BASE_URL}/post/findAllByMultipleUser`,
+    FIND_ALL_MULTIPLE_USER: `${API_BASE_URL}/post/findAllPost`,
     UPDATE_VISIBLE: `${API_BASE_URL}/post/updateVisible`,
     UPDATE_CAPTION: `${API_BASE_URL}/post/updateCaption`,
   },
@@ -72,14 +73,14 @@ const ENDPOINTS = {
     FOLOWERING: `${API_BASE_URL}/follow/following`,
     SUGGEST_USER: `${API_BASE_URL}/follow/suggestUser`,
   },
-
   CHAT: {
     SOCKJS: `${API_WEBSOCKET}/ws`,
     MESSAGE: `${API_WEBSOCKET}/messages`,
     MESSAGE_LIST: `${API_WEBSOCKET}/messages/messageList`,
-    FOLLOWING: `${API_BASE_URL}/follow/followingList`,
+    FOLLOWING_USERS: `${API_BASE_URL}/follow/followingList`,
     CREATE_GROUP: `${API_WEBSOCKET}/GroupChat/createGroup`,
-    GROUP: `${API_WEBSOCKET}/messages/group`,
+    USER_CONVERSATION: `${API_WEBSOCKET}/messages/group`,
+    FOLLOWING: `${API_WEBSOCKET}/messages/following`
   },
 
   LIKE: {
@@ -89,6 +90,9 @@ const ENDPOINTS = {
     IS_LIKE: `${API_BASE_URL}/like/isLike`,
     QUANTITY_LIKE_BY_ONE: `${API_BASE_URL}/like/quantityLikeByOne`,
   },
+  NOTIFY: {
+    GET: `${API_BASE_URL}/notification`
+  }
 };
 
 export default ENDPOINTS;
