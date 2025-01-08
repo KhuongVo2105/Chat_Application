@@ -21,15 +21,29 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import Video from 'react-native-video';
 
 const NewPostScreen = () => {
+    const {
+      tokenContext,
+      setIdContext,
+      idContext,
+      setUsernameContext,
+      setEmailContext,
+      setCreatedAtContext,
+      setBirthdayContext,
+      setPrivacyContext,
+      setStatusContext,
+      setRoleContext,
+      setAvatarContext
+    } = useContext(AuthContext);
+  
   const [media, setMedia] = useState([]);
   const [text, setText] = useState('');
-  const {tokenContext} = useContext(AuthContext);
   const navigation = useNavigation();
+  const [isUploaded, setIsUploaded] = useState(false);
   const isFocused = useIsFocused();
 
   const fetchData = async () => {
-    setMedia([])
-    setText('')
+    setMedia([]);
+    setText('');
   };
 
   useEffect(() => {
@@ -67,19 +81,11 @@ const NewPostScreen = () => {
   };
 
   const handleCreatePost = async () => {
-    const userInfoEndpoint = ENDPOINTS.USER.MY_INFORMATION;
-    const userInfoResponse = await axios.post(
-      userInfoEndpoint,
-      {},
-      {
-        headers: {Authorization: `Bearer ${tokenContext}`},
-      },
-    );
-    const user = userInfoResponse.data.result;
+    setIsUploaded(true)
     const newPost = {
       caption: text,
       user: {
-        id: user.id,
+        id: idContext,
       },
     };
 
@@ -127,7 +133,7 @@ const NewPostScreen = () => {
         // thêm ảnh vào cloudinary
         await axios.post(ENDPOINTS.CLOUDINARY.ADD_MULTIPLE, formData, {
           params: {
-            userId: user.id,
+            userId: idContext,
             postId: postId,
           },
           headers: {
@@ -144,6 +150,7 @@ const NewPostScreen = () => {
     } else {
       Alert.alert('Đăng bài thất bại');
     }
+    setIsUploaded(false)
   };
 
   return (
@@ -158,7 +165,7 @@ const NewPostScreen = () => {
           <Button
             title="Đăng"
             onPress={() => handleCreatePost()}
-            disabled={text || media.length != 0 ? false : true}
+            disabled={isUploaded || !(text || media.length !== 0)}
           />
         </View>
 
@@ -196,6 +203,7 @@ const NewPostScreen = () => {
           title="Thêm"
           onPress={pickMedia}
           style={styles.imagePickerButton}
+          disabled={isUploaded ? true : false}
         />
 
         <TextInput
@@ -204,6 +212,7 @@ const NewPostScreen = () => {
           multiline={true}
           value={text}
           onChangeText={value => setText(value)}
+          editable={isUploaded ? false : true}
         />
       </View>
     </SafeAreaView>
