@@ -126,7 +126,7 @@ const LikeButton = ({postId}) => {
       {isLiked ? (
         <Ionicons name="heart" size={28} color="red"></Ionicons>
       ) : (
-        <Ionicons name="heart-outline" size={28}></Ionicons>
+        <Ionicons name="heart-outline" size={28} color="black"></Ionicons>
       )}
     </TouchableOpacity>
   );

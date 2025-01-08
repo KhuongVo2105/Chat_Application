@@ -439,77 +439,11 @@ const Home = ({ navigation, route }) => {
                         </View>
                       </View>
 
-                      {/* Comment row */}
-                      <Text className="w-full mb-2">{post.caption}</Text>
-                      <View className="flex flex-row items-center">
-                        <View className="w-8 h-8 overflow-hidden flex flex-row justify-center items-center">
-                          {/* Hình ảnh chính (phía dưới) */}
-                          <Image
-                            className="absolute z-0 rounded-full" // Đặt dưới cùng với z-0
-                            style={{ width: '85%', height: '85%' }}
-                            resizeMode="cover"
-                            source={require('./../../assets/portaits/portait_1.jpg')}
-                          />
-                        </View>
-                        <TextInput
-                          className="ml-1"
-                          placeholder="Write a caption..."
-                          onChangeText={newCaption => setNewCaption(newCaption)}
-                          value={newCaption}
-                        />
-                      </View>
-
-                      <View
-                        style={{
-                          flexl: 1,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          marginBottom: 5,
-                        }}>
-                        <FlatList
-                          data={medias[index]} // Chỉ render danh sách media tương ứng với index
-                          renderItem={renderItem}
-                          keyExtractor={(item, idxChild) => `${index} ${idxChild}`}
-                          horizontal
-                          pagingEnabled
-                          bounces={false}
-                        />
-                      </View>
-
                       {/* Footer post */}
                       <View className="flex flew-column">
                         <View className="w-full flex flex-column justify-between px-3">
-                          {/* React row */}
-                          <View className="w-24 flex flex-row justify-between items-center mb-2">
-                            <TouchableOpacity className="">
-                              <Image
-                                source={images.icon_notify}
-                                style={styles.icons}
-                              />
-                            </TouchableOpacity>
-                            <TouchableOpacity className="">
-                              <Image
-                                source={images.icon_message}
-                                style={{
-                                  width: 25,
-                                  height: 25,
-                                  transform: [{ scaleX: -1 }],
-                                }}
-                              />
-                            </TouchableOpacity>
-                            <TouchableOpacity className="">
-                              <Image
-                                source={images.icon_share}
-                                style={{
-                                  width: 25,
-                                  height: 25,
-                                }}
-                              />
-                            </TouchableOpacity>
-                          </View>
-
                           {/* Comment row */}
-                          <Text className="w-full mb-2">{post.caption}</Text>
+                          <Text style={{ display: post.caption.length === 0 ? 'none' : 'flex' }} className="w-full mb-2">{post.caption}</Text>
                           <View className="flex flex-row items-center">
                             <View className="w-8 h-8 overflow-hidden flex flex-row justify-center items-center">
                               {/* Hình ảnh chính (phía dưới) */}
