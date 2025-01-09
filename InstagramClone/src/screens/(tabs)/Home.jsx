@@ -404,10 +404,11 @@ const Home = ({ navigation, route }) => {
                         marginBottom: 5,
                       }}>
                       <FlatList
-                        data={medias[index]} // Chỉ render danh sách media tương ứng với index
+                        data={medias[index].slice().reverse()} // Chỉ render danh sách media tương ứng với index
                         renderItem={renderItem}
                         keyExtractor={(item, idxChild) => `${index} ${idxChild}`}
                         horizontal
+                        inverted
                         pagingEnabled
                         bounces={false}
                       />
