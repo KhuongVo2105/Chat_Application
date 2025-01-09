@@ -9,6 +9,7 @@ import { AuthProvider } from '../context/AuthContext';
 import ChatLayout from './(message)/_layout';
 import { config } from './Link';
 import CameraLayout from './(camera)/_layout';
+import ProfileLayout from './(profile)/_layout';
 
 const RootLayout = () => {
   console.log(
@@ -49,6 +50,10 @@ const RootLayout = () => {
           <Stack.Screen
             name='(camera)'
             component={CameraLayout}
+            options={{ headerShown: false }} />
+                      <Stack.Screen
+            name='ProfileLayout'
+            component={ProfileLayout}
             options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
